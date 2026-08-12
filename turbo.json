@@ -1,0 +1,10 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalPassThroughEnv": ["PATH", "LOCALAPPDATA", "TROVAYA_PYTHON"],
+  "tasks": {
+    "build": { "dependsOn": ["^build"], "outputs": [".next/**", "dist/**", "artifacts/**", "**/__pycache__/**"] },
+    "test": { "dependsOn": ["build", "^build"], "outputs": [], "cache": false },
+    "lint": { "dependsOn": ["build", "^build"], "outputs": [] },
+    "dev": { "cache": false, "persistent": true }
+  }
+}

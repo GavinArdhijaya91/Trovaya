@@ -1,0 +1,14 @@
+{
+  "name": "trovaya",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "build": "turbo build --concurrency=1",
+    "test": "turbo test --concurrency=1",
+    "lint": "turbo lint --concurrency=1",
+    "dev:web": "pnpm --filter @trovaya/web dev",
+    "dev:poison": "pnpm --filter @trovaya/poison-engine dev",
+    "dev:indexer": "pnpm --filter @trovaya/event-indexer dev"
+  },
+  "devDependencies": { "turbo": "^2.4.2" }
+}

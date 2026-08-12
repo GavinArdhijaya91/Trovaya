@@ -1,0 +1,62 @@
+node_modules/
+.pnpm-store/
+.npm/
+.yarn/
+.next/
+dist/
+coverage/
+artifacts/
+cache/
+typechain-types/
+packages/protocol-sdk/src/generated/
+.turbo/
+
+# Runtime configuration and secrets (examples are intentionally tracked)
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+keystore/
+keystores/
+secrets/
+*.secret
+
+# Local chain and deployment state
+.openzeppelin/
+deployments/local/
+ignition/deployments/chain-31337/
+broadcast/
+gas-report.txt
+
+# Python
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+*.pyc
+*.egg-info/
+
+# TypeScript and tooling
+*.tsbuildinfo
+.eslintcache
+
+# Logs and operating-system/editor state
+*.log
+logs/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo

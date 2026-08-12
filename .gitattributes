@@ -1,0 +1,20 @@
+* text=auto
+
+*.js text eol=lf
+*.mjs text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.sol text eol=lf
+*.py text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.sql text eol=lf
+*.md text eol=lf
+*.css text eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
