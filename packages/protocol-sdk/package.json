@@ -1,0 +1,15 @@
+{
+  "name": "@trovaya/protocol-sdk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "scripts": {
+    "build": "node scripts/generate.mjs && tsc",
+    "test": "tsc --noEmit",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": { "@trovaya/contracts": "workspace:*", "typescript": "^5.7.3" }
+}

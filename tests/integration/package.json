@@ -1,0 +1,9 @@
+{
+  "name": "@trovaya/integration-tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "tsc", "test": "node --test dist/*.test.js", "lint": "tsc --noEmit" },
+  "dependencies": { "@trovaya/protocol-sdk": "workspace:*" },
+  "devDependencies": { "@types/node": "^22.13.1", "typescript": "^5.7.3" }
+}
