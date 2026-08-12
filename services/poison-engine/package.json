@@ -1,0 +1,11 @@
+{
+  "name": "@trovaya/poison-engine",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/python.mjs -m uvicorn app.main:app --reload",
+    "test": "node scripts/python.mjs -m pytest -p no:cacheprovider",
+    "lint": "node scripts/python.mjs -m ruff check --no-cache app tests",
+    "build": "node scripts/python.mjs -m compileall -q app"
+  }
+}
