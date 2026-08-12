@@ -25,9 +25,22 @@ async function sync(): Promise<void> {
   ]);
   await sql.begin(async (tx) => {
     for (const log of mints) {
+      const metadata = await client.readContract({
+        address: contractAddress, abi: trovayaIPNFTAbi, functionName: "getIPMetadata",
+        args: [log.args.tokenId!], blockNumber: log.blockNumber,
+      });
+      const tokenUri = await client.readContract({
+        address: contractAddress, abi: trovayaIPNFTAbi, functionName: "tokenURI",
+        args: [log.args.tokenId!], blockNumber: log.blockNumber,
+      });
       await tx`insert into users (wallet_address) values (${log.args.creator!.toLowerCase()}) on conflict do nothing`;
-      await tx`insert into ip_assets (chain_id, token_id, creator_wallet, allow_ai_training, tx_hash, log_index, status)
-        values (${chainId}, ${log.args.tokenId!.toString()}, ${log.args.creator!.toLowerCase()}, ${log.args.allowAITraining!}, ${log.transactionHash}, ${log.logIndex}, 'MINTED')
+      await tx`insert into ip_assets (chain_id, token_id, creator_wallet, allow_ai_training,
+          public_poisoned_cid, encrypted_vault_cid, commercial_license_fee_wei, token_uri,
+          tx_hash, log_index, status)
+        values (${chainId}, ${log.args.tokenId!.toString()}, ${log.args.creator!.toLowerCase()},
+          ${log.args.allowAITraining!}, ${metadata.publicPoisonedCid}, ${metadata.encryptedVaultCid},
+          ${metadata.commercialLicenseFee.toString()}, ${tokenUri}, ${log.transactionHash},
+          ${log.logIndex}, 'MINTED')
         on conflict (chain_id, tx_hash, log_index) do nothing`;
     }
     for (const log of licenses) {

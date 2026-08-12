@@ -4,6 +4,7 @@ import { FeeComparison } from "@/components/fee-comparison";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { TaxExport } from "@/components/tax-export";
 import { LicensePreview } from "@/components/license-preview";
+import { AssetGallery } from "@/components/asset-gallery";
 
 const benefits = [
   ["01", "Register ownership", "Create a permanent proof connecting your work to you."],
@@ -57,6 +58,7 @@ export default function Home() {
           <div className="mt-8 border-t pt-5"><TaxExport rows={[]} /></div>
         </article>
       </section>
+      <AssetGallery />
     </main>
   );
 }
