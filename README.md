@@ -3,6 +3,15 @@
 Initial monorepo scaffold for the consent-first creator IP protocol described in
 [`docs/MASTER_SPEC.md`](docs/MASTER_SPEC.md).
 
+The canonical product requirements live in [`docs/PRD.md`](docs/PRD.md). The
+official identity, account recovery, KYC, profile, and community expansion is
+defined in [`docs/TRUST_AND_IDENTITY.md`](docs/TRUST_AND_IDENTITY.md). This
+expansion supports the current MVP; it does not supersede the IP protection and
+fair-trade protocol at its core.
+
+Optional post-MVP analytics and social connectors are scoped in Section 4 of
+[`docs/MASTER_SPEC.md`](docs/MASTER_SPEC.md).
+
 ## Workspaces
 
 - `apps/web` — creator-facing Next.js dApp

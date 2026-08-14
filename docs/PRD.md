@@ -129,3 +129,45 @@ By combining an **On-Chain Data Poisoning Pipeline**, a **ZK-Proof Encrypted Hig
 | **Poisoning Processing Latency** | High | Perform pixel perturbations in-memory (RAM) via optimized OpenCV/NumPy matrix operations without writing temporary files to disk. |
 | **ZK Verification Complexity** | Medium | Implement a dedicated mock ZK Verifier contract simulating proof validation for live demo reliability. |
 | **Regulatory Misinterpretation** | Medium | Maintain the AI Reviewer strictly as a non-advisory educational tool with prominent UI disclaimer badges[cite: 1]. |
+
+---
+
+## 10. Official Product Expansion: Trust and Accounts
+
+Trovaya formally expands toward an account and trust layer without replacing
+or outweighing the original MVP. The protected-asset registration and licensing
+journeys in Section 6 remain the primary product path and dominant value.
+
+The trust layer adds passwordless email OTP, personal profiles,
+cryptographically linked wallets, mock KYC status, and a moderated community.
+These capabilities must preserve a strict boundary between an off-chain account
+and self-custodied wallets: OTP session recovery cannot recover a seed phrase,
+replace a wallet signer, or transfer on-chain assets. Trovaya does not issue or
+store an account password.
+
+Trust indicators must remain separate and explainable. Identity verification,
+wallet ownership, creator provenance, and community standing must not be
+collapsed into a claim that an asset, business, or investment is guaranteed.
+Detailed requirements and security boundaries are defined in
+`TRUST_AND_IDENTITY.md`.
+
+Fractional funding and tokenized investment form a subordinate future track,
+not the defining value of this pivot. They require a separate architecture and
+regulatory decision before entering the implementation backlog. A future
+asset-holding contract will use `TrovayaFundingPool`; `TrovayaVault` remains
+reserved for encrypted IP access.
+
+### 10.1 Advanced insight distribution
+
+After the core MVP and trust layer are stable, Trovaya may add a provider-neutral
+Insights Gateway. It can expose non-advisory creator fundamentals internally,
+publish public on-chain aggregates through Dune, and let creators share approved
+achievements through X, Threads, or Farcaster.
+
+These integrations are optional channels and must not become sources of truth
+for ownership. Initial social delivery is user-initiated; automated publishing
+requires explicit consent and revocable OAuth authorization. External articles
+must come from licensed APIs, permitted feeds, or canonical links and must not
+be converted into trading signals, price predictions, or investment advice.
+The technical boundary and delivery order are defined in Section 4 of
+`MASTER_SPEC.md`.
