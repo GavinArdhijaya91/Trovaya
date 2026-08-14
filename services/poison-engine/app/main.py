@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import os
+from typing import Annotated
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -39,8 +40,8 @@ def health() -> dict[str, str]:
 
 @app.post("/api/v1/poison", response_model=PoisonResponse, tags=["protection"])
 async def poison_image(
-    file: UploadFile = File(...),
-    intensity: float = Form(0.35, ge=0.0, le=1.0),
+    file: Annotated[UploadFile, File()],
+    intensity: Annotated[float, Form(ge=0.0, le=1.0)] = 0.35,
 ) -> PoisonResponse:
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, "file must be an image")
@@ -68,7 +69,7 @@ async def poison_image(
 
 
 @app.post("/api/v1/kyc/watermark", response_model=WatermarkResponse, tags=["privacy"])
-async def watermark_kyc_document(file: UploadFile = File(...)) -> WatermarkResponse:
+async def watermark_kyc_document(file: Annotated[UploadFile, File()]) -> WatermarkResponse:
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, "document must be an image")
     source = await file.read(MAX_UPLOAD_BYTES + 1)

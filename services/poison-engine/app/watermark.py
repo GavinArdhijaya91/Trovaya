@@ -4,7 +4,7 @@ from io import BytesIO
 
 from PIL import Image, ImageDraw, ImageFont, UnidentifiedImageError
 
-from .perturbation import InvalidImageError, MAX_IMAGE_PIXELS
+from .perturbation import MAX_IMAGE_PIXELS, InvalidImageError
 
 
 def watermark_identity_document(source: bytes, label: str = "SAMPLE / CONTOH") -> bytes:
