@@ -3,6 +3,9 @@
 Trovaya uses pull requests, Conventional Commits, and automated repository gates. Keep changes
 small enough that their product and security impact can be reviewed independently.
 
+Frontend contributors should also follow the practical
+[`Frontend Contribution Guide`](docs/guides/FRONTEND_CONTRIBUTION_GUIDE.md).
+
 ## Development workflow
 
 1. Branch from the latest `main` using `feat/<topic>`, `fix/<topic>`, or `docs/<topic>`.
@@ -45,4 +48,3 @@ runtime truth.
 Never commit secrets, local environment files, private keys, KYC documents, uploaded creator assets,
 or generated build/cache output. Add new public configuration keys to the adjacent `.env.example`.
 Only variables intentionally safe for browsers may use the `NEXT_PUBLIC_` prefix.
-

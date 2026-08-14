@@ -22,6 +22,9 @@ Contributor workflow and shared-interface approvals are defined in
 must not change API, ABI, SDK, database, authentication, or security boundaries without approval
 from every affected owner.
 
+Frontend onboarding is documented step by step in the
+[`Frontend Contribution Guide`](docs/guides/FRONTEND_CONTRIBUTION_GUIDE.md).
+
 ## Workspaces
 
 - `apps/web` — creator-facing Next.js dApp
