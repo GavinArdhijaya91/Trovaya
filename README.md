@@ -12,6 +12,10 @@ fair-trade protocol at its core.
 Optional post-MVP analytics and social connectors are scoped in Section 4 of
 [`docs/MASTER_SPEC.md`](docs/MASTER_SPEC.md).
 
+Release history is maintained in [`CHANGELOG.md`](CHANGELOG.md) from
+Conventional Commits. CI run details are published as GitHub job summaries and
+downloadable artifacts; generated run reports are not committed to the repo.
+
 ## Workspaces
 
 - `apps/web` — creator-facing Next.js dApp
