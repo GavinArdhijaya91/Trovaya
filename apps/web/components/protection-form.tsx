@@ -6,6 +6,7 @@ import { useRegisterIP } from "@/hooks/use-register-ip";
 import { encryptOriginal } from "@/lib/client-encryption";
 import { pinFile, pinJson } from "@/lib/ipfs-api";
 import { protectImage, type PoisonResult } from "@/lib/poison-api";
+import { OperationStatus } from "@/components/operation-status";
 
 export function ProtectionForm() {
   const [file, setFile] = useState<File>();
@@ -77,8 +78,7 @@ export function ProtectionForm() {
       {isLoading || registration.isPending ? "Memproses pendaftaran…" : "Lindungi dan daftarkan karya"}
     </button>
     {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
-    {registration.error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">Akun belum memiliki izin operator pendaftaran atau transaksi ditolak.</p>}
-    {registration.hash && <p className="mt-4 break-all rounded-xl bg-mint p-3 text-xs text-leaf">Bukti pendaftaran: {registration.hash}</p>}
+    <OperationStatus state={registration.state} />
     {registration.isConfirmed && <p className="mt-3 font-semibold text-leaf">Pendaftaran Hak Cipta Digital berhasil.</p>}
     {result && <div className="mt-6 grid gap-4 rounded-2xl bg-sand p-4 sm:grid-cols-[120px_1fr]">
       <Image unoptimized width={120} height={120} src={result.poisoned_image_base64} alt="Pratinjau terlindungi" className="aspect-square w-full rounded-xl object-cover" />

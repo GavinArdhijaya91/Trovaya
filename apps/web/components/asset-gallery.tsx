@@ -1,11 +1,10 @@
 "use client";
 
-import { trovayaIPNFTAbi, trovayaVaultAbi } from "@trovaya/protocol-sdk";
 import Image from "next/image";
 import { formatEther } from "viem";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useAssets, type IndexedAsset } from "@/hooks/use-assets";
-import { getClientContractAddresses } from "@/lib/contracts";
+import { useLicenseActions } from "@/hooks/use-license-actions";
+import { OperationStatus } from "@/components/operation-status";
 
 export function AssetGallery() {
   const assets = useAssets();
@@ -19,24 +18,17 @@ export function AssetGallery() {
 }
 
 function AssetCard({ asset }: { asset: IndexedAsset }) {
-  const purchase = useWriteContract();
-  const purchaseReceipt = useWaitForTransactionReceipt({ hash: purchase.data });
-  const unlock = useWriteContract();
-  const unlockReceipt = useWaitForTransactionReceipt({ hash: unlock.data });
-  const addresses = getClientContractAddresses();
+  const license = useLicenseActions();
   const gateway = process.env.NEXT_PUBLIC_IPFS_GATEWAY ?? "https://gateway.pinata.cloud/ipfs";
   const cid = asset.public_poisoned_cid;
   const isDemo = cid?.startsWith("demo-");
 
   async function buy() {
-    if (!addresses || !asset.commercial_license_fee_wei) return;
-    await purchase.writeContractAsync({ address: addresses.ipNFT, abi: trovayaIPNFTAbi,
-      functionName: "purchaseCommercialLicense", args: [BigInt(asset.token_id)], value: BigInt(asset.commercial_license_fee_wei) });
+    if (!asset.commercial_license_fee_wei) return;
+    await license.purchaseLicense(asset.token_id, asset.commercial_license_fee_wei);
   }
   async function authorizeVault() {
-    if (!addresses) return;
-    await unlock.writeContractAsync({ address: addresses.vault, abi: trovayaVaultAbi,
-      functionName: "unlockWithLicense", args: [BigInt(asset.token_id)] });
+    await license.authorizeOriginal(asset.token_id);
   }
 
   return <article className="overflow-hidden rounded-3xl bg-white shadow-soft">
@@ -44,8 +36,10 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
     <div className="p-5"><div className="flex justify-between gap-3"><strong>Karya #{asset.token_id}</strong><span className="rounded-full bg-mint px-2 py-1 text-xs text-leaf">{asset.allow_ai_training ? "AI berlisensi" : "Tanpa pelatihan AI"}</span></div>
       <p className="mt-2 truncate text-xs text-slate-500">Kreator: {asset.creator_wallet}</p>
       <p className="mt-4 text-sm">Lisensi: <strong>{asset.commercial_license_fee_wei ? formatEther(BigInt(asset.commercial_license_fee_wei)) : "—"} {asset.chain_id === 97 ? "BNB" : "ETH"}</strong></p>
-      <button onClick={buy} disabled={!addresses || purchase.isPending || purchaseReceipt.isSuccess} className="mt-4 w-full rounded-xl bg-coral px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{purchaseReceipt.isSuccess ? "Lisensi tercatat" : "Beli lisensi komersial"}</button>
-      {purchaseReceipt.isSuccess && <button onClick={authorizeVault} disabled={unlock.isPending || unlockReceipt.isSuccess} className="mt-2 w-full rounded-xl bg-ink px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{unlockReceipt.isSuccess ? "Akses original diizinkan" : "Buka akses original"}</button>}
+      <button onClick={buy} disabled={!license.isConfigured || !["idle", "failed"].includes(license.purchaseState.phase)} className="mt-4 w-full rounded-xl bg-coral px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{license.purchaseState.phase === "completed" ? "Lisensi tercatat" : "Beli lisensi komersial"}</button>
+      <OperationStatus state={license.purchaseState} />
+      {license.purchaseState.phase === "completed" && <button onClick={authorizeVault} disabled={!license.isConfigured || !["idle", "failed"].includes(license.unlockState.phase)} className="mt-2 w-full rounded-xl bg-ink px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">{license.unlockState.phase === "completed" ? "Akses original diizinkan" : "Buka akses original"}</button>}
+      <OperationStatus state={license.unlockState} />
     </div>
   </article>;
 }

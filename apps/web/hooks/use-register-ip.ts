@@ -1,6 +1,6 @@
 "use client";
 
-import { trovayaIPNFTAbi } from "@trovaya/protocol-sdk";
+import { deriveTransactionState, trovayaIPNFTAbi } from "@trovaya/protocol-sdk";
 import { parseEther } from "viem";
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { getClientContractAddresses } from "@/lib/contracts";
@@ -15,6 +15,13 @@ export function useRegisterIP() {
   const writer = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash: writer.data });
   const addresses = getClientContractAddresses();
+  const state = deriveTransactionState({
+    hash: writer.data,
+    isWalletPending: writer.isPending,
+    isConfirming: receipt.isLoading,
+    isSuccess: receipt.isSuccess,
+    error: writer.error ?? receipt.error,
+  });
   async function register(input: RegistrationInput) {
     if (!addresses || !account.address) throw new Error("Hubungkan akun dan konfigurasi alamat protokol.");
     return writer.writeContractAsync({
@@ -22,5 +29,10 @@ export function useRegisterIP() {
       args: [account.address, input.tokenUri, input.allowAITraining, parseEther(input.licenseFee), input.publicPoisonedCid, input.encryptedVaultCid, BigInt(input.royaltyBps)],
     });
   }
-  return { register, hash: writer.data, isPending: writer.isPending || receipt.isLoading, isConfirmed: receipt.isSuccess, error: writer.error };
+  return {
+    register,
+    state,
+    isPending: state.phase === "awaiting_wallet" || state.phase === "submitted" || state.phase === "confirming",
+    isConfirmed: state.phase === "completed",
+  };
 }
