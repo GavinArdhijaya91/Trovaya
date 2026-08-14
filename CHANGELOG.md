@@ -3,6 +3,13 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.2.1](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.2.0...v0.2.1) (2026-08-14)
+
+
+### Documentation
+
+* **governance:** establish frontend integration contract ([e873454](https://github.com/GavinArdhijaya91/Trovaya/commit/e873454203ad413d9b894c2d4b0b017d8f513efd))
+
 ## [0.2.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.1.0...v0.2.0) (2026-08-14)
 
 
