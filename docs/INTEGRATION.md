@@ -36,3 +36,29 @@ For the creator demo, the generated encryption key lives only in browser `sessio
 authorization does not itself reveal this key. Delivering a key to an authorized buyer requires a
 separate authenticated key-delivery service with wallet-signature verification; this is intentionally
 not simulated as production security.
+
+## Frontend integration contract
+
+Frontend components must not call contract ABIs or interpret provider errors
+directly. Integration follows this boundary:
+
+```text
+protocol SDK types -> web adapter hook -> reusable operation state -> UI component
+```
+
+The shared lifecycle is `idle`, `preparing`, `awaiting_wallet`, `submitted`,
+`confirming`, `indexing`, `completed`, or `failed`. UI copy uses familiar terms;
+transaction hashes are presented as proof numbers. Provider errors are reduced
+to stable, retry-aware error codes before reaching a component.
+
+New contract actions should be added in this order:
+
+1. expose the ABI and provider-neutral types from `@trovaya/protocol-sdk`;
+2. implement a focused hook under `apps/web/hooks`;
+3. return actions plus `OperationState`, never raw wagmi state;
+4. render progress through the reusable `OperationStatus` component; and
+5. add an integration-boundary test before wiring the product UI.
+
+Finance-specific policy remains outside this template until approved by product
+management. The integration layer accepts validated amounts and identifiers but
+does not infer pricing, returns, recommendations, or ownership policy.
