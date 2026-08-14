@@ -60,3 +60,13 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Local product-design scratch space (canonical decisions live in docs/*.md)
+/docs/trovaya/
+
+# Local platform state (keep migrations and declarative config tracked)
+/.vercel/
+/.supabase/
+/supabase/.branches/
+/supabase/.temp/
+/.docker-data/
