@@ -16,6 +16,12 @@ Release history is maintained in [`CHANGELOG.md`](CHANGELOG.md) from
 Conventional Commits. CI run details are published as GitHub job summaries and
 downloadable artifacts; generated run reports are not committed to the repo.
 
+Contributor workflow and shared-interface approvals are defined in
+[`CONTRIBUTING.md`](CONTRIBUTING.md) and the
+[`Frontend Integration Contract`](docs/architecture/FRONTEND_INTEGRATION_CONTRACT.md). Pull requests
+must not change API, ABI, SDK, database, authentication, or security boundaries without approval
+from every affected owner.
+
 ## Workspaces
 
 - `apps/web` — creator-facing Next.js dApp

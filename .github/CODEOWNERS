@@ -1,0 +1,16 @@
+# Replace or supplement these entries with the frontend collaborator's GitHub handle after invitation.
+# The repository owner is the temporary fallback reviewer for every protected integration boundary.
+* @GavinArdhijaya91
+
+# Shared interfaces and security-sensitive areas.
+/packages/contracts/ @GavinArdhijaya91
+/packages/protocol-sdk/ @GavinArdhijaya91
+/services/event-indexer/migrations/ @GavinArdhijaya91
+/apps/web/lib/ @GavinArdhijaya91
+/apps/web/hooks/ @GavinArdhijaya91
+/.env.example @GavinArdhijaya91
+/**/.env.example @GavinArdhijaya91
+/docs/architecture/FRONTEND_INTEGRATION_CONTRACT.md @GavinArdhijaya91
+/docs/TRUST_AND_IDENTITY.md @GavinArdhijaya91
+/.github/ @GavinArdhijaya91
+

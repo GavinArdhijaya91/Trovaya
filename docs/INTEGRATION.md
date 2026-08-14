@@ -39,6 +39,10 @@ not simulated as production security.
 
 ## Frontend integration contract
 
+The normative ownership, compatibility, and approval rules are defined in
+[`architecture/FRONTEND_INTEGRATION_CONTRACT.md`](architecture/FRONTEND_INTEGRATION_CONTRACT.md).
+This section is the implementation runbook for that agreement.
+
 Frontend components must not call contract ABIs or interpret provider errors
 directly. Integration follows this boundary:
 
