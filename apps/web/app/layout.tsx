@@ -4,7 +4,7 @@ import "./globals.css";
 import { Web3Provider } from "@/components/web3-provider";
 
 export const metadata: Metadata = {
-  title: "Trovaya — Protect your creations",
+  title: "Trovaya | Protect your creations",
   description: "Consent-first IP protection for creators and UMKMs.",
 };
 

@@ -48,6 +48,32 @@ contract/API schema -> protocol SDK type -> focused web adapter hook -> reusable
 - Wallet identity and passwordless account recovery remain separate security boundaries.
 - Sensitive values and clean creator assets must never cross a browser-public environment boundary.
 
+## Frontend design ownership
+
+The frontend owner has authority to explore and improve layout, visual hierarchy, typography,
+spacing, responsive behavior, accessibility, interaction feedback, component composition, and
+micro-interactions. This ownership includes modifying an existing design when doing so produces a
+clearer Trovaya experience; visual references are inputs for judgment, not templates that must be
+reproduced.
+
+Design work remains governed by the following authority order:
+
+```text
+MASTER_SPEC.md and PRD.md -> DESIGN.md -> this integration contract -> visual references
+```
+
+A reference application, including `web3-investment-platform`, is non-canonical and must not become
+a runtime dependency or a second application root. Patterns such as an application shell, cards,
+navigation rhythm, and responsive composition may be adapted inside `apps/web`. Its product domain,
+hardcoded data, package configuration, lockfile, trading language, and speculative interactions must
+not be copied into Trovaya.
+
+Frontend design changes do not require joint approval when they preserve product behavior and stable
+boundaries. Joint approval is required when a design change alters consent, ownership, licensing,
+payment, authentication, verification, security meaning, or the order and outcome of a core product
+journey. Visual status labels such as "verified," "secure," "live," or "protected" must be backed by
+a real typed state or be explicitly marked as a demo.
+
 ## Change protocol
 
 For a shared-interface change, the pull request author must:
@@ -68,4 +94,3 @@ Material decisions should be recorded in the pull-request description. If a deci
 long-term boundary, update this document or add a focused architecture decision record under this
 directory. Ordinary UI styling and private implementation refactors do not require joint approval
 when stable boundaries and behavior remain unchanged.
-

@@ -78,7 +78,42 @@ The stable phases are `idle`, `preparing`, `awaiting_wallet`, `submitted`, `conf
 `completed`, and `failed`. Render these through the shared operation UI instead of inventing a
 component-local transaction lifecycle.
 
-## 4. Preserve Trovaya's UX language
+## 4. Exercise design ownership responsibly
+
+Frontend contributors own the quality of Trovaya's visual experience. They may reshape layouts,
+split or combine presentation components, refine typography and spacing, improve responsive
+behavior, add appropriate motion, and propose better user journeys without reproducing a reference
+design exactly.
+
+When using a reference such as `web3-investment-platform`:
+
+- treat it as visual research, not application source code;
+- extract useful patterns such as the dashboard shell, card hierarchy, navigation rhythm, and
+  responsive composition;
+- translate every object and action into Trovaya's creator-protection domain;
+- implement production work only under `apps/web`;
+- keep existing SDK hooks, operation states, service boundaries, and security semantics;
+- do not copy its package manifest, lockfile, framework configuration, hardcoded financial data, or
+  monolithic state architecture; and
+- do not introduce trading, swap, price speculation, guaranteed-return language, or unsupported
+  "live," "secure," and "verified" claims.
+
+Use the following authority order when a reference conflicts with the product:
+
+```text
+docs/MASTER_SPEC.md and docs/PRD.md
+  -> docs/DESIGN.md
+  -> Frontend Integration Contract
+  -> visual reference
+```
+
+For a substantial visual exploration, open a focused branch such as
+`feat/web-creator-dashboard`. Include before/after screenshots or a Vercel Preview URL in the pull
+request and explain which reference patterns were adapted, rejected, or transformed. The frontend
+owner may make the final visual recommendation; changes to shared product meaning still require the
+affected owners.
+
+## 5. Preserve Trovaya's UX language
 
 The interface should explain outcomes in familiar language while retaining accurate consent,
 ownership, licensing, and payment meaning. Reuse `apps/web/lib/terminology.ts`; for example:
@@ -91,7 +126,7 @@ ownership, licensing, and payment meaning. Reuse `apps/web/lib/terminology.ts`; 
 Never hide a cost, irreversible action, AI-training consent choice, or transaction failure. AI
 insights must keep the explicit non-advisory disclaimer required by the product specification.
 
-## 5. Develop with explicit service states
+## 6. Develop with explicit service states
 
 Local fallbacks are for UI development and must not claim that a production action occurred:
 
@@ -102,7 +137,7 @@ Local fallbacks are for UI development and must not claim that a production acti
 Design and test loading, empty, disconnected, rejected, retryable error, success, and configuration-
 missing states. Do not replace missing services with silent fake success.
 
-## 6. Validate before handoff
+## 7. Validate before handoff
 
 Run the same gates as CI from the repository root:
 
@@ -117,7 +152,7 @@ wrong or unavailable network, rejected signature, pending transaction, confirmed
 readable failure copy. Confirm that no `.env.local`, build output, uploaded asset, or personal data
 appears in `git status`.
 
-## 7. Commit and open a pull request
+## 8. Commit and open a pull request
 
 Use a Conventional Commit message with the `web` scope:
 
@@ -133,7 +168,7 @@ or manual test evidence when the visible experience changes.
 
 Do not edit `CHANGELOG.md`. Release Please generates it after eligible commits reach `main`.
 
-## 8. Know when joint approval is required
+## 9. Know when joint approval is required
 
 Request review from every affected owner before changing:
 
@@ -152,10 +187,10 @@ need joint approval when their observable behavior and all shared boundaries rem
 
 - [ ] Branch started from the latest `main`.
 - [ ] UI uses hooks and SDK types instead of raw ABI calls.
+- [ ] Visual references were adapted to Trovaya rather than copied as a second application.
 - [ ] Loading, empty, wallet, error, and success states are covered.
 - [ ] Trovaya terminology and required disclaimers remain intact.
 - [ ] No secret, personal data, generated output, or creator source asset is tracked.
 - [ ] Lint, tests, build, and the affected user flow pass.
 - [ ] Shared-interface changes have affected-owner approval and a migration plan.
 - [ ] Commit and pull-request titles follow Conventional Commits.
-
