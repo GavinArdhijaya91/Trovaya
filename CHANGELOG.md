@@ -3,6 +3,21 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.3.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.2.2...v0.3.0) (2026-08-15)
+
+
+### Features
+
+* **web:** add creator workspace experience ([f1e49c7](https://github.com/GavinArdhijaya91/Trovaya/commit/f1e49c7c1240058218647b1298ed329687b6f99c))
+* **web:** add creator workspace experience ([4b26d10](https://github.com/GavinArdhijaya91/Trovaya/commit/4b26d105ff695b7f52160c718a492c3f50ba1e92))
+
+
+### Documentation
+
+* **design:** translate and formalize visual system ([b871f63](https://github.com/GavinArdhijaya91/Trovaya/commit/b871f63e2721f4bd70cda6caa8be53a2850dbbe0))
+* **readme:** add step-by-step developer onboarding ([d52184b](https://github.com/GavinArdhijaya91/Trovaya/commit/d52184babba65e4df155603eb63d14152ab1def2))
+* **web:** define frontend design exploration boundaries ([f2784c6](https://github.com/GavinArdhijaya91/Trovaya/commit/f2784c6719f4bc3e723434ff962fd15ac9fcec4e))
+
 ## [0.2.2](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.2.1...v0.2.2) (2026-08-14)
 
 
