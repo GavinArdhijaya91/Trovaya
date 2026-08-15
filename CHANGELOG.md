@@ -3,6 +3,14 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.3.1](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.3.0...v0.3.1) (2026-08-15)
+
+
+### Documentation
+
+* **readme:** streamline onboarding documentation ([6931578](https://github.com/GavinArdhijaya91/Trovaya/commit/693157870227e3a7dfd2d0ae880ef174094469f8))
+* **readme:** streamline onboarding documentation ([9f366c6](https://github.com/GavinArdhijaya91/Trovaya/commit/9f366c66ba0ac559e285658e2067fbb823f71390))
+
 ## [0.3.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.2.2...v0.3.0) (2026-08-15)
 
 
