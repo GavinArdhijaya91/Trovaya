@@ -5,13 +5,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: "#13231d",
-        leaf: "#176b4d",
-        mint: "#dff4e9",
-        sand: "#f7f4ec",
-        coral: "#ef795f"
+        ink: "#2C2C2A",
+        leaf: "#085041",
+        mint: "#E1F5EE",
+        sand: "#F1EFE8",
+        coral: {
+          DEFAULT: "#D85A30",
+          dark: "#B94723",
+          soft: "#FAECE7"
+        }
       },
-      boxShadow: { soft: "0 18px 50px rgba(19, 35, 29, 0.09)" }
+      boxShadow: { soft: "0 18px 50px rgba(44, 44, 42, 0.09)" }
     }
   },
   plugins: []

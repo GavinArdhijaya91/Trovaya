@@ -7,8 +7,202 @@
 body {
   margin: 0;
   background:
-    radial-gradient(circle at 85% 10%, rgba(223, 244, 233, 0.9), transparent 30rem),
-    #f7f4ec;
-  color: #13231d;
+    radial-gradient(circle at 85% 10%, rgba(225, 245, 238, 0.9), transparent 30rem),
+    #f1efe8;
+  color: #2c2c2a;
 }
 button, input { font: inherit; }
+
+.provenance-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: #f1efe8;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(15, 110, 86, 0.28), transparent 34rem),
+    #052d26;
+  animation: intro-appear 420ms ease both;
+}
+
+.provenance-intro-leaving {
+  pointer-events: none;
+  animation: intro-leave 520ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.provenance-skip {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 2;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid rgba(225, 245, 238, 0.28);
+  border-radius: 999px;
+  color: #e1f5ee;
+  background: rgba(5, 45, 38, 0.52);
+  font-size: 0.75rem;
+  font-weight: 650;
+  backdrop-filter: blur(10px);
+}
+
+.provenance-skip:hover,
+.provenance-skip:focus-visible {
+  border-color: #9fe1cb;
+  outline: none;
+  background: rgba(15, 110, 86, 0.72);
+}
+
+.provenance-visual {
+  position: absolute;
+  inset: 0;
+}
+
+.provenance-visual svg {
+  width: 100%;
+  height: 100%;
+}
+
+.provenance-thread {
+  fill: none;
+  stroke: url("#thread-teal");
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-dasharray: 1 1;
+  pathLength: 1;
+  animation: weave-thread 1.5s cubic-bezier(0.5, 0, 0.25, 1) both;
+}
+
+.thread-two { animation-delay: 90ms; }
+.thread-three { animation-delay: 170ms; }
+.thread-four { animation-delay: 250ms; }
+
+.provenance-nodes circle {
+  fill: #9fe1cb;
+  opacity: 0;
+  animation: reveal-node 380ms ease forwards;
+}
+
+.provenance-nodes circle:nth-child(2) { animation-delay: 360ms; }
+.provenance-nodes circle:nth-child(3) { animation-delay: 500ms; }
+.provenance-nodes circle:nth-child(4) { animation-delay: 640ms; }
+.provenance-nodes circle:nth-child(5) { animation-delay: 780ms; }
+.provenance-nodes circle:nth-child(6) { animation-delay: 920ms; }
+.provenance-nodes circle:nth-child(7) { animation-delay: 1.06s; }
+.provenance-nodes circle:nth-child(8) { animation-delay: 680ms; }
+.provenance-nodes circle:nth-child(9) { animation-delay: 850ms; }
+
+.creator-glow {
+  opacity: 0;
+  animation: reveal-origin 700ms ease 620ms forwards;
+}
+
+.creator-origin {
+  fill: #d85a30;
+  opacity: 0;
+  animation: origin-pulse 850ms ease 620ms forwards;
+}
+
+.protection-frame {
+  fill: rgba(225, 245, 238, 0.025);
+  stroke: #9fe1cb;
+  stroke-width: 2;
+  stroke-dasharray: 1 1;
+  pathLength: 1;
+  animation: weave-thread 720ms ease 1s both;
+}
+
+.consent-mark {
+  fill: none;
+  stroke: #f5c4b3;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 1;
+  pathLength: 1;
+  animation: weave-thread 460ms ease 1.35s both;
+}
+
+.provenance-copy {
+  position: relative;
+  z-index: 1;
+  margin-top: 18rem;
+  padding: 0 1.5rem;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: reveal-copy 520ms ease 1.08s forwards;
+}
+
+.provenance-copy p {
+  margin: 0;
+  color: #9fe1cb;
+  font-size: clamp(0.75rem, 2vw, 0.95rem);
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.provenance-copy strong {
+  display: block;
+  margin-top: 0.65rem;
+  font-size: clamp(1.25rem, 4vw, 2.15rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.provenance-wordmark {
+  position: absolute;
+  bottom: 1.7rem;
+  left: 50%;
+  z-index: 1;
+  color: #f1efe8;
+  font-size: 1rem;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  opacity: 0;
+  transform: translateX(-50%);
+  animation: reveal-node 400ms ease 1.55s forwards;
+}
+
+.provenance-wordmark span { color: #f0997b; }
+
+@keyframes weave-thread {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes reveal-node {
+  from { opacity: 0; transform: scale(0.4); transform-origin: center; }
+  to { opacity: 1; transform: scale(1); transform-origin: center; }
+}
+
+@keyframes reveal-origin {
+  from { opacity: 0; transform: scale(0.45); transform-origin: 558px 328px; }
+  to { opacity: 0.82; transform: scale(1); transform-origin: 558px 328px; }
+}
+
+@keyframes origin-pulse {
+  0% { opacity: 0; transform: scale(0.5); transform-origin: 558px 328px; }
+  60% { opacity: 1; transform: scale(1.7); transform-origin: 558px 328px; }
+  100% { opacity: 1; transform: scale(1); transform-origin: 558px 328px; }
+}
+
+@keyframes reveal-copy {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes intro-appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes intro-leave {
+  from { opacity: 1; clip-path: inset(0 0 0 0); }
+  to { opacity: 0; clip-path: inset(48% 0 48% 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .provenance-intro { display: none; }
+}

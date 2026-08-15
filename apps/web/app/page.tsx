@@ -1,10 +1,12 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Link from "next/link";
 import { ProtectionForm } from "@/components/protection-form";
 import { FeeComparison } from "@/components/fee-comparison";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { TaxExport } from "@/components/tax-export";
 import { LicensePreview } from "@/components/license-preview";
 import { AssetGallery } from "@/components/asset-gallery";
+import { IntroExperience } from "@/components/intro-experience";
 
 const benefits = [
   ["01", "Register ownership", "Create a permanent proof connecting your work to you."],
@@ -15,9 +17,13 @@ const benefits = [
 export default function Home() {
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-5 pb-16 pt-6 md:px-8">
+      <IntroExperience />
       <nav className="flex items-center justify-between">
         <a href="#" className="text-xl font-bold tracking-tight">Trovaya<span className="text-coral">.</span></a>
         <div className="flex items-center gap-3">
+          <Link href="/dashboard" className="hidden rounded-xl px-3 py-2 text-sm font-semibold text-leaf hover:bg-mint md:block">
+            Creator workspace
+          </Link>
           <button className="hidden rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium sm:block" title="Social sign-in provider will be configured for deployment">
             Continue with email
           </button>
@@ -29,13 +35,13 @@ export default function Home() {
         <div>
           <p className="mb-4 inline-flex rounded-full bg-mint px-4 py-2 text-sm font-semibold text-leaf">Built for creators & local businesses</p>
           <h1 className="max-w-3xl text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl">Your ideas deserve <span className="text-leaf">clear protection.</span></h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">Register your work, choose how AI may use it, and share a protected public preview—all from one calm workspace.</p>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">Register your work, choose how AI may use it, and share a protected public preview. Everything stays in one calm workspace.</p>
           <a href="#studio" className="mt-8 inline-block rounded-xl bg-coral px-6 py-3 font-semibold text-white">Protect your first creation</a>
         </div>
         <div id="studio"><ProtectionForm /></div>
       </section>
 
-      <section className="border-t border-slate-300/70 pt-10">
+      <section id="how-it-works" className="border-t border-slate-300/70 pt-10">
         <p className="mb-6 text-sm font-semibold text-slate-500">ONE SIMPLE PATH FROM IDEA TO PROTECTED ASSET</p>
         <div className="grid gap-4 md:grid-cols-3">
           {benefits.map(([number, title, description]) => (
