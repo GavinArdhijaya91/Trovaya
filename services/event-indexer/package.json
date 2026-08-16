@@ -11,5 +11,5 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": { "@trovaya/protocol-sdk": "workspace:*", "dotenv": "^17.4.2", "postgres": "^3.4.5", "viem": "^2.23.2" },
-  "devDependencies": { "@types/node": "^22.13.1", "tsx": "^4.19.3", "typescript": "^5.7.3" }
+  "devDependencies": { "@types/node": "^26.2.0", "tsx": "^4.19.3", "typescript": "^7.0.2" }
 }
