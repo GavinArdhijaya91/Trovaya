@@ -7,6 +7,10 @@ export const PUBLIC_ASSET_FIELDS = [
   "public_poisoned_cid",
   "commercial_license_fee_wei",
   "token_uri",
+  "license_terms_uri",
+  "license_terms_hash",
+  "license_terms_version",
+  "license_duration_seconds",
   "status",
   "created_at",
 ] as const;
@@ -20,6 +24,10 @@ export interface PublicAsset {
   public_poisoned_cid: string | null;
   commercial_license_fee_wei: string | null;
   token_uri: string | null;
+  license_terms_uri: string | null;
+  license_terms_hash: string | null;
+  license_terms_version: number | null;
+  license_duration_seconds: string | null;
   status: string;
   created_at: string;
 }
@@ -40,6 +48,10 @@ function parsePublicAsset(input: unknown): PublicAsset {
     public_poisoned_cid: nullableString(input, "public_poisoned_cid"),
     commercial_license_fee_wei: nullableString(input, "commercial_license_fee_wei"),
     token_uri: nullableString(input, "token_uri"),
+    license_terms_uri: nullableString(input, "license_terms_uri"),
+    license_terms_hash: nullableString(input, "license_terms_hash"),
+    license_terms_version: nullableNumber(input, "license_terms_version"),
+    license_duration_seconds: nullableString(input, "license_duration_seconds"),
     status: requiredString(input, "status"),
     created_at: requiredString(input, "created_at"),
   };
@@ -73,6 +85,14 @@ function nullableString(record: Record<string, unknown>, field: string): string 
   const value = record[field];
   if (value !== null && typeof value !== "string") {
     throw new Error(`Public asset field ${field} must be a string or null.`);
+  }
+  return value;
+}
+
+function nullableNumber(record: Record<string, unknown>, field: string): number | null {
+  const value = record[field];
+  if (value !== null && (typeof value !== "number" || !Number.isSafeInteger(value))) {
+    throw new Error(`Public asset field ${field} must be a safe integer or null.`);
   }
   return value;
 }

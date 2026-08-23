@@ -13,6 +13,7 @@ export type IntegrationErrorCode =
   | "configuration_missing"
   | "wallet_required"
   | "user_rejected"
+  | "chain_mismatch"
   | "network_error"
   | "transaction_failed"
   | "service_unavailable"
@@ -82,6 +83,10 @@ export function normalizeIntegrationError(error: unknown): IntegrationError {
   const rawMessage = `${candidate?.shortMessage ?? candidate?.message ?? ""}`.toLowerCase();
   if (candidate?.code === 4001 || rawMessage.includes("user rejected") || rawMessage.includes("user denied")) {
     return { code: "user_rejected", message: "Persetujuan transaksi dibatalkan.", retryable: true };
+  }
+  if (candidate?.code === 4902 || rawMessage.includes("chain mismatch")
+      || rawMessage.includes("chain is not configured") || rawMessage.includes("unsupported chain")) {
+    return { code: "chain_mismatch", message: "Jaringan akun tidak sesuai dengan jaringan Trovaya.", retryable: true };
   }
   if (rawMessage.includes("network") || rawMessage.includes("fetch") || rawMessage.includes("rpc")) {
     return { code: "network_error", message: "Jaringan belum dapat dihubungi. Coba kembali.", retryable: true };

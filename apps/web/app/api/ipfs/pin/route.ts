@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { isCanonicalIpfsCid } from "@/lib/vault/validation";
 
 export const runtime = "nodejs";
 const MAX_BYTES = 20 * 1024 * 1024;
@@ -18,7 +19,10 @@ export async function POST(request: NextRequest) {
       method: "POST", headers: { Authorization: `Bearer ${jwt}` }, body: pinData,
     });
     if (!response.ok) return NextResponse.json({ detail: "Pinata menolak penyimpanan." }, { status: 502 });
-    const body = await response.json() as { IpfsHash: string };
+    const body = await response.json().catch(() => null) as { IpfsHash?: unknown } | null;
+    if (!body || typeof body.IpfsHash !== "string" || !isCanonicalIpfsCid(body.IpfsHash)) {
+      return NextResponse.json({ detail: "Pinata mengembalikan CID tidak valid." }, { status: 502 });
+    }
     return NextResponse.json({ cid: body.IpfsHash, mode: "pinata" });
   }
 

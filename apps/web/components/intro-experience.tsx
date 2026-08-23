@@ -19,7 +19,7 @@ export function IntroExperience() {
     if (prefersReducedMotion || readIntroSeen()) return;
 
     markIntroSeen();
-    setPhase("visible");
+    const showTimer = setTimeout(() => setPhase("visible"), 0);
 
     exitTimer.current = setTimeout(() => setPhase("leaving"), DISPLAY_DURATION_MS);
     hideTimer.current = setTimeout(() => setPhase("hidden"), DISPLAY_DURATION_MS + EXIT_DURATION_MS);
@@ -27,6 +27,7 @@ export function IntroExperience() {
     return () => {
       if (exitTimer.current) clearTimeout(exitTimer.current);
       if (hideTimer.current) clearTimeout(hideTimer.current);
+      clearTimeout(showTimer);
       document.body.style.overflow = previousOverflow.current;
     };
   }, []);
