@@ -11,8 +11,10 @@ contract MockZKHumanVerifier is AccessControl, ReentrancyGuard, IZKHumanVerifier
     mapping(address account => bool verified) public isVerifiedHuman;
 
     event HumanVerificationUpdated(address indexed account, bool verified);
+    error InvalidAddress();
 
     constructor(address initialAdmin) {
+        if (initialAdmin == address(0)) revert InvalidAddress();
         _grantRole(DEFAULT_ADMIN_ROLE, initialAdmin);
         _grantRole(VERIFIER_OPERATOR_ROLE, initialAdmin);
     }
@@ -20,6 +22,7 @@ contract MockZKHumanVerifier is AccessControl, ReentrancyGuard, IZKHumanVerifier
     function setVerifiedHuman(address account, bool verified)
         external onlyRole(VERIFIER_OPERATOR_ROLE) nonReentrant
     {
+        if (account == address(0)) revert InvalidAddress();
         isVerifiedHuman[account] = verified;
         emit HumanVerificationUpdated(account, verified);
     }
