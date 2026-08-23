@@ -230,6 +230,52 @@ contains credentials into issues, commits, screenshots, or group chats. The anon
 key is intended for public clients, but its effective permissions must still be
 limited by RLS and explicit grants.
 
+## Supabase email-OTP account foundation
+
+Passwordless email login is implemented with Supabase's numeric email OTP flow
+and cookie-based SSR sessions. Its database foundation lives separately from
+event-indexer data:
+
+```text
+Supabase auth.users
+  -> account_profiles       private owner preferences
+  -> creator_profiles       explicitly public creator fields
+  -> linked_wallets         signature-verified wallet relationships
+  -> wallet_link_challenges server-only hashed, expiring nonces
+  -> account_audit_events   server-only security audit trail
+```
+
+Apply [`202608230001_account_foundation.sql`](supabase/migrations/202608230001_account_foundation.sql)
+only to a Supabase project, then run the read-only checks in
+[`account_foundation_verification.sql`](supabase/tests/account_foundation_verification.sql).
+The indexer's `public.users` table remains a blockchain wallet directory and is
+not an email-account table.
+
+Browser auth will use:
+
+```dotenv
+NEXT_PUBLIC_SUPABASE_URL=https://PROJECT_ID.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_PROJECT_ANON_KEY
+```
+
+These values are browser-public and constrained by RLS. Never expose
+`SUPABASE_SERVICE_ROLE_KEY`.
+
+Before testing the runtime:
+
+1. Apply the account-foundation migration.
+2. In Supabase Auth, enable Email and configure the email template to contain
+   `{{ .Token }}` so Supabase sends a six-digit OTP rather than only a magic link.
+3. Configure Site URL and allowed redirect URLs for `http://localhost:3000` and
+   the production domain.
+4. Add the two `NEXT_PUBLIC_` values to `apps/web/.env.local` and restart the web
+   server.
+
+The UI supports OTP request, generic delivery feedback, six-digit verification,
+60-second resend cooldown, cookie session restoration, verified-email display,
+and logout. Wallet linking remains a separate server-side challenge and
+signature-verification flow; email login never grants signing authority.
+
 ## Contribution rule
 
 Do not commit or push directly to `main`.

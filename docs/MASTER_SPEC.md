@@ -59,6 +59,13 @@ The trust expansion is specified in `TRUST_AND_IDENTITY.md`. The advanced
 integrations in Section 4 extend the original MVP; they neither replace nor
 outweigh its IP protection and fair-trade purpose.
 
+Supabase `auth.users` is authoritative for email-account subjects and managed
+sessions. Account preferences, explicitly public creator profiles, verified
+wallet links, hashed wallet-link challenges, and audit events use the separate
+schema defined under `supabase/migrations/`. The event indexer's `public.users`
+table remains only an on-chain wallet directory and must never become an email
+identity or session store.
+
 ### 3.1 Authority boundaries
 
 - Smart contracts are authoritative for token ownership, recorded consent,

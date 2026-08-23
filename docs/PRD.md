@@ -220,13 +220,40 @@ collapsed into a claim that an asset, business, or investment is guaranteed.
 Detailed requirements and security boundaries are defined in
 `TRUST_AND_IDENTITY.md`.
 
+### 10.1 Passwordless account acceptance criteria
+
+- Email authentication uses Supabase passwordless OTP; Trovaya does not create a
+  password or duplicate provider OTP/session storage.
+- Request and verification responses do not disclose whether an email already
+  exists, and UI states cover cooldown, expiry, invalid code, attempt exhaustion,
+  delivery failure, success, logout, and session expiry.
+- Browser sessions use the supported Supabase SSR/cookie integration and are
+  validated server-side before private data is rendered.
+- `account_profiles` is owner-only; `creator_profiles` is public only after an
+  explicit `is_public` choice; challenge and audit tables have no client grants.
+- Email-authenticated users cannot link or unlink a wallet until recent auth is
+  confirmed and a fresh, expiring, single-use challenge is signed by that wallet.
+- OTP recovery restores only the off-chain account. Minting and other on-chain
+  actions still require the wallet signer.
+- The RLS/grant inspection script passes in the target Supabase project, and
+  negative tests prove that one account cannot read or update another account's
+  private profile or linked-wallet records.
+
+The database foundation is defined in
+`supabase/migrations/202608230001_account_foundation.sql`. The web implements OTP
+request/verification, cookie session refresh, account state, resend cooldown, and
+logout. Target-Supabase migration/RLS verification, provider email configuration,
+SMTP readiness, and wallet-link signature endpoints remain deployment or
+implementation work and must not be presented as shipped until their criteria
+pass.
+
 Fractional funding and tokenized investment form a subordinate future track,
 not the defining value of this pivot. They require a separate architecture and
 regulatory decision before entering the implementation backlog. A future
 asset-holding contract will use `TrovayaFundingPool`; `TrovayaVault` remains
 reserved for encrypted IP access.
 
-### 10.1 Advanced insight distribution
+### 10.2 Advanced insight distribution
 
 After the core MVP and trust layer are stable, Trovaya may add a provider-neutral
 Insights Gateway. It can expose non-advisory creator fundamentals internally,

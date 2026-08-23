@@ -25,6 +25,29 @@ encrypted vault references, identity data, sessions, or key-delivery material to
 the view. Database owners and service roles bypass ordinary RLS and therefore
 must remain limited to trusted server processes.
 
+## Supabase account foundation
+
+Operational/indexer migrations and Supabase Auth migrations have different
+portability boundaries:
+
+- apply `services/event-indexer/migrations/` to operational PostgreSQL in numeric
+  order;
+- apply `supabase/migrations/` only to Supabase because these migrations use
+  `auth.users`, `auth.uid()`, `anon`, and `authenticated`;
+- run the read-only inspection queries under `supabase/tests/` afterward.
+
+Email OTP configuration remains provider-managed. Enable email OTP, configure
+development and production redirect URLs, set expiry/resend/rate limits, and
+review templates so responses do not disclose whether an account exists.
+Supabase owns OTP and session storage; never duplicate raw OTPs, magic links,
+access tokens, or refresh tokens in the public schema or application logs.
+
+The Magic Link/OTP email template must contain `{{ .Token }}` for the six-digit
+code-entry UI. Supabase's default test email service is not a production delivery
+channel; configure approved SMTP before inviting real users. Restart the Next.js
+runtime after changing `NEXT_PUBLIC_SUPABASE_URL` or
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` because they are compiled into the browser bundle.
+
 The listener resumes from `indexer_cursors` and deduplicates every event by chain, transaction
 hash, and log index. It stores timestamps and native-crypto amounts exactly. A production fiat
 rate adapter must populate `fiat_rate_idr` at execution time; missing rates remain null rather
