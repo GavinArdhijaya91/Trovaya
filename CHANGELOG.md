@@ -3,6 +3,37 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.5.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.4.0...v0.5.0) (2026-08-23)
+
+
+### Features
+
+* **indexer:** add reorg-safe bounded synchronization ([b26f8a2](https://github.com/GavinArdhijaya91/Trovaya/commit/b26f8a27bad7384002b77d646bae1c36ce0c803b))
+* **protocol:** complete priority remediation backlog ([73fd158](https://github.com/GavinArdhijaya91/Trovaya/commit/73fd15810f555d7666cef24b6af993d45b7c20d1))
+* **protocol:** harden licensing and vault access ([d98315a](https://github.com/GavinArdhijaya91/Trovaya/commit/d98315af6b042af0316e5f8bcb27511c9f7ce7cd))
+* **web:** complete licensing and secure key delivery ([0ca9213](https://github.com/GavinArdhijaya91/Trovaya/commit/0ca9213d2b5acfb4d0b1f0053480ae18b89ed7f2))
+
+
+### Fixes
+
+* **ci:** gate unavailable dependency review ([3e72cc9](https://github.com/GavinArdhijaya91/Trovaya/commit/3e72cc9750e7a1b8fd1fba317dc1e6f28445d6fa))
+* **ci:** generate protocol ABI before lint ([f03bb4f](https://github.com/GavinArdhijaya91/Trovaya/commit/f03bb4fdd895b7d3de20d133fa5cdf55c08113bf))
+* **ci:** generate protocol ABI before lint ([730d4e9](https://github.com/GavinArdhijaya91/Trovaya/commit/730d4e9661d3161c33930790f093837699466277))
+* **ci:** grant read access for secret scan ([e1ecac8](https://github.com/GavinArdhijaya91/Trovaya/commit/e1ecac8e64ac6dc9e085998e83673e9571d8bc30))
+* **poison:** harden experimental preview pipeline ([533253e](https://github.com/GavinArdhijaya91/Trovaya/commit/533253e850ce0dbe813901c37a6fe32d0407b873))
+* **security:** triage solidity analysis findings ([4bdfffc](https://github.com/GavinArdhijaya91/Trovaya/commit/4bdfffc638a6cb4263f66bd480622593949b932e))
+* **security:** update audited Python dependencies ([1ab5083](https://github.com/GavinArdhijaya91/Trovaya/commit/1ab5083da4c2204032c360824e660c69b1823f97))
+
+
+### Security
+
+* **ci:** add automated release gates ([d926fae](https://github.com/GavinArdhijaya91/Trovaya/commit/d926fae83b00850c62e0254d8771ecc34dbd0c92))
+
+
+### Documentation
+
+* **release:** define verified acceptance gates ([c3ca9a5](https://github.com/GavinArdhijaya91/Trovaya/commit/c3ca9a5325e625680403eb30e047ae3728f8da18))
+
 ## [0.4.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.3.1...v0.4.0) (2026-08-23)
 
 
