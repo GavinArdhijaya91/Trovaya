@@ -110,6 +110,13 @@ Dependency policy blocks new high or critical production advisories. The
 affected buffer-output UUID API. Reassess them whenever RainbowKit/Wagmi updates,
 and do not use a forced incompatible major override merely to reduce the count.
 
+The 2026-08-24 clean Python environment resolves Pillow 12.3.0 and setuptools
+83.0.0, passes `pip check`, Ruff, and all Poison Engine tests, and reports no
+known third-party vulnerability through `pip-audit --skip-editable`. The local
+`trovaya-poison-engine` distribution is intentionally skipped because editable
+workspace packages do not exist on PyPI; every resolved external dependency is
+still audited.
+
 Native GitHub dependency review additionally requires Dependency Graph and, for
 a private repository, GitHub Code Security or Advanced Security. Until that
 repository capability is available, the workflow reports an explicit notice and
