@@ -58,13 +58,14 @@ async def poison_image(
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, str(exc)) from exc
 
     digest = hashlib.sha256(poisoned).hexdigest()
-    # Deterministic placeholder with CID-like shape; replace at the IPFS adapter boundary.
-    mock_cid = f"Qm{digest[:44]}"
     encoded = base64.b64encode(poisoned).decode("ascii")
     return PoisonResponse(
         poisoned_image_base64=f"data:image/png;base64,{encoded}",
         perturbation_hash=f"0x{digest}",
-        public_ipfs_cid=mock_cid,
+        capability_notice=(
+            "Experimental bounded pixel transform; no adversarial-protection effectiveness "
+            "is claimed. This response is not persisted to IPFS."
+        ),
     )
 
 

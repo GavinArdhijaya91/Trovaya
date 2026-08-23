@@ -3,9 +3,12 @@ from __future__ import annotations
 import hashlib
 from io import BytesIO
 
+import numpy as np
 from PIL import Image, UnidentifiedImageError
 
-MAX_IMAGE_PIXELS = 25_000_000
+MAX_IMAGE_WIDTH = 4096
+MAX_IMAGE_HEIGHT = 4096
+MAX_IMAGE_PIXELS = MAX_IMAGE_WIDTH * MAX_IMAGE_HEIGHT
 
 
 class InvalidImageError(ValueError):
@@ -24,7 +27,11 @@ def perturb_image(source: bytes, intensity: float) -> bytes:
     try:
         with Image.open(BytesIO(source)) as opened:
             opened.load()
-            if opened.width * opened.height > MAX_IMAGE_PIXELS:
+            if (
+                opened.width > MAX_IMAGE_WIDTH
+                or opened.height > MAX_IMAGE_HEIGHT
+                or opened.width * opened.height > MAX_IMAGE_PIXELS
+            ):
                 raise InvalidImageError("image dimensions are too large")
             image = opened.convert("RGB")
     except (UnidentifiedImageError, OSError, Image.DecompressionBombError) as exc:
@@ -32,22 +39,17 @@ def perturb_image(source: bytes, intensity: float) -> bytes:
 
     amplitude = round(intensity * 12)
     if amplitude:
-        pixels = image.load()
-        seed = hashlib.sha256(source).digest()
-        for y in range(image.height):
-            for x in range(image.width):
-                red, green, blue = pixels[x, y]
-                direction = 1 if seed[(x + y * image.width) % len(seed)] & 1 else -1
-                pixels[x, y] = (
-                    _clamp(red + direction * amplitude),
-                    _clamp(green - direction * amplitude),
-                    _clamp(blue + direction * max(1, amplitude // 2)),
-                )
+        pixels = np.asarray(image, dtype=np.int16).copy()
+        seed = np.frombuffer(hashlib.sha256(source).digest(), dtype=np.uint8)
+        pixel_count = image.width * image.height
+        direction = ((np.resize(seed, pixel_count) & 1).astype(np.int16) * 2 - 1).reshape(
+            image.height, image.width
+        )
+        pixels[:, :, 0] += direction * amplitude
+        pixels[:, :, 1] -= direction * amplitude
+        pixels[:, :, 2] += direction * max(1, amplitude // 2)
+        image = Image.fromarray(np.clip(pixels, 0, 255).astype(np.uint8))
 
     output = BytesIO()
     image.save(output, format="PNG", optimize=True)
     return output.getvalue()
-
-
-def _clamp(value: int) -> int:
-    return max(0, min(255, value))
