@@ -153,13 +153,17 @@ pnpm.cmd dev:web
 | Mode | Available behavior | Requirement |
 | --- | --- | --- |
 | UI preview | Landing, intro, dashboard, and explicit empty states | Web environment example |
-| Protection demo | Image perturbation and protected preview | Poison engine |
+| Protection demo | Experimental image perturbation and visibly labelled preview | Poison engine |
 | Indexed integration | Gallery and creator records | PostgreSQL migrations and indexer |
 | Testnet integration | Wallet provenance and commercial licensing | RPC, addresses, and testnet funds |
 | External persistence | RLS-restricted Supabase gallery reads and Pinata IPFS pinning | Supabase anon key and server-only Pinata credential |
 
 Missing credentials must produce an explicit demo, empty, or unavailable state. The application
 must never silently represent a fallback as a successful production operation.
+
+The poison-engine demo supports images up to 4096 x 4096 pixels and uses a
+process-local async rate limiter. Run a single Uvicorn worker locally. Multiple
+workers or replicas require a shared limiter such as Redis before production use.
 
 ## Environment and secrets
 

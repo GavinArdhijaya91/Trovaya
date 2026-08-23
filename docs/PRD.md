@@ -99,15 +99,39 @@ enforcement, or prevention of scraping.
   authorization with recorded transaction hashes and failure states.
 
 ### P1 (High Priority - Value Add)
+- [x] **Frontend Runtime and Failure Hardening (implemented in code):** Next 16
+  lint tooling, Node/TypeScript runtime targets, and direct dependencies are
+  aligned. Deterministic wallet, chain, service, and retry tests plus accessible
+  failure-state component tests pass. Live golden-path browser evidence remains a
+  deployment release gate.
+- [ ] **Automated Security Gates (workflow implemented; execution pending):**
+  Slither, dependency review/audits, Gitleaks, payout-accounting invariants, and a
+  fail-closed deployment-role verifier are defined. The release gate remains open
+  until hosted CI and target-testnet role evidence pass.
+- [x] **Reorg-Safe Event Indexer (implemented in code; deployment pending):**
+  confirmed, bounded block chunks; serialized polling; bounded RPC retry;
+  canonical cursor validation; transactional rollback/replay; structured metrics;
+  and graceful signal shutdown. Migration/replay and live failure drills remain
+  release-gate requirements.
+- [x] **Withdrawal-Credit Licensing (implemented in code; audit pending):** a
+  purchase records the license without calling an arbitrary creator receiver.
+  Proceeds become a creator-owned balance withdrawable to a selected address;
+  failed withdrawals preserve the full liability. Minted fee and hashed terms are
+  immutable, so a materially changed offer requires a new registration/version.
+  The dashboard displays the pending balance and lets the creator withdraw to the
+  connected wallet. Trovaya does not apply a denomination-dependent universal
+  price cap: payment is buyer-initiated only after displaying and hash-verifying
+  the exact immutable fee and terms.
 - [ ] **Mock ZK-KYC Submission:** Lightweight upload form rendering automatic `SAMPLE` watermarks on uploaded credentials[cite: 1].
 - [ ] **AI Reviewer Audit Panel:** Interactive card rendering asset authenticity scores and red-flag summaries with explicit educational disclaimers[cite: 1].
 - [ ] **Commercial License Purchase:** Payment escrow function transferring license fees directly to creator wallets[cite: 1].
-- [ ] **Versioned License Terms:** buyer sees and accepts the exact hashed terms,
+- [x] **Versioned License Terms (implemented in code; deployment pending):** buyer sees and accepts the exact hashed terms,
   including duration, territory, permitted use/media, exclusivity,
   sublicensing, and AI-training consent, before payment.
-- [ ] **Secure Clean-Source Delivery:** an authorized buyer can obtain and use a
+- [x] **Secure Clean-Source Delivery (implemented in code; deployment pending):** an authorized buyer can obtain and use a
   decryption key while unauthorized, expired, or revoked identities cannot begin
-  a new delivery. The product states that downloaded plaintext cannot be revoked.
+  a new delivery. **Implemented in code; deployment testing pending.** The product
+  states that downloaded plaintext cannot be revoked.
 
 ### P2 (Nice-to-Have / Post-Hackathon Roadmap)
 - [ ] **Soulbound Badge (SBT) Issuance:** Automatic minting of reputation badges for top-tier MSMEs[cite: 1].

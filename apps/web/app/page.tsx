@@ -10,7 +10,7 @@ import { IntroExperience } from "@/components/intro-experience";
 import { EmailAuth } from "@/components/email-auth";
 
 const benefits = [
-  ["01", "Register ownership", "Create a permanent proof connecting your work to you."],
+  ["01", "Register provenance", "Create a durable on-chain record connecting your wallet and work reference."],
   ["02", "Control AI consent", "Clearly state whether your creation may be used for AI training."],
   ["03", "Earn fairly", "Set commercial terms and automatic resale rewards."],
 ] as const;
@@ -34,7 +34,7 @@ export default function Home() {
         <div>
           <p className="mb-4 inline-flex rounded-full bg-mint px-4 py-2 text-sm font-semibold text-leaf">Built for creators & local businesses</p>
           <h1 className="max-w-3xl text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl">Your ideas deserve <span className="text-leaf">clear protection.</span></h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">Register your work, choose how AI may use it, and share a protected public preview. Everything stays in one calm workspace.</p>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600">Register provenance, choose how AI may use your work, and share an experimental public preview. Trovaya records evidence and consent; it does not adjudicate copyright.</p>
           <a href="#studio" className="mt-8 inline-block rounded-xl bg-coral px-6 py-3 font-semibold text-white">Protect your first creation</a>
         </div>
         <div id="studio"><ProtectionForm /></div>

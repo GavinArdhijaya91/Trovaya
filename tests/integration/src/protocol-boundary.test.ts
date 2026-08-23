@@ -16,4 +16,8 @@ test("SDK exposes a stable frontend transaction lifecycle", () => {
   assert.equal(deriveTransactionState({ hash: "0x123", isWalletPending: false, isConfirming: true, isSuccess: false }).phase, "confirming");
   assert.equal(deriveTransactionState({ hash: "0x123", isWalletPending: false, isConfirming: false, isSuccess: true }).phase, "completed");
   assert.equal(deriveTransactionState({ isWalletPending: false, isConfirming: false, isSuccess: false, error: { code: 4001 } }).error?.code, "user_rejected");
+  assert.deepEqual(
+    deriveTransactionState({ isWalletPending: false, isConfirming: false, isSuccess: false, error: { code: 4902 } }).error,
+    { code: "chain_mismatch", message: "Jaringan akun tidak sesuai dengan jaringan Trovaya.", retryable: true },
+  );
 });

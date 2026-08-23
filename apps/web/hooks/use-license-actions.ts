@@ -27,13 +27,13 @@ export function useLicenseActions() {
     error: unlock.error ?? unlockReceipt.error,
   });
 
-  async function purchaseLicense(tokenId: string, feeWei: string) {
+  async function purchaseLicense(tokenId: string, feeWei: string, termsHash: `0x${string}`, termsVersion: number) {
     if (!addresses) throw new Error("Alamat protokol belum dikonfigurasi.");
     return purchase.writeContractAsync({
       address: addresses.ipNFT,
       abi: trovayaIPNFTAbi,
       functionName: "purchaseCommercialLicense",
-      args: [BigInt(tokenId)],
+      args: [BigInt(tokenId), termsHash, termsVersion],
       value: BigInt(feeWei),
     });
   }

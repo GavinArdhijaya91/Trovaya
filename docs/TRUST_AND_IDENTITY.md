@@ -66,6 +66,37 @@ encrypted infrastructure with explicit retention and deletion policies. The
 MVP mock-KYC preview retains the required `SAMPLE` watermark and must not imply
 production-grade identity assurance.
 
+## Production identity proof contract (not yet implemented)
+
+The mock adapter may be replaced only after a named issuer and jurisdictional
+owner approve this contract. A production claim exposes only the minimum signal:
+
+| Field | Requirement |
+| --- | --- |
+| `issuer` | Stable provider identifier and public verification-key reference |
+| `subject_commitment` | Provider-bound pseudonymous commitment; never plaintext identity data |
+| `proof_type` / `proof_hash` | Named protocol/version and integrity hash; raw evidence stays with its custodian |
+| `nullifier` | Issuer- and purpose-scoped replay prevention, unlinkable across unrelated products |
+| `issued_at` / `expires_at` | Mandatory bounded validity window |
+| `status` / `revoked_at` | Pending, verified, rejected, expired, or revoked, checked fresh at authorization |
+| `assurance_level` | Explicit evidence and review class, not an opaque trust score |
+
+Raw documents require a named controller/processor, encryption, access logging,
+regional storage decision, purpose limitation, and approved deletion schedule.
+The default target is deletion after the appeal window; longer legal retention
+must name its basis and duration. Analytics, the indexer, contracts, public
+profiles, and IPFS receive neither raw documents nor stable cross-service IDs.
+
+Revocation must propagate within a documented maximum delay. Users need a reason
+category, correction and appeal route, response deadline, and auditable outcome.
+Provider timeout, invalid proof, stale issuer keys, status outage, and ambiguous
+results fail closed as `unverified`; prior success cannot outlive its expiry.
+
+Before implementation, record a data-protection review, threat model, issuer SLA,
+key-rotation/compromise procedure, unlinkability and retention tests, revocation
+drill, and appeal owner. Until then, runtime responses remain
+`identity_mode: mock` and `verification_status: not_verified`.
+
 ## OTP and session controls
 
 An implementation of email OTP must provide:

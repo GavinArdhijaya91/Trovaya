@@ -1,7 +1,7 @@
 # Trovaya Protocol
 
 Trovaya is a consent-first IP protection and fair-trade protocol for digital creators and local
-MSMEs. It combines protected public previews, encrypted originals, explicit AI-training consent,
+MSMEs. It combines experimental protected public previews, encrypted originals, explicit AI-training consent,
 on-chain provenance, and transparent commercial licensing.
 
 The product is governed by [`docs/MASTER_SPEC.md`](docs/MASTER_SPEC.md) and
@@ -12,7 +12,7 @@ The product is governed by [`docs/MASTER_SPEC.md`](docs/MASTER_SPEC.md) and
 ```text
 Connect account
   -> upload work
-  -> generate protected preview
+  -> generate experimental protected preview
   -> encrypt clean original
   -> record AI consent and provenance
   -> publish protected work
@@ -43,6 +43,8 @@ corepack install --global pnpm@9.15.4
 pnpm.cmd install --frozen-lockfile
 pnpm.cmd build
 Copy-Item apps/web/.env.example apps/web/.env.local
+Copy-Item services/event-indexer/.env.example services/event-indexer/.env
+pnpm.cmd demo:check
 pnpm.cmd dev:web
 ```
 
@@ -304,6 +306,8 @@ Read [`CONTRIBUTING.md`](CONTRIBUTING.md) before making changes.
 - [`CONTRACT_ARCHITECTURE.md`](docs/CONTRACT_ARCHITECTURE.md): smart-contract design
 - [`INTEGRATION.md`](docs/INTEGRATION.md): end-to-end integration runbook
 - [`OPERATIONS.md`](docs/OPERATIONS.md): secrets, migrations, and controls
+- [`EVALUATION_ACTION_PLAN.md`](docs/EVALUATION_ACTION_PLAN.md): ordered remediation backlog and release gates
+- [`SECURITY_AND_PRIVACY_REVIEW.md`](docs/SECURITY_AND_PRIVACY_REVIEW.md): threat register, drills, and pending approvals
 - [`TRUST_AND_IDENTITY.md`](docs/TRUST_AND_IDENTITY.md): OTP, KYC, profile, and trust boundaries
 - [`Frontend Contribution Guide`](docs/guides/FRONTEND_CONTRIBUTION_GUIDE.md)
 - [`Frontend Integration Contract`](docs/architecture/FRONTEND_INTEGRATION_CONTRACT.md)
@@ -313,7 +317,9 @@ Read [`CONTRIBUTING.md`](CONTRIBUTING.md) before making changes.
 
 - Mock KYC must display a visible `SAMPLE` watermark.
 - Demo identifiers do not prove public IPFS persistence.
-- Vault authorization does not yet provide production key delivery.
+- Secure key delivery is implemented but is not production-ready until its
+  migration, secrets, rate limits, chain checks, denial paths, and recovery
+  drills pass in the target environment.
 - AI audit output is educational and non-advisory.
 - Production deployment requires real credentials, deployed addresses, monitoring, and approved
   security controls.

@@ -11,6 +11,10 @@ const validAsset = {
   public_poisoned_cid: "QmPublic",
   commercial_license_fee_wei: "100",
   token_uri: "ipfs://QmMetadata",
+  license_terms_uri: "ipfs://QmTerms",
+  license_terms_hash: `0x${"1".repeat(64)}`,
+  license_terms_version: 1,
+  license_duration_seconds: "31536000",
   status: "MINTED",
   created_at: "2026-08-23T00:00:00.000Z",
 };

@@ -7,6 +7,16 @@ from PIL import Image, ImageDraw, ImageFont, UnidentifiedImageError
 from .perturbation import MAX_IMAGE_PIXELS, InvalidImageError
 
 
+def _load_watermark_font(size: int) -> ImageFont.ImageFont | ImageFont.FreeTypeFont:
+    """Use Pillow's embedded scalable font, with its bitmap font as a fallback."""
+    try:
+        return ImageFont.load_default(size=size)
+    except (OSError, TypeError):
+        # Older/minimal Pillow builds may not expose a scalable embedded font.
+        # The unscaled default is bundled by Pillow and needs no system font.
+        return ImageFont.load_default()
+
+
 def watermark_identity_document(source: bytes, label: str = "SAMPLE / CONTOH") -> bytes:
     """Render a prominent diagonal privacy watermark without persisting the source document."""
     try:
@@ -20,7 +30,7 @@ def watermark_identity_document(source: bytes, label: str = "SAMPLE / CONTOH") -
 
     overlay = Image.new("RGBA", image.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
-    font = ImageFont.load_default(size=max(18, min(image.size) // 12))
+    font = _load_watermark_font(max(18, min(image.size) // 12))
     box = draw.textbbox((0, 0), label, font=font)
     text_width = box[2] - box[0]
     text_height = box[3] - box[1]

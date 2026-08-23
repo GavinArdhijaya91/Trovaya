@@ -8,6 +8,8 @@ import { useAccount } from "wagmi";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { useAssets, type IndexedAsset } from "@/hooks/use-assets";
 import { getClientContractAddresses } from "@/lib/contracts";
+import { useLicenseProceeds } from "@/hooks/use-license-proceeds";
+import { OperationStatus } from "@/components/operation-status";
 
 const navigation = [
   { label: "Overview", href: "/dashboard", marker: "01" },
@@ -25,6 +27,7 @@ export function CreatorDashboard() {
   const protectedFromAI = records.length - licensedForAI;
   const licenseReady = records.filter((asset) => asset.commercial_license_fee_wei).length;
   const contractsConfigured = Boolean(getClientContractAddresses());
+  const proceeds = useLicenseProceeds();
   const shortAddress = account.address
     ? `${account.address.slice(0, 6)}…${account.address.slice(-4)}`
     : "No account connected";
@@ -101,7 +104,7 @@ export function CreatorDashboard() {
                 Protect the work. Keep the choice.
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
-                Track protected previews, AI-training consent, and commercial licensing without
+                Track experimental protected previews, AI-training consent, and commercial licensing without
                 exposing the clean original.
               </p>
             </div>
@@ -115,6 +118,18 @@ export function CreatorDashboard() {
             <SummaryCard label="Licenses available" value={assets.isLoading ? "Loading" : `${licenseReady}`} note="Commercial terms recorded" />
             <SummaryCard label="AI training allowed" value={assets.isLoading ? "Loading" : `${licensedForAI}`} note="Explicit licensed consent" tone="coral" />
             <SummaryCard label="Account trust" value="SAMPLE" note="Mock verification only" tone="amber" />
+          </section>
+
+          <section className="mt-5 rounded-3xl border border-stone-200 bg-white p-6 md:flex md:items-center md:justify-between md:gap-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-leaf">License proceeds</p>
+              <strong className="mt-2 block text-2xl">{proceeds.isLoading ? "Loading…" : `${formatEther(proceeds.amount)} ${process.env.NEXT_PUBLIC_CHAIN_ID === "97" ? "BNB" : "ETH"}`}</strong>
+              <p className="mt-1 text-xs leading-5 text-stone-500">Purchases credit this contract balance. Withdrawal requires an explicit creator transaction.</p>
+            </div>
+            <button type="button" onClick={() => void proceeds.withdraw().catch(() => undefined)} disabled={!account.address || !proceeds.isConfigured || proceeds.amount === 0n || proceeds.state.phase === "awaiting_wallet" || proceeds.state.phase === "confirming"} className="mt-4 rounded-xl bg-leaf px-5 py-3 text-sm font-semibold text-white disabled:opacity-50 md:mt-0">
+              Withdraw to connected wallet
+            </button>
+            <OperationStatus state={proceeds.state} />
           </section>
 
           <section className="mt-5 grid gap-5 xl:grid-cols-[1.55fr_1fr]">
@@ -146,8 +161,8 @@ export function CreatorDashboard() {
                 </div>
                 <div className="rounded-2xl bg-sand p-4">
                   <span className="text-xs text-stone-500">Public exposure model</span>
-                  <strong className="mt-1 block text-sm text-leaf">Protected preview only</strong>
-                  <p className="mt-1 text-xs leading-5 text-stone-500">Clean sources remain encrypted in the vault boundary.</p>
+                  <strong className="mt-1 block text-sm text-leaf">Experimental preview only</strong>
+                  <p className="mt-1 text-xs leading-5 text-stone-500">The browser encrypts clean sources. Persistence and key delivery require separately configured services.</p>
                 </div>
               </div>
             </article>
@@ -155,7 +170,7 @@ export function CreatorDashboard() {
             <article className="rounded-3xl bg-leaf p-6 text-white md:p-7">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-200">Quick actions</p>
               <div className="mt-5 grid gap-3">
-                <QuickAction href="/#studio" index="01" title="Protect a work" detail="Create a protected preview and register consent." />
+                <QuickAction href="/#studio" index="01" title="Protect a work" detail="Create an experimental preview and register consent." />
                 <QuickAction href="/#gallery" index="02" title="Explore clear licenses" detail="Review works with explicit commercial terms." />
                 <QuickAction href="#recent-works" index="03" title="Review AI choices" detail="Check the consent attached to indexed works." />
               </div>
@@ -267,7 +282,7 @@ function WorkRow({ asset }: { asset: IndexedAsset }) {
         <span className="grid h-12 w-12 place-items-center rounded-xl bg-mint text-[10px] font-bold text-leaf">IP</span>
       )}
       <span className="min-w-0">
-        <strong className="block truncate text-sm">Protected work #{asset.token_id}</strong>
+        <strong className="block truncate text-sm">Experimental preview #{asset.token_id}</strong>
         <small className="mt-1 block truncate text-xs text-stone-500">Creator {asset.creator_wallet}</small>
       </span>
       <span className="col-start-2 rounded-full bg-stone-100 px-3 py-1 text-[10px] font-semibold text-stone-600 sm:col-start-auto">

@@ -3,10 +3,11 @@
 ## Prerequisites
 
 1. Deploy the contracts and copy the emitted addresses.
-2. Apply all SQL files under `services/event-indexer/migrations/` in numeric order.
+2. Apply all SQL files under `services/event-indexer/migrations/` in numeric order,
+   including `004_versioned_license_terms.sql`.
 3. Configure each workspace from its adjacent `.env.example`.
-4. Ensure the connected registration wallet has `MINTER_ROLE`. The initial deployer receives it
-   automatically; production deployments should use an approved relayer.
+4. Fund a fresh creator wallet on the selected testnet. Permissionless `mintIP`
+   self-registers for that wallet; only `mintIPFor` requires an approved relayer.
 
 ## Runtime order
 
@@ -16,16 +17,25 @@ pnpm dev:indexer
 pnpm dev:web
 ```
 
+Before starting, run `pnpm demo:check`. It reads ignored local environment files,
+prints only PASS/FAIL states, and never prints credential values. All checks must
+pass before recording a golden-path run.
+
 The creator flow performs these steps:
 
-1. Sends the selected image to the poison engine.
+1. Sends the selected image to the poison engine, which returns an explicitly
+   experimental transform and no persistence reference.
 2. Encrypts the clean original client-side using AES-256-GCM.
-3. Pins the poisoned preview, encrypted original, and metadata through the server-only IPFS route.
-4. Calls permissionless `mintIP` from the creator wallet with the generated CIDs
-   and licensing preferences. `mintIPFor` remains reserved for authorized relayers.
+3. Pins the experimental preview, encrypted original, and metadata through the
+   server-only IPFS route. This adapter is the only source of canonical content
+   references.
+4. Calls permissionless `mintIP` from the creator wallet with the generated CIDs,
+   immutable license terms URI/hash/version, and licensing preferences.
+   `mintIPFor` remains reserved for authorized relayers.
 5. Lets the indexer read authoritative metadata at the mint block and cache it in PostgreSQL.
 6. Displays the indexed asset in the gallery.
-7. Allows another wallet to purchase a commercial license and authorize vault access.
+7. Requires another wallet to load and hash-verify the exact license artifact,
+   accept its version in purchase calldata, and then authorize vault access.
 
 Without `PINATA_JWT`, the pin route returns deterministic `demo-*` identifiers and never claims
 that content was persisted to IPFS. Without Supabase configuration, the gallery returns an empty
@@ -33,10 +43,36 @@ list. These fallbacks keep local UI development explicit but do not constitute a
 
 ## Key-delivery boundary
 
-For the creator demo, the generated encryption key lives only in browser `sessionStorage`. Vault
-authorization does not itself reveal this key. Delivering a key to an authorized buyer requires a
-separate authenticated key-delivery service with wallet-signature verification; this is intentionally
-not simulated as production security.
+For the creator flow, the generated content key is retained only in mounted
+browser memory while registration is pending; it is never written to
+`sessionStorage` or another persistent browser store. A failed registration can
+be retried during that mounted session, and a successful registration clears the
+pending key. Vault authorization alone does not reveal a key. The authenticated
+delivery service wraps creator keys at rest with AES-256-GCM, verifies single-use
+wallet challenges and current on-chain license/vault state, and re-wraps delivery
+using buyer RSA-OAEP-256. It requires
+`202608230002_vault_key_delivery.sql`, `SUPABASE_SERVICE_ROLE_KEY`,
+`VAULT_RPC_URL`, and a 32-byte base64 `VAULT_MASTER_KEY`. Production deployment
+also requires HTTPS, managed secret rotation, backups, and edge rate limiting.
+
+## Golden-path evidence
+
+Copy `docs/evidence/golden-path.example.json` to an ignored working file, replace
+every placeholder with evidence from one BSC testnet run, then validate it:
+
+```bash
+pnpm demo:evidence path/to/golden-path.json
+```
+
+The evidence requires separate creator and buyer wallets, real non-demo CIDs for
+the public preview, encrypted source, and versioned license terms;
+the exact source commit, UTC run interval, deployment addresses and transactions;
+mint/license/vault transaction hashes; maximum-dimension target-host latency and
+peak memory; an indexed gallery record; successful
+key registration and RSA-OAEP-256 delivery; decrypted-file integrity; denial for
+unauthorized and expired/revoked buyers; and a negative public-data check. Never
+put private keys, JWTs, OTPs, signatures, nonces, plaintext content keys, or
+decrypted source files in the evidence artifact.
 
 ## Frontend integration contract
 
