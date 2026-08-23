@@ -160,6 +160,9 @@ contract TrovayaIPNFT is
         if (amount == 0) revert NoProceeds();
         pendingWithdrawals[msg.sender] = 0;
         totalPendingWithdrawals -= amount;
+        // Pull payments require forwarding arbitrary gas to the creator-selected
+        // recipient; state is rolled back on failure and the entry is non-reentrant.
+        // slither-disable-next-line low-level-calls
         (bool sent,) = recipient.call{value: amount}("");
         if (!sent) revert WithdrawalFailed();
         emit ProceedsWithdrawn(msg.sender, recipient, amount);
@@ -210,6 +213,8 @@ contract TrovayaIPNFT is
         return super._update(to, tokenId, auth);
     }
 
+    // Required by Solidity to resolve ERC721 and ERC721Enumerable inheritance.
+    // slither-disable-next-line dead-code
     function _increaseBalance(address account, uint128 value)
         internal
         override(ERC721, ERC721Enumerable)

@@ -118,6 +118,16 @@ ran. After enabling the capability, create the repository Actions variable
 `DEPENDENCY_REVIEW_ENABLED=true`. The pinned v5 action then runs on pull requests
 and fails for newly introduced high-severity dependencies.
 
+Slither findings are triaged at the exact source line rather than disabling
+detectors globally. The accepted informational cases are: `block.timestamp` as
+the explicit access-expiry clock; the non-reentrant checks-effects-interactions
+call used to withdraw pull-payment proceeds; the compiler-required
+`_increaseBalance` inheritance override; and immutable `IP_NFT` naming required
+by Solhint. Any new occurrence of those detectors remains a failing finding. The
+workflow installs the root pnpm lockfile and precompiles Hardhat artifacts before
+running Slither, so the analyzer never performs an unrelated unlocked `npm i` in
+the contracts subdirectory.
+
 Pausing stops registration, license purchases, and vault unlocks. It does not block ERC-721
 transfers, preserving user custody during a protocol incident.
 

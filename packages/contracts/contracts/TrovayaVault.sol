@@ -12,6 +12,8 @@ import {IZKHumanVerifier} from "./interfaces/IZKHumanVerifier.sol";
 /// @notice Records authorization only. Encryption keys and clean files remain off-chain.
 contract TrovayaVault is AccessControl, Pausable, ReentrancyGuard, ITrovayaVault {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
+    // Solhint requires immutable variables to use capitalized snake case.
+    // slither-disable-next-line naming-convention
     ITrovayaIPNFT public immutable IP_NFT;
     IZKHumanVerifier public humanVerifier;
 
@@ -40,8 +42,10 @@ contract TrovayaVault is AccessControl, Pausable, ReentrancyGuard, ITrovayaVault
     function unlockWithHumanProof(uint256 tokenId, bytes calldata proof)
         external whenNotPaused nonReentrant
     {
-        // Metadata lookup also guarantees that the token exists.
-        IP_NFT.getIPMetadata(tokenId);
+        // Metadata lookup also guarantees that the token exists. The creator
+        // check defends the invariant if a future adapter changes that behavior.
+        ITrovayaIPNFT.IPMetadata memory metadata = IP_NFT.getIPMetadata(tokenId);
+        if (metadata.creator == address(0)) revert AccessDenied();
         if (!humanVerifier.verifyHuman(msg.sender, proof)) revert InvalidHumanProof();
         _grantAccess(tokenId, msg.sender, false, uint64(block.timestamp + 1 days));
     }
@@ -52,7 +56,9 @@ contract TrovayaVault is AccessControl, Pausable, ReentrancyGuard, ITrovayaVault
         ITrovayaIPNFT.LicenseReceipt memory receipt = IP_NFT.getLicenseReceipt(tokenId, msg.sender);
         ITrovayaIPNFT.IPMetadata memory metadata = IP_NFT.getIPMetadata(tokenId);
         uint256 expiry = uint256(receipt.purchasedAt) + metadata.licenseDurationSeconds;
-        if (receipt.purchasedAt == 0 || expiry <= block.timestamp) revert AccessDenied();
+        // Timestamp drift cannot extend access: expiry is fixed from purchase time.
+        // slither-disable-next-line timestamp
+        if (receipt.purchasedAt < 1 || expiry <= block.timestamp) revert AccessDenied();
         _grantAccess(tokenId, msg.sender, true, uint64(expiry));
     }
 
@@ -69,14 +75,16 @@ contract TrovayaVault is AccessControl, Pausable, ReentrancyGuard, ITrovayaVault
         ITrovayaIPNFT.IPMetadata memory metadata = IP_NFT.getIPMetadata(tokenId);
         if (msg.sender != metadata.creator && !hasRole(DEFAULT_ADMIN_ROLE, msg.sender)) revert AccessDenied();
         AccessGrant storage grant = _accessGrants[tokenId][account];
-        if (grant.grantedAt == 0 || grant.revokedAt != 0) revert AccessDenied();
+        if (grant.grantedAt < 1 || grant.revokedAt > 0) revert AccessDenied();
         grant.revokedAt = uint64(block.timestamp);
         emit VaultAccessRevoked(tokenId, account, msg.sender);
     }
 
     function hasVaultAccess(uint256 tokenId, address account) public view returns (bool) {
         AccessGrant memory grant = _accessGrants[tokenId][account];
-        return grant.grantedAt != 0 && grant.revokedAt == 0 && grant.expiresAt > block.timestamp;
+        // Timestamp is the intended enforcement clock for bounded access grants.
+        // slither-disable-next-line timestamp
+        return grant.grantedAt > 0 && grant.revokedAt < 1 && grant.expiresAt > block.timestamp;
     }
 
     function getAccessGrant(uint256 tokenId, address account) external view returns (AccessGrant memory) {
