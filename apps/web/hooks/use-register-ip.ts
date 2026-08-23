@@ -25,8 +25,8 @@ export function useRegisterIP() {
   async function register(input: RegistrationInput) {
     if (!addresses || !account.address) throw new Error("Hubungkan akun dan konfigurasi alamat protokol.");
     return writer.writeContractAsync({
-      address: addresses.ipNFT, abi: trovayaIPNFTAbi, functionName: "mintIPFor",
-      args: [account.address, input.tokenUri, input.allowAITraining, parseEther(input.licenseFee), input.publicPoisonedCid, input.encryptedVaultCid, BigInt(input.royaltyBps)],
+      address: addresses.ipNFT, abi: trovayaIPNFTAbi, functionName: "mintIP",
+      args: [input.tokenUri, input.allowAITraining, parseEther(input.licenseFee), input.publicPoisonedCid, input.encryptedVaultCid, BigInt(input.royaltyBps)],
     });
   }
   return {

@@ -78,6 +78,46 @@ An implementation of email OTP must provide:
   before linking or unlinking a wallet; and
 - an audit trail for login, recovery, KYC status, and wallet-link changes.
 
+When Supabase Auth is the configured provider, Supabase owns OTP generation,
+hashing, delivery, attempt controls, and session rotation. Trovaya must not create
+a second OTP table or store raw OTP values. Provider settings must enforce the
+requirements above, and application logs must never include OTPs, access tokens,
+refresh tokens, magic links, or complete email addresses.
+
+## Canonical account data model and RLS
+
+Supabase `auth.users` is the account identity authority. The indexer's existing
+`public.users` table is only a normalized on-chain wallet directory and must not
+store email identity, OTP state, or Supabase session identifiers.
+
+The account foundation is defined by
+`supabase/migrations/202608230001_account_foundation.sql`:
+
+| Relation | Purpose | Client access |
+| --- | --- | --- |
+| `auth.users` | Provider-owned email identity and session subject | Supabase Auth API only |
+| `account_profiles` | Private locale and notification preferences | Owner read/update through RLS |
+| `creator_profiles` | Explicit public creator fields | Public read only when `is_public`; owner update |
+| `linked_wallets` | Verified account-to-wallet relationship | Owner read; server-only writes after signature verification |
+| `wallet_link_challenges` | Hashed, expiring, single-use linking nonce | No PostgREST client access |
+| `account_audit_events` | Append-only security events | No PostgREST client access |
+
+RLS is necessary but not sufficient. Column grants restrict writable fields;
+server endpoints must enforce recent authentication, verify the signed challenge,
+consume it atomically, normalize the EVM address to lowercase, and append a
+sanitized audit event. Service-role access must never be used as a generic client
+fallback.
+
+The browser auth client uses `NEXT_PUBLIC_SUPABASE_URL` and
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`. The service-role key remains server-only. Email
+OTP login does not require or justify exposing it.
+
+The Next.js runtime uses `@supabase/ssr` cookie storage and a root `proxy.ts` to
+refresh claims. Server authorization must use validated claims or a fresh user
+lookup, never an unverified session payload. Numeric email login calls
+`signInWithOtp` followed by `verifyOtp` with type `email`; the provider template
+must include `{{ .Token }}`.
+
 ## Community scope
 
 The forum can connect discussions to public profiles and creator assets, but

@@ -9,6 +9,9 @@ The PRD defines two P0 on-chain capabilities: IP registration and a mock ZK unlo
 `TrovayaIPNFT` provides:
 
 - ERC-721 asset registration and token metadata;
+- permissionless self-registration through `mintIP`, which always attributes the
+  asset to `msg.sender`;
+- role-gated registration through `mintIPFor` for explicitly authorized relayers;
 - ERC-2981 creator royalties;
 - immutable creator attribution;
 - AI-training consent captured at registration;
@@ -95,3 +98,5 @@ These requirements must be added to `MASTER_SPEC.md` before their contracts are 
 6. Creator attribution and registered consent metadata cannot be modified in v1.
 7. Vault authorization never exposes source bytes or encryption keys on-chain.
 8. Only the configured verifier can satisfy the human-verification path.
+9. Any wallet may self-register, but only `MINTER_ROLE` may register an asset for
+   a different creator address.

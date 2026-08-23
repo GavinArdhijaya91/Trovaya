@@ -25,6 +25,17 @@ describe("TrovayaIPNFT", () => {
     expect(royalty).to.equal(500n);
   });
 
+  it("allows a non-admin creator to self-register IP", async () => {
+    const { contract, buyer } = await deployFixture();
+
+    await expect(
+      contract.connect(buyer).mintIP("ipfs://buyer-metadata", false, 100n, "QmPublic", "QmVault", 500),
+    ).to.emit(contract, "IPMinted").withArgs(1n, buyer.address, false);
+
+    expect(await contract.ownerOf(1)).to.equal(buyer.address);
+    expect((await contract.getIPMetadata(1)).creator).to.equal(buyer.address);
+  });
+
   it("records and pays a commercial license", async () => {
     const { contract, creator, buyer } = await deployFixture();
     await contract.mintIP("ipfs://metadata", true, 100n, "QmPoisoned", "QmVault", 500);
@@ -88,5 +99,16 @@ describe("TrovayaIPNFT", () => {
     await contract.mintIPFor(buyer.address, "ipfs://metadata", true, 100n, "a", "b", 500);
     expect(await contract.ownerOf(1)).to.equal(buyer.address);
     expect((await contract.getIPMetadata(1)).creator).to.equal(buyer.address);
+  });
+
+  it("prevents a non-relayer from registering IP for another creator", async () => {
+    const { contract, creator, buyer } = await deployFixture();
+
+    await expect(
+      contract.connect(buyer).mintIPFor(
+        creator.address, "ipfs://metadata", true, 100n, "a", "b", 500,
+      ),
+    ).to.be.revertedWithCustomError(contract, "AccessControlUnauthorizedAccount")
+      .withArgs(buyer.address, await contract.MINTER_ROLE());
   });
 });

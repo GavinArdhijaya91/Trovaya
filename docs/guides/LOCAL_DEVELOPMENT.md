@@ -156,7 +156,7 @@ pnpm.cmd dev:web
 | Protection demo | Image perturbation and protected preview | Poison engine |
 | Indexed integration | Gallery and creator records | PostgreSQL migrations and indexer |
 | Testnet integration | Wallet provenance and commercial licensing | RPC, addresses, and testnet funds |
-| External persistence | Supabase reads and Pinata IPFS pinning | Server-only credentials |
+| External persistence | RLS-restricted Supabase gallery reads and Pinata IPFS pinning | Supabase anon key and server-only Pinata credential |
 
 Missing credentials must produce an explicit demo, empty, or unavailable state. The application
 must never silently represent a fallback as a successful production operation.
@@ -166,6 +166,8 @@ must never silently represent a fallback as a successful production operation.
 Each runtime has an adjacent `.env.example`. Copy the example and edit only the ignored local file.
 
 - Only browser-safe values may use the `NEXT_PUBLIC_` prefix.
+- The server-rendered public gallery uses `SUPABASE_ANON_KEY` with RLS; it must
+  never use or fall back to the service-role key.
 - Never commit private keys, service-role keys, KYC documents, clean creator assets, or seed phrases.
 - OTP recovery cannot recover a wallet, replace its signer, or transfer on-chain assets.
 - Contract addresses are network configuration and must not be hardcoded into UI components.
@@ -231,6 +233,18 @@ pnpm.cmd build
 
 An empty gallery is expected without Supabase configuration or indexed contract events. Check the
 database migrations, indexer environment, RPC, deployment address, and start block.
+
+### WalletConnect repeatedly fails to subscribe or restore
+
+`NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` must either be empty or contain a valid
+32-character hexadecimal WalletConnect Cloud project ID. Placeholder values such
+as `replace-with-project-id` intentionally disable WalletConnect; injected browser
+wallets such as MetaMask remain available.
+
+After changing the value, stop and restart `pnpm.cmd dev:web`. If a previously
+configured WalletConnect connector still attempts to restore an obsolete session,
+clear site data for `localhost:3000` in the browser and reload. Do not clear wallet
+extension data or seed phrases.
 
 ### The poison endpoint is unavailable
 
