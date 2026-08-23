@@ -110,6 +110,14 @@ Dependency policy blocks new high or critical production advisories. The
 affected buffer-output UUID API. Reassess them whenever RainbowKit/Wagmi updates,
 and do not use a forced incompatible major override merely to reduce the count.
 
+Native GitHub dependency review additionally requires Dependency Graph and, for
+a private repository, GitHub Code Security or Advanced Security. Until that
+repository capability is available, the workflow reports an explicit notice and
+continues enforcing `pnpm audit` and `pip-audit`; it must not claim native review
+ran. After enabling the capability, create the repository Actions variable
+`DEPENDENCY_REVIEW_ENABLED=true`. The pinned v5 action then runs on pull requests
+and fails for newly introduced high-severity dependencies.
+
 Pausing stops registration, license purchases, and vault unlocks. It does not block ERC-721
 transfers, preserving user custody during a protocol incident.
 

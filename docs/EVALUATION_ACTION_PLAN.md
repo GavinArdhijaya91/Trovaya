@@ -183,7 +183,7 @@ These items are required before describing the vault as a complete access system
     fuzz tests), dependency scanning, secret scanning, and deployment-role checks.
     **Implemented as repository gates on 2026-08-23; CI execution pending:** the
     pinned security workflow runs Slither, JavaScript/Python dependency audits,
-    PR dependency review, and Gitleaks. Contract tests enforce the aggregate
+    capability-gated PR dependency review, and Gitleaks. Contract tests enforce the aggregate
     withdrawal-liability invariant and adversarial receiver behavior. A fail-closed
     read-only deployment checker validates bytecode and expected admin, pauser,
     and minter assignments, including deployer-admin revocation. This item remains
@@ -193,8 +193,11 @@ These items are required before describing the vault as a complete access system
     centrally overriding patched `ws >=8.21.0` and `axios >=1.18.0`. Two moderate
     transitive `uuid` advisories remain monitored; the affected buffer-writing API
     is not called by Trovaya, and a forced major override was rejected because it
-    could break wallet connectors. Hosted Slither/Gitleaks results are still
-    required. `SECURITY_AND_PRIVACY_REVIEW.md` now provides the scoped threat
+    could break wallet connectors. Native dependency review remains explicitly
+    unavailable until Dependency Graph plus GitHub Code Security/Advanced
+    Security are enabled and repository variable `DEPENDENCY_REVIEW_ENABLED` is
+    set to `true`; audits remain mandatory meanwhile. Hosted Slither/Gitleaks
+    results are still required. `SECURITY_AND_PRIVACY_REVIEW.md` now provides the scoped threat
     register, residual-risk evidence requirements, operational drills, and an
     explicit human approval record; every approval remains honestly pending.
 

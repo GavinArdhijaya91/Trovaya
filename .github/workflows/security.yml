@@ -43,7 +43,15 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4.9.0
+      - name: Report unavailable dependency review
+        if: vars.DEPENDENCY_REVIEW_ENABLED != 'true'
+        run: |
+          echo "::notice title=Dependency review unavailable::Enable Dependency Graph and GitHub Code Security/Advanced Security, then set repository variable DEPENDENCY_REVIEW_ENABLED=true. pnpm and Python production audits remain enforced."
+          echo "### Dependency review" >> "$GITHUB_STEP_SUMMARY"
+          echo "Native dependency review was not run because repository capability is not enabled." >> "$GITHUB_STEP_SUMMARY"
+      - name: Review dependency changes
+        if: vars.DEPENDENCY_REVIEW_ENABLED == 'true'
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
         with:
           fail-on-severity: high
 
