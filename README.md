@@ -65,6 +65,12 @@ Open:
 The UI can run with explicit demo and empty states. Image protection, PostgreSQL indexing, testnet
 contracts, Supabase, and IPFS persistence require their respective services and credentials.
 
+WalletConnect is optional during local development. Leave
+`NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` empty to use an injected browser wallet
+such as MetaMask. Mobile/QR wallet connections require a valid 32-character
+project ID from WalletConnect Cloud. Placeholder values are rejected so they do
+not start a broken relay subscription.
+
 For the complete setup, terminal layout, runtime modes, environment variables, and troubleshooting,
 read the [`Local Development Guide`](docs/guides/LOCAL_DEVELOPMENT.md).
 
@@ -80,6 +86,149 @@ pnpm.cmd build
 
 Use `pnpm` in place of `pnpm.cmd` on macOS or Linux. These gates match
 `.github/workflows/ci.yml`.
+
+## Verify the Supabase public-gallery boundary
+
+The public gallery uses `SUPABASE_ANON_KEY`, PostgreSQL row-level security
+(RLS), an allowlisted view, and a second response allowlist in the web API. It
+must never use or fall back to `SUPABASE_SERVICE_ROLE_KEY`.
+
+### 1. Apply the database migration
+
+Apply migrations in numeric order. For an existing database that already has
+`001` and `002`, apply:
+
+```powershell
+$env:TROVAYA_DATABASE_URL = Read-Host "Supabase database connection string"
+psql $env:TROVAYA_DATABASE_URL -v ON_ERROR_STOP=1 -f "services/event-indexer/migrations/003_public_gallery_boundary.sql"
+Remove-Item Env:TROVAYA_DATABASE_URL
+```
+
+Obtain the connection string from Supabase **Project Settings -> Database ->
+Connection string**. If `psql` is unavailable, open the Supabase SQL Editor and
+run the contents of
+[`003_public_gallery_boundary.sql`](services/event-indexer/migrations/003_public_gallery_boundary.sql).
+
+The migration:
+
+- enables RLS on indexed operational tables;
+- removes broad `anon` and `authenticated` table access;
+- grants only approved gallery columns;
+- creates the `public_gallery_assets` security-invoker view;
+- excludes encrypted-vault, identity, session, and key-delivery data.
+
+### 2. Configure and run the web application
+
+Set these values in the ignored `apps/web/.env.local` file:
+
+```dotenv
+SUPABASE_URL=https://PROJECT_ID.supabase.co
+SUPABASE_ANON_KEY=YOUR_PROJECT_ANON_KEY
+```
+
+Do not add `SUPABASE_SERVICE_ROLE_KEY` to the public gallery configuration.
+Restart the web process after changing environment values:
+
+```powershell
+pnpm.cmd dev:web
+```
+
+In another PowerShell terminal, verify the application boundary:
+
+```powershell
+Invoke-RestMethod http://localhost:3000/api/assets | ConvertTo-Json -Depth 5
+```
+
+A configured endpoint returns `assets` containing only:
+
+```text
+id
+chain_id
+token_id
+creator_wallet
+allow_ai_training
+public_poisoned_cid
+commercial_license_fee_wei
+token_uri
+status
+created_at
+```
+
+It must not return `encrypted_vault_cid`, encryption or wrapped keys, identity
+documents, email/session data, or delivery tokens. An unconfigured endpoint
+fails closed with HTTP `503`; an invalid upstream response returns HTTP `502`.
+
+### 3. Run positive and negative anon-access tests
+
+Load the project URL and anon key into the current terminal session:
+
+```powershell
+$env:TROVAYA_SUPABASE_URL = Read-Host "Supabase URL"
+$env:TROVAYA_SUPABASE_ANON_KEY = Read-Host "Supabase anon key"
+$headers = @{
+  apikey = $env:TROVAYA_SUPABASE_ANON_KEY
+  Authorization = "Bearer $env:TROVAYA_SUPABASE_ANON_KEY"
+}
+```
+
+The allowlisted public view must return HTTP `200`:
+
+```powershell
+Invoke-WebRequest `
+  -Uri "$env:TROVAYA_SUPABASE_URL/rest/v1/public_gallery_assets?select=*&limit=1" `
+  -Headers $headers |
+Select-Object StatusCode, Content
+```
+
+A direct request for the encrypted vault reference must be denied:
+
+```powershell
+Invoke-WebRequest `
+  -Uri "$env:TROVAYA_SUPABASE_URL/rest/v1/ip_assets?select=encrypted_vault_cid&limit=1" `
+  -Headers $headers `
+  -SkipHttpErrorCheck |
+Select-Object StatusCode, Content
+```
+
+The operational tables must also be denied:
+
+```powershell
+"users", "licenses", "indexer_cursors" | ForEach-Object {
+  $response = Invoke-WebRequest `
+    -Uri "$env:TROVAYA_SUPABASE_URL/rest/v1/$($_)?select=*&limit=1" `
+    -Headers $headers `
+    -SkipHttpErrorCheck
+
+  [PSCustomObject]@{
+    Table = $_
+    StatusCode = $response.StatusCode
+    Content = $response.Content
+  }
+}
+```
+
+Expected results:
+
+| Request | Expected result |
+| --- | --- |
+| `public_gallery_assets` | HTTP `200` |
+| `ip_assets.encrypted_vault_cid` | HTTP `401`, `403`, or a PostgREST permission error |
+| `users` | denied |
+| `licenses` | denied |
+| `indexer_cursors` | denied |
+
+Clean the terminal variables afterward:
+
+```powershell
+Remove-Item Env:TROVAYA_SUPABASE_URL
+Remove-Item Env:TROVAYA_SUPABASE_ANON_KEY
+Remove-Variable headers
+```
+
+Never paste database connection strings, service-role keys, or test output that
+contains credentials into issues, commits, screenshots, or group chats. The anon
+key is intended for public clients, but its effective permissions must still be
+limited by RLS and explicit grants.
 
 ## Contribution rule
 

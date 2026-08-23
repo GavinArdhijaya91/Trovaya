@@ -1,7 +1,17 @@
 # 🛡️ Trovaya Protocol - Master Technical Specification
 
+Status: canonical product and technical specification. Implementation maturity
+and release sequencing are normative; aspirational capabilities must not be
+presented as shipped functionality.
+
 ## 1. Executive Overview
-Trovaya is a Web3 creator platform and decentralized Intellectual Property (IP) vault designed to protect digital creators and local UMKMs from unauthorized AI scraping. By combining on-chain data poisoning, encrypted high-res storage unlocked via ZK-Proofs, and non-advisory AI asset auditing, Trovaya establishes a transparent, consent-first creator economy.
+Trovaya is a consent-first creator platform and decentralized Intellectual
+Property (IP) registry for digital creators and local UMKMs. It combines
+verifiable provenance and consent records, experimental protected public
+previews, encrypted clean-source storage, explicit commercial-license receipts,
+and non-advisory educational insights. On-chain records provide evidence and
+auditability; they do not by themselves establish copyright, enforce legal
+terms, or prevent unauthorized scraping.
 
 ---
 
@@ -9,16 +19,26 @@ Trovaya is a Web3 creator platform and decentralized Intellectual Property (IP) 
 
 ### Pillar 1: Access (Frictionless Onboarding)
 - **One-Door Entry:** Wallet connector (wagmi/viem) + Social Login fallback.
-- **Mock ZK-KYC:** Lightweight document verification for UMKM identity with explicit `SAMPLE` watermarks for privacy.
+- **Mock Identity UX:** A demo-only document-submission flow for UMKMs with
+  explicit `SAMPLE/CONTOH` watermarks. It does not verify identity or implement a
+  zero-knowledge protocol.
 - **UX Abstraction:** Technical Web3 terms (gas fees, smart contracts) are abstracted behind familiar traditional finance tooltips[cite: 1].
 
 ### Pillar 2: Own & Protect (Tokenization & Data Defense)
 - **On-Chain Registration:** ERC-721 + ERC-2981 Royalty Standard for asset proof-of-ownership[cite: 1].
-- **Invisible Data Poisoning:** Images undergo pixel perturbation (Glaze/Nightshade concept) before public IPFS pinning to disrupt unauthorized AI dataset training models.
-- **Encrypted Vault:** Clean high-resolution source files are encrypted off-chain and gated behind ZK-Proof human verification (e.g., World ID / Semaphore).
+- **Experimental Protected Preview:** The MVP applies a deterministic, bounded
+  image transformation before public distribution. It is a demonstration
+  pipeline, not Glaze, Nightshade, or a proven defense, until effectiveness is
+  established through reproducible model-specific benchmarks.
+- **Encrypted Vault:** Clean high-resolution source files are encrypted
+  client-side and stored off-chain. On-chain authorization is only an access
+  signal; production readiness additionally requires secure off-chain key
+  delivery, expiry/revocation policy, and an audited identity or license adapter.
 
 ### Pillar 3: Understand (Unbiased AI Reviewer & Reputation)
-- **AI Asset Auditor:** Non-advisory backend AI service that analyzes license metadata, verifies IP authenticity, and flags red flags[cite: 1].
+- **AI Asset Auditor:** Non-advisory backend service that summarizes license
+  metadata, checks available provenance evidence, and flags explainable red
+  flags. It must not claim to prove authenticity.
 - **Soulbound Badges (SBT):** Non-transferable tokens awarded for verified authentic creators and consistent IP publishing[cite: 1].
 
 ---
@@ -38,6 +58,43 @@ never be published to public IPFS, analytics platforms, or social networks.
 The trust expansion is specified in `TRUST_AND_IDENTITY.md`. The advanced
 integrations in Section 4 extend the original MVP; they neither replace nor
 outweigh its IP protection and fair-trade purpose.
+
+### 3.1 Authority boundaries
+
+- Smart contracts are authoritative for token ownership, recorded consent,
+  license-payment receipts, and vault-authorization state.
+- Versioned license terms are authoritative legal artifacts referenced by an
+  immutable URI/hash; the `allowAITraining` boolean is an auditable preference,
+  not a complete license or technical enforcement mechanism.
+- The Insights Gateway and event indexer are derived views and may be rebuilt.
+- Off-chain services are authoritative for encrypted-object persistence and key
+  delivery, but must never expose clean files or plaintext keys publicly.
+- KYC status, human-proof status, provenance signals, and community reputation
+  remain separate claims with issuer, timestamp, expiry, and revocation state.
+
+### 3.2 Implementation maturity and claims
+
+Every capability must be labelled as `Demo/Mock`, `Experimental`, or
+`Production` in documentation and user-facing flows where confusion is
+material. Demo identifiers must never be presented as real IPFS CIDs. Mock KYC
+must retain the visible `SAMPLE/CONTOH` watermark. The mock human verifier must
+not be described as a real zero-knowledge proof. ERC-2981 communicates royalty
+information but does not guarantee marketplace enforcement.
+
+### 3.3 Core release gates
+
+1. **Demo-ready:** a fresh non-admin wallet completes the protected-asset golden
+   path on one primary testnet, and all simulations/fallbacks are visibly labelled.
+2. **MVP-ready:** real persistence, versioned license acceptance, and secure
+   clean-source key delivery work end-to-end with failure-path tests.
+3. **Production-candidate:** threat modelling, privacy review, automated contract
+   analysis, monitoring, recovery, access lifecycle, and no unresolved
+   critical/high security findings.
+4. **Expansion-ready:** optional analytics, social, badges, and funding may enter
+   delivery only after the production-candidate core is stable and measured.
+
+Detailed ordered work and acceptance evidence are defined in
+`EVALUATION_ACTION_PLAN.md`.
 
 ---
 
@@ -97,7 +154,8 @@ speculative rankings.
 
 ### 4.6 Delivery order
 
-1. Complete and harden the protection and licensing MVP.
+1. Complete and harden the protection, versioned licensing, real persistence,
+   and secure key-delivery MVP on one primary testnet.
 2. Implement the Supabase/PostgreSQL trust and account layer.
 3. Add internal creator fundamentals and user-initiated sharing.
 4. Add an optional public Dune dashboard for on-chain transparency.

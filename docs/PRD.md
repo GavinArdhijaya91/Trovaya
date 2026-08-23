@@ -4,7 +4,13 @@
 
 **Trovaya Protocol** is a Web3 decentralized Intellectual Property (IP) registry and safe-haven marketplace designed to protect digital creators and Micro, Small, and Medium Enterprises (MSMEs / UMKMs) from unauthorized AI data scraping[cite: 1].
 
-By combining an **On-Chain Data Poisoning Pipeline**, a **ZK-Proof Encrypted High-Res Vault**, an **ERC-721 + ERC-2981 Royalty Standard**, and an **Unbiased AI Asset Reviewer (Non-Advisory)**, Trovaya delivers a fair-trade IP ecosystem built for the artificial intelligence era[cite: 1].
+By combining **on-chain provenance and consent records**, an **experimental
+protected-preview pipeline**, a **client-encrypted high-resolution vault**, an
+**ERC-721 + ERC-2981 royalty signal**, explicit license receipts, and a
+**non-advisory AI asset reviewer**, Trovaya aims to deliver a fair-trade IP
+ecosystem for the artificial-intelligence era. These mechanisms create evidence
+and controlled access; they do not guarantee copyright validity, royalty
+enforcement, or prevention of scraping.
 
 ---
 
@@ -35,7 +41,8 @@ By combining an **On-Chain Data Poisoning Pipeline**, a **ZK-Proof Encrypted Hig
 
 ### Persona 3: Alex (Ethical AI Developer / Corporate Licensee)
 - **Background:** Seeks to source clean, legally compliant datasets for commercial model training without running into copyright lawsuits.
-- **Needs:** Verifiable proof of creator consent, clear licensing terms, and ZK-KYC authenticated asset provenance[cite: 1].
+- **Needs:** Verifiable proof of creator consent, clear licensing terms, and
+  separately explained creator-identity and asset-provenance signals.
 
 ---
 
@@ -43,37 +50,72 @@ By combining an **On-Chain Data Poisoning Pipeline**, a **ZK-Proof Encrypted Hig
 
 ### Pillar 1: ACCESS (Frictionless Onboarding)
 - **One-Door Entry:** Seamless authentication via Web3 Wallets (wagmi/viem) or Social/Email login fallbacks[cite: 1].
-- **Mock ZK-KYC:** Lightweight business verification (NIB/ID) utilizing Zero-Knowledge principles, automatically embedding `SAMPLE` / `CONTOH` watermarks for privacy during verification[cite: 1].
-- **Web3 Abstraction:** Complex crypto jargon is abstracted behind familiar traditional finance terms via interactive tooltips (e.g., *"Gas Fee"* $\rightarrow$ *"Network Processing Fee"*)[cite: 1].
+- **Mock Identity UX:** Demo-only business-document submission that embeds a
+  visible `SAMPLE/CONTOH` watermark. It neither verifies identity nor implements
+  a zero-knowledge protocol.
+- **Web3 Abstraction:** Complex crypto jargon is abstracted behind familiar terms
+  via interactive tooltips (e.g., *"Gas Fee"* $\rightarrow$ *"Biaya
+  Transaksi"*), as required by `RULES.md`.
 
 ### Pillar 2: OWN & PROTECT (Tokenization & Data Defense)
 - **On-Chain IP Registration:** Asset minting utilizing ERC-721 + ERC-2981 Royalty Standards for verifiable proof-of-ownership[cite: 1].
-- **Invisible Data Poisoning:** Applies subtle pixel perturbations (Glaze/Nightshade methodology) prior to public IPFS pinning, corrupting unauthorized AI training extraction models.
-- **Encrypted High-Res Vault:** Original pristine files are encrypted client-side and stored in IPFS vaults, unlocked exclusively via Zero-Knowledge Proof (Proof-of-Humanity) or verified licensing payments.
+- **Experimental Protected Preview:** Applies a deterministic bounded pixel
+  transform before public distribution. The MVP implementation demonstrates the
+  workflow and must not be marketed as Glaze/Nightshade-equivalent or effective
+  adversarial protection without reproducible benchmarks.
+- **Encrypted High-Res Vault:** Original files are encrypted client-side and
+  stored off-chain. The MVP may demonstrate authorization with a mock human-proof
+  adapter; production access additionally requires secure key delivery and
+  explicit expiry/revocation semantics.
 
 ### Pillar 3: UNDERSTAND (Unbiased AI Reviewer & Reputation)
-- **AI Asset Auditor:** A backend non-advisory AI engine that analyzes asset authenticity, summarizes licensing terms, and flags potential red flags[cite: 1].
+- **AI Asset Auditor:** A backend non-advisory engine that summarizes licensing
+  terms, checks available provenance evidence, and flags explainable red flags.
+  It must not claim to prove asset authenticity.
 - **Soulbound Reputation Badges (SBT):** Non-transferable tokens awarded to verified authentic creators and consistent MSME publishers[cite: 1].
 
 ---
 
 ## 5. Functional Requirements (P0, P1, P2)
 
-### P0 (Critical for Hackathon MVP Demo)
+### P0 (Critical for a trustworthy MVP demo)
 - [ ] **Auth & Wallet Connection:** RainbowKit + wagmi/viem connector targeting L2 / BSC Testnet[cite: 1].
-- [ ] **Poison Engine Microservice:** Python FastAPI endpoint `/api/v1/poison` accepting image buffers and returning perturbed preview images.
-- [ ] **IP-NFT Minting Flow:** `TrovayaIPNFT.sol` contract execution storing `allowAITraining`, `publicPoisonedCid`, and `encryptedVaultCid` parameters[cite: 1].
+- [ ] **Protected Preview Microservice:** Python FastAPI endpoint
+  `/api/v1/poison` accepts validated image buffers and returns an explicitly
+  experimental perturbed preview within documented latency/memory limits.
+- [ ] **Non-Admin IP-NFT Registration:** a fresh creator wallet can mint directly
+  or authorize a relayer through a replay-safe EIP-712 signature. The transaction
+  stores consent, canonical persisted content references, and a versioned license
+  terms URI/hash.
 - [ ] **Public Gallery & Protected View:** Marketplace displaying only perturbed public preview assets.
-- [ ] **Mock ZK-Proof Vault Unlock:** Interoperable UI button simulating Zero-Knowledge identity verification before revealing vault decryption keys.
+- [ ] **Honest Demo Vault Authorization:** UI and contract visibly label the mock
+  human verifier; authorization state must not be represented as delivery of a
+  decryption key.
+- [ ] **Persistence and Privacy Boundary:** real IPFS pinning is distinguished
+  from labelled demo identifiers, and the public gallery returns only allowlisted
+  fields without using an unrestricted public data path or returning private records.
+- [ ] **Golden-Path Evidence:** one primary testnet demonstrates upload,
+  transform, encryption, real persistence, mint, index, license purchase, and
+  authorization with recorded transaction hashes and failure states.
 
 ### P1 (High Priority - Value Add)
 - [ ] **Mock ZK-KYC Submission:** Lightweight upload form rendering automatic `SAMPLE` watermarks on uploaded credentials[cite: 1].
 - [ ] **AI Reviewer Audit Panel:** Interactive card rendering asset authenticity scores and red-flag summaries with explicit educational disclaimers[cite: 1].
 - [ ] **Commercial License Purchase:** Payment escrow function transferring license fees directly to creator wallets[cite: 1].
+- [ ] **Versioned License Terms:** buyer sees and accepts the exact hashed terms,
+  including duration, territory, permitted use/media, exclusivity,
+  sublicensing, and AI-training consent, before payment.
+- [ ] **Secure Clean-Source Delivery:** an authorized buyer can obtain and use a
+  decryption key while unauthorized, expired, or revoked identities cannot begin
+  a new delivery. The product states that downloaded plaintext cannot be revoked.
 
 ### P2 (Nice-to-Have / Post-Hackathon Roadmap)
 - [ ] **Soulbound Badge (SBT) Issuance:** Automatic minting of reputation badges for top-tier MSMEs[cite: 1].
 - [ ] **Tax & Transaction Export:** CSV transaction summary exporter (recording cost basis, fees, and timestamps) for official compliance reporting[cite: 1].
+
+Soulbound badges, automated social distribution, public analytics, external
+content ingestion, and fractional funding are deferred until all P0 acceptance
+criteria pass and the core has no unresolved critical/high security finding.
 
 ---
 
@@ -81,21 +123,28 @@ By combining an **On-Chain Data Poisoning Pipeline**, a **ZK-Proof Encrypted Hig
 
 ### 6.1 Asset Protection & Registration Journey (Creator / MSME)
 1. Creator connects wallet or logs in via one-door entry[cite: 1].
-2. Completes lightweight Mock ZK-KYC by uploading watermarked identity documents[cite: 1].
+2. Optionally completes the visibly labelled Mock Identity UX by uploading a
+   `SAMPLE/CONTOH`-watermarked document; this does not verify identity.
 3. Navigates to the *Protection Studio* and uploads high-resolution design files.
 4. The system sends the image to the Python *Poison Engine* to generate a perturbed public file.
-5. The original file is encrypted client-side; both files are pinned to IPFS.
+5. The original file is encrypted client-side; configured production mode pins
+   both files to IPFS, while demo mode returns visibly labelled non-CID identifiers.
 6. Creator sets AI consent preferences (`allowAITraining`: True/False) and defines commercial licensing fees.
-7. Executes `mintIP()` on the L2 Smart Contract (BSC Testnet)[cite: 1].
-8. Dashboard updates automatically, and the AI Reviewer generates an authenticity report[cite: 1].
+7. Registers through the selected direct-mint or signed-relayer contract flow on
+   the primary testnet.
+8. Dashboard updates automatically, and the AI Reviewer produces a non-advisory
+   provenance-evidence and licensing summary with the required disclaimer.
 
 ### 6.2 License Purchase & Vault Unlock Journey (Buyer / Licensee)
 1. Buyer explores the Trovaya Marketplace[cite: 1].
 2. Reviews the perturbed public preview, asset metadata, and AI Reviewer score[cite: 1].
 3. Clicks *Purchase Commercial License* or *Unlock High-Res Vault*.
 4. Confirms the transaction on-chain[cite: 1].
-5. The smart contract validates payment and ZK-Human status.
-6. Decryption keys are granted to the buyer, allowing direct download of the clean, uncorrupted original file from the vault.
+5. The smart contract validates payment and records vault authorization; the
+   mock human verifier, when used, is visibly labelled as a simulation.
+6. A separate secure delivery service verifies authorization and releases or
+   wraps the decryption key for the buyer. An on-chain authorization event alone
+   never exposes or delivers the key.
 
 ---
 
@@ -115,8 +164,12 @@ By combining an **On-Chain Data Poisoning Pipeline**, a **ZK-Proof Encrypted Hig
 
 ## 8. Success Metrics & Hackathon Evaluation Criteria
 
-1. **Innovation & Relevance (30%):** Directly tackles AI copyright infringement and MSME IP harvesting using a novel decentralized data poisoning approach[cite: 1].
-2. **Technical Execution & Live Demo (30%):** Flawless end-to-end integration (Upload $\rightarrow$ Python Perturbation $\rightarrow$ Smart Contract Mint $\rightarrow$ ZK-Vault Unlock)[cite: 1].
+1. **Innovation & Relevance (30%):** Addresses uncompensated AI harvesting with
+   consent evidence, protected-preview experimentation, and transparent licensing.
+2. **Technical Execution & Live Demo (30%):** Repeatable end-to-end integration
+   (upload $\rightarrow$ protected preview and encryption $\rightarrow$ real
+   persistence $\rightarrow$ non-admin registration $\rightarrow$ license
+   purchase $\rightarrow$ vault authorization), with mocks clearly labelled.
 3. **UX & Web3 Abstraction (20%):** Seamless onboarding for non-technical users without exposing raw Web3 complexities[cite: 1].
 4. **Business Viability & Real Impact (20%):** Practical utility for MSMEs and alignment with 2026 digital asset regulatory standards[cite: 1].
 
@@ -128,7 +181,23 @@ By combining an **On-Chain Data Poisoning Pipeline**, a **ZK-Proof Encrypted Hig
 | :--- | :--- | :--- |
 | **Poisoning Processing Latency** | High | Perform pixel perturbations in-memory (RAM) via optimized OpenCV/NumPy matrix operations without writing temporary files to disk. |
 | **ZK Verification Complexity** | Medium | Implement a dedicated mock ZK Verifier contract simulating proof validation for live demo reliability. |
+| **Claims exceed implementation maturity** | High | Label every capability as Demo/Mock, Experimental, or Production; prohibit unbenchmarked Glaze/Nightshade, legal-enforcement, and real-ZK claims. |
+| **Mint authorization mismatch** | Critical | Prove non-admin registration through permissionless self-mint or a replay-safe signed relayer flow before demo. |
+| **Private data exposed through public APIs** | Critical | Use allowlisted projections, RLS/session validation, and negative authorization tests; never return KYC, vault, session, or key material. |
+| **Authorization mistaken for key delivery** | High | Keep keys off-chain, implement authenticated delivery, define expiry/revocation, and test unauthorized access. |
 | **Regulatory Misinterpretation** | Medium | Maintain the AI Reviewer strictly as a non-advisory educational tool with prominent UI disclaimer badges[cite: 1]. |
+
+### 9.1 Product release criteria
+
+- **Demo-ready:** P0 golden path succeeds for a fresh non-admin wallet on one
+  primary testnet and every mock/fallback is visible.
+- **MVP-ready:** real persistence, versioned terms, secure key delivery, and
+  failure-path tests are complete.
+- **Production-candidate:** threat/privacy reviews, automated Solidity analysis,
+  monitoring and recovery runbooks pass with no unresolved critical/high issue.
+
+The ordered engineering breakdown and verified corrections to the external
+evaluation are maintained in `EVALUATION_ACTION_PLAN.md`.
 
 ---
 
