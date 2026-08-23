@@ -2,12 +2,13 @@
   "name": "@trovaya/web",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
-    "test": "tsc --noEmit"
+    "test": "node --experimental-strip-types --test tests/*.test.ts && tsc --noEmit"
   },
   "dependencies": {
     "@trovaya/protocol-sdk": "workspace:*",
