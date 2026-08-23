@@ -3,6 +3,31 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.4.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.3.1...v0.4.0) (2026-08-23)
+
+
+### Features
+
+* **auth:** implement email OTP and account foundation ([a75985d](https://github.com/GavinArdhijaya91/Trovaya/commit/a75985ddee37502452efec37473625c6a005440e))
+* **auth:** implement Supabase email OTP ([4d9908a](https://github.com/GavinArdhijaya91/Trovaya/commit/4d9908aab8185f420061b74a07f68ed751b39a25))
+
+
+### Fixes
+
+* **protocol:** enable permissionless self-minting ([530df7c](https://github.com/GavinArdhijaya91/Trovaya/commit/530df7caa322fb2712584680fd7d95507f452edd))
+* **web3:** handle missing WalletConnect configuration ([f500d73](https://github.com/GavinArdhijaya91/Trovaya/commit/f500d73a9c8550e8ea9f0c38aa4591ea24baa2e9))
+
+
+### Security
+
+* **web:** enforce public gallery data boundary ([01a212b](https://github.com/GavinArdhijaya91/Trovaya/commit/01a212b797619b094d10100af3251d64ab619c36))
+
+
+### Documentation
+
+* align roadmap with verified evaluation ([fb64b25](https://github.com/GavinArdhijaya91/Trovaya/commit/fb64b25aee5277e12c38d4dd3042eadea9a070d3))
+* **auth:** define OTP account boundaries ([a3bc2d1](https://github.com/GavinArdhijaya91/Trovaya/commit/a3bc2d17a63acee30a8a21fb6e604ad764c4fe77))
+
 ## [0.3.1](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.3.0...v0.3.1) (2026-08-15)
 
 
