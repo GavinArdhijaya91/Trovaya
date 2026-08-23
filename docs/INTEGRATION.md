@@ -21,7 +21,8 @@ The creator flow performs these steps:
 1. Sends the selected image to the poison engine.
 2. Encrypts the clean original client-side using AES-256-GCM.
 3. Pins the poisoned preview, encrypted original, and metadata through the server-only IPFS route.
-4. Calls `mintIPFor` with the generated CIDs and licensing preferences.
+4. Calls permissionless `mintIP` from the creator wallet with the generated CIDs
+   and licensing preferences. `mintIPFor` remains reserved for authorized relayers.
 5. Lets the indexer read authoritative metadata at the mint block and cache it in PostgreSQL.
 6. Displays the indexed asset in the gallery.
 7. Allows another wallet to purchase a commercial license and authorize vault access.

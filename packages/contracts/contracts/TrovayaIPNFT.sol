@@ -50,7 +50,7 @@ contract TrovayaIPNFT is
         string memory publicPoisonedCid,
         string memory encryptedVaultCid,
         uint96 royaltyBps
-    ) external onlyRole(MINTER_ROLE) whenNotPaused nonReentrant returns (uint256 tokenId) {
+    ) external whenNotPaused nonReentrant returns (uint256 tokenId) {
         return _mintIP(msg.sender, tokenURI_, allowAITraining, commercialLicenseFee,
             publicPoisonedCid, encryptedVaultCid, royaltyBps);
     }
