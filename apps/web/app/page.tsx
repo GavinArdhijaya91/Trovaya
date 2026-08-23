@@ -7,6 +7,7 @@ import { TaxExport } from "@/components/tax-export";
 import { LicensePreview } from "@/components/license-preview";
 import { AssetGallery } from "@/components/asset-gallery";
 import { IntroExperience } from "@/components/intro-experience";
+import { EmailAuth } from "@/components/email-auth";
 
 const benefits = [
   ["01", "Register ownership", "Create a permanent proof connecting your work to you."],
@@ -24,9 +25,7 @@ export default function Home() {
           <Link href="/dashboard" className="hidden rounded-xl px-3 py-2 text-sm font-semibold text-leaf hover:bg-mint md:block">
             Creator workspace
           </Link>
-          <button className="hidden rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium sm:block" title="Social sign-in provider will be configured for deployment">
-            Continue with email
-          </button>
+          <EmailAuth />
           <ConnectButton label="Connect account" accountStatus="avatar" chainStatus="icon" showBalance={false} />
         </div>
       </nav>
