@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "license": { "approved": false, "reference": null },
+  "method": { "name": "experimental_preview", "version": "0" },
+  "reproducibility": { "commit": null, "configHash": null },
+  "dataset": { "name": null, "sampleCount": 0, "consentReference": null },
+  "attacks": { "namedModels": [], "transformations": [] },
+  "quality": { "meanPsnrDb": null, "meanSsim": null },
+  "effectiveness": { "baselineSuccessRate": null, "protectedSuccessRate": null },
+  "compute": { "hardware": null, "medianSecondsPerMegapixel": null }
+}

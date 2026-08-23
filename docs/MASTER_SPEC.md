@@ -78,6 +78,10 @@ identity or session store.
   delivery, but must never expose clean files or plaintext keys publicly.
 - KYC status, human-proof status, provenance signals, and community reputation
   remain separate claims with issuer, timestamp, expiry, and revocation state.
+- A future production identity claim follows the minimal pseudonymous proof
+  contract in `TRUST_AND_IDENTITY.md`. Without an approved issuer, jurisdiction,
+  processor, retention basis, revocation drill, and appeal owner, the only
+  permitted runtime state is explicitly mock/unverified.
 
 ### 3.2 Implementation maturity and claims
 
@@ -101,7 +105,9 @@ information but does not guarantee marketplace enforcement.
    delivery only after the production-candidate core is stable and measured.
 
 Detailed ordered work and acceptance evidence are defined in
-`EVALUATION_ACTION_PLAN.md`.
+`EVALUATION_ACTION_PLAN.md`. The reviewable threat register, deployment drills,
+and approval record are defined in `SECURITY_AND_PRIVACY_REVIEW.md`; its pending
+fields must never be interpreted as approval.
 
 ---
 

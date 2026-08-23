@@ -1,0 +1,53 @@
+{
+  "runId": "YYYY-MM-DD-bsc-testnet-01",
+  "commit": "0000000000000000000000000000000000000000",
+  "startedAt": "2026-08-23T00:00:00.000Z",
+  "completedAt": "2026-08-23T00:00:00.000Z",
+  "chainId": 97,
+  "deployments": {
+    "ipNft": "0x0000000000000000000000000000000000000000",
+    "vault": "0x0000000000000000000000000000000000000000",
+    "ipNftTransaction": "0x...",
+    "vaultTransaction": "0x..."
+  },
+  "creatorWallet": "0x0000000000000000000000000000000000000000",
+  "buyerWallet": "0x0000000000000000000000000000000000000000",
+  "persistence": {
+    "mode": "pinata",
+    "publicPreviewCid": "bafy...",
+    "encryptedVaultCid": "bafy...",
+    "metadataCid": "bafy...",
+    "licenseTermsCid": "bafy..."
+  },
+  "transactions": {
+    "mint": "0x...",
+    "licensePurchase": "0x...",
+    "vaultAuthorization": "0x..."
+  },
+  "indexing": {
+    "tokenId": "1",
+    "galleryVisible": true,
+    "privateFieldsAbsent": true
+  },
+  "delivery": {
+    "keyRegistered": false,
+    "status": "not_run",
+    "algorithm": null,
+    "decryptedFileSha256": null,
+    "unauthorizedStatus": "not_run",
+    "expiredOrRevokedStatus": "not_run",
+    "sensitiveMaterialRecorded": null,
+    "note": "Fill only from a live authorized and negative-path test; never record keys, signatures, nonces, or plaintext."
+  },
+  "hostMetrics": {
+    "imageWidth": 4096,
+    "imageHeight": 4096,
+    "protectionLatencyMs": null,
+    "peakMemoryMiB": null
+  },
+  "fallbacksVerified": [
+    "wallet rejection",
+    "demo persistence label",
+    "index unavailable"
+  ]
+}
