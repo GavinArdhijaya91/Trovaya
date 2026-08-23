@@ -2,9 +2,8 @@ import asyncio
 import time
 from io import BytesIO
 
-from PIL import Image
-
 import pytest
+from PIL import Image
 
 from app.perturbation import InvalidImageError, perturb_image
 from app.rate_limit import RateLimitMiddleware
