@@ -63,6 +63,7 @@ Thumbs.db
 
 # Local product-design scratch space (canonical decisions live in docs/*.md)
 /docs/trovaya/
+/web3-investment-platform/
 
 # Local platform state (keep migrations and declarative config tracked)
 /.vercel/
