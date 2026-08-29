@@ -3,6 +3,22 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.6.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.5.0...v0.6.0) (2026-08-29)
+
+
+### Features
+
+* **supabase:** add gallery core schema with chain and reorg support ([0afb216](https://github.com/GavinArdhijaya91/Trovaya/commit/0afb216f339f6d554ae6af6a2c2543d34ff7fdc2))
+* **supabase:** enforce public gallery RLS boundary and license terms ([fa0e245](https://github.com/GavinArdhijaya91/Trovaya/commit/fa0e245246275a71284632909008fad2305e7f7b))
+* **web:** add Trovaya SVG logo and update navbar branding ([dc1698f](https://github.com/GavinArdhijaya91/Trovaya/commit/dc1698f02f273c7b025310486b0c4274651dc39d))
+
+
+### Fixes
+
+* protocol sdk clean lint ([064b4ef](https://github.com/GavinArdhijaya91/Trovaya/commit/064b4eff5139218dc9dd9c104b01aab13431fefd))
+* **web:** correct import order for requestJson in poison-api ([101423f](https://github.com/GavinArdhijaya91/Trovaya/commit/101423fb8ebedb96d679cff7eba7acebdea394f2))
+* **web:** relocate Trovaya logo to app public directory ([5ba8582](https://github.com/GavinArdhijaya91/Trovaya/commit/5ba85828832f73599b029e76c697c3b0e2b94e1d))
+
 ## [0.5.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.4.0...v0.5.0) (2026-08-23)
 
 
