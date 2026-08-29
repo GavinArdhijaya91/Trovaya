@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Link from "next/link";
+import Image from "next/image";
 import { ProtectionForm } from "@/components/protection-form";
 import { FeeComparison } from "@/components/fee-comparison";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
@@ -8,6 +9,7 @@ import { LicensePreview } from "@/components/license-preview";
 import { AssetGallery } from "@/components/asset-gallery";
 import { IntroExperience } from "@/components/intro-experience";
 import { EmailAuth } from "@/components/email-auth";
+
 
 const benefits = [
   ["01", "Register provenance", "Create a durable on-chain record connecting your wallet and work reference."],
@@ -20,7 +22,10 @@ export default function Home() {
     <main className="mx-auto min-h-screen max-w-6xl px-5 pb-16 pt-6 md:px-8">
       <IntroExperience />
       <nav className="flex items-center justify-between">
-        <a href="#" className="text-xl font-bold tracking-tight">Trovaya<span className="text-coral">.</span></a>
+        <a href="#" className="flex items-center gap-2.5">
+          <Image src="/trovaya-logo.svg" alt="Trovaya logo" width={32} height={32} priority />
+          <span className="text-xl font-bold tracking-tight">Trovaya<span className="text-coral">.</span></span>
+        </a>
         <div className="flex items-center gap-3">
           <Link href="/dashboard" className="hidden rounded-xl px-3 py-2 text-sm font-semibold text-leaf hover:bg-mint md:block">
             Creator workspace

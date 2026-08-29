@@ -1,0 +1,1 @@
+import { ethers } from "hardhat"; async function main() { const [deployer] = await ethers.getSigners(); if (!deployer) return; console.log("Alamat dompet di .env:", deployer.address); const balance = await ethers.provider.getBalance(deployer.address); console.log("Saldo di BSC Testnet:", ethers.formatEther(balance), "BNB"); } main().catch(console.error);

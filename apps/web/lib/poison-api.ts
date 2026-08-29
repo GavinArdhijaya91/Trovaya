@@ -1,3 +1,5 @@
+import { requestJson } from "@/lib/service-request";
+
 export interface PoisonResult {
   status: "success";
   protection_mode: "experimental";
@@ -15,4 +17,3 @@ export async function protectImage(file: File, intensity: number): Promise<Poiso
   const baseUrl = process.env.NEXT_PUBLIC_POISON_ENGINE_URL ?? "http://localhost:8000";
   return requestJson<PoisonResult>(`${baseUrl}/api/v1/poison`, { method: "POST", body: payload }, { attempts: 2 });
 }
-import { requestJson } from "@/lib/service-request";
