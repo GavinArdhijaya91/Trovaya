@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "hardhat compile",
+    "deploy:local-smoke": "hardhat run scripts/smoke-seed.ts --network localhost",
     "deploy:bsc-testnet": "hardhat run scripts/deploy.ts --network bscTestnet",
     "deploy:base-sepolia": "hardhat run scripts/deploy.ts --network baseSepolia",
     "deploy:arbitrum-sepolia": "hardhat run scripts/deploy.ts --network arbitrumSepolia",

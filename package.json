@@ -16,6 +16,7 @@
     "env:check": "node scripts/check-env.mjs",
     "env:check:runtime": "node scripts/check-env.mjs --runtime",
     "migrations:check": "node scripts/check-migration-sync.mjs",
+    "smoke:local": "node scripts/smoke-local.mjs",
     "dev:web": "pnpm --filter @trovaya/web dev",
     "dev:poison": "pnpm --filter @trovaya/poison-engine dev",
     "dev:indexer": "pnpm --filter @trovaya/event-indexer dev",
