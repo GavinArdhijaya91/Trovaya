@@ -130,8 +130,10 @@ export default function ExplorePage() {
   const [activeFilter, setActiveFilter] =
     useState<ExploreFilter>("all");
 
-  const records =
-    assets.data ?? [];
+  const records = useMemo(
+    () => assets.data ?? [],
+    [assets.data],
+  );
 
   const filteredAssets = useMemo(() => {
     return records.filter((asset) => {
@@ -302,9 +304,7 @@ export default function ExplorePage() {
               <p className="text-xs text-stone-500">
                 Showing{" "}
                 <strong className="text-ink">
-                  {
-                    filteredAssets.length
-                  }
+                  {filteredAssets.length}
                 </strong>{" "}
                 of {records.length} works
               </p>
