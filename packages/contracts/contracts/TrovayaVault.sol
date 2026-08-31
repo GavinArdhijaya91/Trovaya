@@ -46,6 +46,7 @@ contract TrovayaVault is AccessControl, Pausable, ReentrancyGuard, ITrovayaVault
         // check defends the invariant if a future adapter changes that behavior.
         ITrovayaIPNFT.IPMetadata memory metadata = IP_NFT.getIPMetadata(tokenId);
         if (metadata.creator == address(0)) revert AccessDenied();
+        if (_accessGrants[tokenId][msg.sender].revokedAt > 0) revert AccessDenied();
         if (!humanVerifier.verifyHuman(msg.sender, proof)) revert InvalidHumanProof();
         _grantAccess(tokenId, msg.sender, false, uint64(block.timestamp + 1 days));
     }
@@ -53,6 +54,7 @@ contract TrovayaVault is AccessControl, Pausable, ReentrancyGuard, ITrovayaVault
     /// @notice Grants access to a buyer that purchased the on-chain commercial license.
     function unlockWithLicense(uint256 tokenId) external whenNotPaused nonReentrant {
         if (!IP_NFT.hasCommercialLicense(tokenId, msg.sender)) revert CommercialLicenseRequired();
+        if (_accessGrants[tokenId][msg.sender].revokedAt > 0) revert AccessDenied();
         ITrovayaIPNFT.LicenseReceipt memory receipt = IP_NFT.getLicenseReceipt(tokenId, msg.sender);
         ITrovayaIPNFT.IPMetadata memory metadata = IP_NFT.getIPMetadata(tokenId);
         uint256 expiry = uint256(receipt.purchasedAt) + metadata.licenseDurationSeconds;

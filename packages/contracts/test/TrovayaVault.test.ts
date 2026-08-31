@@ -90,4 +90,15 @@ describe("TrovayaVault", () => {
       .to.emit(vault, "VaultAccessRevoked").withArgs(1n, buyer.address, creator.address);
     expect(await vault.hasVaultAccess(1, buyer.address)).to.equal(false);
   });
+
+  it("prevents a revoked buyer from re-authorizing via unlockWithLicense", async () => {
+    const { creator, buyer, nft, vault } = await deployFixture();
+    await nft.connect(buyer).purchaseCommercialLicense(1, TERMS_HASH, 1, { value: 100n });
+    await vault.connect(buyer).unlockWithLicense(1);
+    await vault.connect(creator).revokeAccess(1, buyer.address);
+
+    await expect(vault.connect(buyer).unlockWithLicense(1))
+      .to.be.revertedWithCustomError(vault, "AccessDenied");
+    expect(await vault.hasVaultAccess(1, buyer.address)).to.equal(false);
+  });
 });
