@@ -10,9 +10,9 @@
     }
   },
   "scripts": {
-    "build": "turbo build --concurrency=1",
-    "test": "turbo test --concurrency=1",
-    "lint": "turbo lint --concurrency=1",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
     "env:check": "node scripts/check-env.mjs",
     "env:check:runtime": "node scripts/check-env.mjs --runtime",
     "migrations:check": "node scripts/check-migration-sync.mjs",

@@ -2,7 +2,11 @@
   "$schema": "https://turbo.build/schema.json",
   "globalPassThroughEnv": ["PATH", "LOCALAPPDATA", "TROVAYA_PYTHON"],
   "tasks": {
-    "build": { "dependsOn": ["^build"], "outputs": [".next/**", "dist/**", "artifacts/**"] },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "dist/**", "artifacts/**"],
+      "env": ["NEXT_PUBLIC_CHAIN_ID", "NEXT_PUBLIC_IPFS_GATEWAY", "NEXT_PUBLIC_POISON_ENGINE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY", "NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_TROVAYA_IP_NFT_ADDRESS", "NEXT_PUBLIC_TROVAYA_VAULT_ADDRESS", "NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID"]
+    },
     "test": { "dependsOn": ["build", "^build"], "outputs": [], "cache": false },
     "lint": { "dependsOn": ["^build"], "outputs": [] },
     "dev": { "cache": false, "persistent": true }
