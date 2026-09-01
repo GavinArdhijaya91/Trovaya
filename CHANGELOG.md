@@ -3,6 +3,27 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.7.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.6.0...v0.7.0) (2026-09-01)
+
+
+### Features
+
+* **config:** add environment and migration validation ([e347401](https://github.com/GavinArdhijaya91/Trovaya/commit/e347401e825417647ee7c2c5fbe3854b53591287))
+* **poison-engine:** upgrade to multi-scale L-infinity bounded adversarial perturbation pipeline ([b0a02c1](https://github.com/GavinArdhijaya91/Trovaya/commit/b0a02c1c8b93fc617e50170141dfc7e4cddf2f34))
+* **runtime:** add production startup and health checks ([239d202](https://github.com/GavinArdhijaya91/Trovaya/commit/239d202f3758b9070b31c09d95a9d1c12755572b))
+* **web:** add anti-scraping blur protection and complete license unl… ([ab3ceb5](https://github.com/GavinArdhijaya91/Trovaya/commit/ab3ceb54e71b10b355e62ea986dca9a7fbeb0674))
+* **web:** add anti-scraping blur protection and complete license unlock UX to asset gallery ([ffd7fcb](https://github.com/GavinArdhijaya91/Trovaya/commit/ffd7fcb5ad08e9f23517188b0f24257a8a78e0f0))
+
+
+### Fixes
+
+* **contracts:** patch revocation bypass in vault and enforce CEI in mintIP ([addc3c6](https://github.com/GavinArdhijaya91/Trovaya/commit/addc3c620c906e13ef24d2fdf7f8021c57ddd73c))
+
+
+### Documentation
+
+* **operations:** document deployment and concurrent workflows ([9042d13](https://github.com/GavinArdhijaya91/Trovaya/commit/9042d13a1435bfda43c7649e1d290f1ae3a00a8f))
+
 ## [0.6.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.5.0...v0.6.0) (2026-08-29)
 
 
