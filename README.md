@@ -306,6 +306,7 @@ Read [`CONTRIBUTING.md`](CONTRIBUTING.md) before making changes.
 - [`CONTRACT_ARCHITECTURE.md`](docs/CONTRACT_ARCHITECTURE.md): smart-contract design
 - [`INTEGRATION.md`](docs/INTEGRATION.md): end-to-end integration runbook
 - [`OPERATIONS.md`](docs/OPERATIONS.md): secrets, migrations, and controls
+- [`DEPLOYMENT.md`](docs/DEPLOYMENT.md): containers, runtime contracts, health checks, and local smoke test
 - [`EVALUATION_ACTION_PLAN.md`](docs/EVALUATION_ACTION_PLAN.md): ordered remediation backlog and release gates
 - [`SECURITY_AND_PRIVACY_REVIEW.md`](docs/SECURITY_AND_PRIVACY_REVIEW.md): threat register, drills, and pending approvals
 - [`TRUST_AND_IDENTITY.md`](docs/TRUST_AND_IDENTITY.md): OTP, KYC, profile, and trust boundaries

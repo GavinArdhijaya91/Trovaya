@@ -1,0 +1,16 @@
+.git
+.github
+.pnpm-store
+.turbo
+**/node_modules
+**/.env
+**/.env.*
+!**/.env.example
+**/.next
+**/dist
+**/coverage
+**/__pycache__
+**/.pytest_cache
+**/.venv
+docs
+web3-investment-platform
