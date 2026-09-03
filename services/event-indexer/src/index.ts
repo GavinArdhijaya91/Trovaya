@@ -59,11 +59,27 @@ async function reconcileReorg(chainId: number, cursor: { last_block: string; las
 
 async function syncChunk(chainId: number, fromBlock: bigint, toBlock: bigint): Promise<void> {
   const startedAt = Date.now();
-  const [mints, licenses, endBlock] = await Promise.all([
-    rpc("get_mint_logs", () => client.getLogs({ address: contractAddress, event: mintEvent, fromBlock, toBlock })),
-    rpc("get_license_logs", () => client.getLogs({ address: contractAddress, event: licenseEvent, fromBlock, toBlock })),
-    rpc("get_chunk_end_block", () => client.getBlock({ blockNumber: toBlock })),
-  ]);
+  let mints: Awaited<ReturnType<typeof client.getLogs>> = [];
+  let licenses: Awaited<ReturnType<typeof client.getLogs>> = [];
+  let endBlock: Awaited<ReturnType<typeof client.getBlock>>;
+  try {
+    [mints, licenses, endBlock] = await Promise.all([
+      rpc("get_mint_logs", () => client.getLogs({ address: contractAddress, event: mintEvent, fromBlock, toBlock })),
+      rpc("get_license_logs", () => client.getLogs({ address: contractAddress, event: licenseEvent, fromBlock, toBlock })),
+      rpc("get_chunk_end_block", () => client.getBlock({ blockNumber: toBlock })),
+    ]);
+  } catch (e) {
+    // Adaptif: kalau limit exceeded, belah chunk jadi dua dan retry otomatis
+    const msg = errorMessage(e);
+    if (msg.includes("limit exceeded") && fromBlock < toBlock) {
+      const mid = (fromBlock + toBlock) / 2n;
+      metric("chunk_split_retry", { fromBlock, toBlock, mid });
+      await syncChunk(chainId, fromBlock, mid);
+      await syncChunk(chainId, mid + 1n, toBlock);
+      return;
+    }
+    throw e;
+  }
   await sql.begin(async (tx) => {
     for (const log of mints) {
       const [metadata, tokenUri] = await Promise.all([
