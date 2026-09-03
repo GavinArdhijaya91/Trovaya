@@ -65,7 +65,7 @@ export function HeroPoisonDemo() {
 
         {/* Top: CLEAR layer clipped by pos */}
         <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
-          <div className="absolute inset-0" style={{ width: containerRef.current ? `${containerRef.current.clientWidth}px` : "100%" }}>
+          <div className="absolute inset-0">
             <Image
               src="/assets/flower-photo.jpg"
               alt=""
