@@ -4,7 +4,7 @@ import hashlib
 from io import BytesIO
 
 import numpy as np
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, ImageFilter, UnidentifiedImageError
 
 MAX_IMAGE_WIDTH = 4096
 MAX_IMAGE_HEIGHT = 4096
@@ -48,18 +48,18 @@ def generate_adversarial_mask(
 
 
 def perturb_image(source: bytes, intensity: float) -> bytes:
-    """Apply deterministic, L-infinity bounded RGB adversarial perturbations.
+    """Apply deterministic anti-scraping transform (PRD opsi 2).
 
-    Multi-scale perturbation pipeline designed to disrupt automated AI dataset
-    harvesting and latent feature extraction (e.g. CLIP / Stable Diffusion VAE)
-    while maintaining strict in-memory execution and bounded visual quality.
+    Pipeline sesuai PRD: Gaussian blur + bounded adversarial noise untuk
+    mengganggu CLIP/ViT feature extraction. Blur bikin scraper susah
+    rekonstruksi detail, noise ganggu latent embedding.
 
     Args:
         source: Raw image bytes (PNG, JPEG, WebP).
-        intensity: Perturbation strength from 0.0 (none) to 1.0 (maximum bounded).
+        intensity: Strength 0.0 (none) to 1.0 (maks blur + noise).
 
     Returns:
-        Perturbed PNG image bytes with embedded adversarial noise field.
+        Perturbed PNG image bytes.
     """
     if not 0.0 <= intensity <= 1.0:
         raise ValueError("intensity must be between 0 and 1")
@@ -77,28 +77,25 @@ def perturb_image(source: bytes, intensity: float) -> bytes:
     except (UnidentifiedImageError, OSError, Image.DecompressionBombError) as exc:
         raise InvalidImageError("file must be a valid image") from exc
 
-    # L-infinity maximum perturbation amplitude (max ±12 at intensity=1.0)
-    amplitude = round(intensity * 12)
+    # 1) Gaussian blur — bikin AI susah scraping (PRD opsi 2)
+    # radius 0..12: intensity 0.35 ~4px, 1.0 ~12px (maksimal buram)
+    if intensity > 0:
+        blur_radius = intensity * 12
+        image = image.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+
+    # 2) Bounded adversarial noise — ganggu CLIP/ViT embedding
+    amplitude = round(intensity * 14)
     if amplitude:
         pixels = np.asarray(image, dtype=np.int16).copy()
         seed_hash = hashlib.sha256(source).digest()
-
-        # Generate deterministic multi-frequency direction field
         pixel_count = image.width * image.height
         seed_arr = np.frombuffer(seed_hash, dtype=np.uint8)
         direction = ((np.resize(seed_arr, pixel_count) & 1).astype(np.int16) * 2 - 1).reshape(
             image.height, image.width
         )
-
-        # Cross-channel adversarial decorrelation
-        # Channel 0 (Red): +direction * amplitude
-        # Channel 1 (Green): -direction * amplitude
-        # Channel 2 (Blue): +direction * max(1, amplitude // 2)
         pixels[:, :, 0] += direction * amplitude
         pixels[:, :, 1] -= direction * amplitude
         pixels[:, :, 2] += direction * max(1, amplitude // 2)
-
-        # Bounded uint8 clip preventing integer overflow/underflow
         image = Image.fromarray(np.clip(pixels, 0, 255).astype(np.uint8))
 
     output = BytesIO()
