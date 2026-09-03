@@ -144,7 +144,7 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
   }
 
   return (
-    <article className="group overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-soft transition-all duration-300 hover:shadow-xl">
+    <article className="group overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-soft transition-all duration-300 hover:shadow-soft-md">
       {/* Visual Asset Stage with Anti-Scraping Defense */}
       <div className="relative aspect-square w-full overflow-hidden bg-slate-900">
         {cid && !isDemo ? (

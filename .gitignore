@@ -18,6 +18,8 @@ packages/protocol-sdk/src/generated/
 **/.env.*
 !.env.example
 !**/.env.example
+.envrc
+**/.envrc
 *.pem
 *.key
 *.p12
@@ -27,6 +29,17 @@ keystore/
 keystores/
 secrets/
 *.secret
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.sql.gz
+
+# Local package-manager credentials
+.npmrc
+**/.npmrc
+!.npmrc.example
+!**/.npmrc.example
 
 # Local chain and deployment state
 .openzeppelin/

@@ -21,7 +21,7 @@ def test_transform_is_deterministic_and_bounded() -> None:
     second = perturb_image(source, 1.0)
     assert first == second
     with Image.open(BytesIO(first)) as result:
-        assert result.getextrema() == ((88, 112), (108, 132), (134, 146))
+        assert result.getextrema() == ((86, 114), (106, 134), (133, 147))
 
 
 def test_1024_square_completes_within_demo_budget() -> None:

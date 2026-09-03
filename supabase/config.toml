@@ -1,0 +1,3 @@
+# Supabase CLI project configuration.
+# Run `supabase link --project-ref <PROJECT_REF>` once to bind this repo to a remote project.
+project_id = "trovaya"

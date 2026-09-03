@@ -31,14 +31,19 @@ export function ProtectionForm() {
   const [keyDeliveryStatus, setKeyDeliveryStatus] = useState<"idle" | "registering" | "registered" | "unavailable">("idle");
   const [pendingKey, setPendingKey] = useState<{ tokenId: string; keyBase64: string }>();
 
+  const [keyError, setKeyError] = useState<string>();
   async function completeKeyRegistration(key: { tokenId: string; keyBase64: string }) {
     if (!account.address) throw new Error("Wallet creator tidak lagi terhubung.");
     setKeyDeliveryStatus("registering");
+    setKeyError(undefined);
     try {
       await registerContentKey({ walletAddress: account.address, tokenId: key.tokenId, contentKey: key.keyBase64, signMessage: (message) => signer.signMessageAsync({ message }) });
       setPendingKey(undefined);
       setKeyDeliveryStatus("registered");
     } catch (caught) {
+      const msg = caught instanceof Error ? caught.message : String(caught);
+      setKeyError(msg);
+      console.error("[vault] registerContentKey failed:", msg);
       setKeyDeliveryStatus("unavailable");
       throw caught;
     }
@@ -148,6 +153,7 @@ export function ProtectionForm() {
     {keyDeliveryStatus === "registered" && <p className="mt-3 rounded-xl bg-mint p-3 text-xs text-leaf">Content key sudah dibungkus oleh secure vault dan dihapus dari state halaman.</p>}
     {keyDeliveryStatus === "unavailable" && pendingKey && <div className="mt-3 rounded-xl bg-amber-50 p-3 text-xs text-amber-800">
       <p>Pendaftaran on-chain berhasil, tetapi content key belum tersimpan. Key hanya berada di memori halaman ini; jangan tutup atau muat ulang sebelum retry berhasil.</p>
+      {keyError && <p className="mt-2 rounded bg-white p-2 font-mono text-[11px] text-red-700 border border-amber-200">Detail: {keyError}</p>}
       <button type="button" onClick={() => void completeKeyRegistration(pendingKey).catch(() => undefined)} className="mt-2 rounded-lg bg-amber-800 px-3 py-2 font-semibold text-white">Retry secure key registration</button>
     </div>}
     {persistenceMode && <div className={`mt-4 rounded-xl p-3 text-sm ${persistenceMode === "pinata" ? "bg-mint text-leaf" : "bg-amber-50 text-amber-800"}`}>
