@@ -20,7 +20,7 @@ async function fetchOnChainFallback(): Promise<IndexedAsset[]> {
   // Ambil tip dulu biar range kecil dan tidak kena limit exceeded data-seed
   const latest = await client.getBlockNumber();
   const fromBlock = latest > 5000n ? latest - 5000n : 0n;
-  let logs: any[] = [];
+  let logs;
   try {
     logs = await client.getLogs({ address: addresses.ipNFT, event: mintEvent, fromBlock, toBlock: "latest" });
   } catch {
