@@ -2,303 +2,469 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
-import { useAssets, type IndexedAsset } from "@/hooks/use-assets";
+import { ProtectionForm } from "@/components/protection-form";
+import { useAssets } from "@/hooks/use-assets";
 import { getClientContractAddresses } from "@/lib/contracts";
 import { useLicenseProceeds } from "@/hooks/use-license-proceeds";
 import { OperationStatus } from "@/components/operation-status";
+import { BnbTestnetBadge } from "@/components/bnb-network-badge";
 
-const navigation = [
-  { label: "Overview", href: "/dashboard", marker: "01" },
-  { label: "Protect a work", href: "/#studio", marker: "02" },
-  { label: "Explore works", href: "/#gallery", marker: "03" },
-  { label: "License activity", href: "#recent-works", marker: "04" },
-  { label: "Trust profile", href: "#trust-profile", marker: "05" },
-] as const;
+type Tab = "overview" | "studio" | "assets" | "licenses" | "trust";
 
-export function CreatorDashboard() {
+const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
+  { id: "overview",  label: "Ringkasan Finansial", icon: "📊", subtitle: "Saldo royalti & metrik karya" },
+  { id: "studio",   label: "Lindungi Karya Baru",  icon: "🛡️", subtitle: "Upload gambar & tetapkan lisensi" },
+  { id: "assets",   label: "Galeri Karya Saya",    icon: "🎨", subtitle: "Katalog aset terlindungi" },
+  { id: "licenses", label: "Penjualan & Lisensi",  icon: "💰", subtitle: "Riwayat pembayaran pembeli" },
+  { id: "trust",    label: "Profil Keamanan",      icon: "🔒", subtitle: "Status wallet & kepatuhan AI" },
+];
+
+export function CreatorDashboard(){
+  const [activeTab, setActiveTab] = useState<Tab>("overview");
   const account = useAccount();
   const assets = useAssets();
   const records = assets.data ?? [];
-  const licensedForAI = records.filter((asset) => asset.allow_ai_training).length;
+  const licensedForAI = records.filter((a) => a.allow_ai_training).length;
   const protectedFromAI = records.length - licensedForAI;
-  const licenseReady = records.filter((asset) => asset.commercial_license_fee_wei).length;
+  const licenseReady = records.filter((a) => a.commercial_license_fee_wei).length;
   const contractsConfigured = Boolean(getClientContractAddresses());
   const proceeds = useLicenseProceeds();
   const shortAddress = account.address
     ? `${account.address.slice(0, 6)}…${account.address.slice(-4)}`
-    : "No account connected";
+    : "Wallet Belum Terhubung";
+  const chainLabel = process.env.NEXT_PUBLIC_CHAIN_ID === "97" ? "BNB" : "ETH";
+
+  // Approximate IDR calculation for friendly visual representation
+  const bnbAmount = parseFloat(formatEther(proceeds.amount || 0n));
+  const estimatedIdr = (bnbAmount * 10000000).toLocaleString("id-ID");
 
   return (
-    <div className="min-h-screen bg-sand text-ink lg:grid lg:grid-cols-[248px_minmax(0,1fr)]">
-      <aside className="border-b border-stone-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:border-b-0 lg:border-r">
-        <div className="flex items-center justify-between px-5 py-5 lg:block lg:px-4 lg:py-6">
-          <Link href="/" className="px-2 text-xl font-bold tracking-tight text-leaf">
-            Trovaya<span className="text-coral">.</span>
+    <div className="min-h-screen text-nusa-900 lg:grid lg:grid-cols-[280px_minmax(0,1fr)]" style={{ background: "#F1EFE8" }}>
+
+      {/* SIDEBAR NAVIGATION (USER-FRIENDLY & ECONOMY FOCUSED) */}
+      <aside className="border-b border-nusa-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:border-b-0 lg:border-r lg:flex lg:flex-col shadow-sm">
+        
+        {/* Workspace Brand Head */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-nusa-100">
+          <Link href="/" className="flex items-center gap-2.5">
+            <Image src="/trovaya-logo.svg" alt="Trovaya" width={28} height={28} />
+            <span className="text-xl font-bold tracking-tight text-teal-900 font-sans">
+              Trovaya<span className="text-coral">.</span>
+            </span>
           </Link>
-          <span className="rounded-full bg-mint px-3 py-1 text-[11px] font-semibold text-leaf lg:mx-2 lg:mt-3 lg:inline-flex">
-            Creator workspace
-          </span>
+          <BnbTestnetBadge />
         </div>
 
-        <div className="mx-4 hidden rounded-2xl border border-stone-200 bg-stone-50 p-3 lg:block">
+        {/* User Account Card */}
+        <div className="p-4 border-b border-nusa-100 bg-teal-50/50">
           <div className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-mint text-xs font-bold text-leaf">
-              {account.address ? account.address.slice(2, 4).toUpperCase() : "TV"}
-            </span>
-            <span className="min-w-0">
-              <strong className="block truncate text-sm">Creator account</strong>
-              <small className="block truncate text-xs text-stone-500">{shortAddress}</small>
-            </span>
+            <div className="h-10 w-10 rounded-2xl bg-teal-900 text-white grid place-items-center text-sm font-bold shadow-md">
+              {account.address ? account.address.slice(2, 4).toUpperCase() : "👋"}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-semibold text-nusa-500">Akun Kreator</p>
+              <p className="truncate text-xs font-bold text-nusa-900 font-mono mt-0.5">{shortAddress}</p>
+            </div>
           </div>
+          {account.isConnected && (
+            <div className="mt-2.5 flex items-center gap-1.5 text-[11px] text-emerald-700 font-semibold bg-emerald-100/60 px-2.5 py-1 rounded-lg">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse" />
+              <span>Terhubung ke Jaringan BNB Chain</span>
+            </div>
+          )}
         </div>
 
-        <nav aria-label="Creator workspace" className="flex gap-2 overflow-x-auto px-4 pb-4 lg:mt-7 lg:block lg:space-y-1 lg:overflow-visible">
-          {navigation.map((item, index) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              aria-current={index === 0 ? "page" : undefined}
-              className={`flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${
-                index === 0
-                  ? "bg-leaf font-semibold text-white"
-                  : "text-stone-600 hover:bg-mint hover:text-leaf"
-              }`}
-            >
-              <span className={`text-[10px] font-bold ${index === 0 ? "text-white/70" : "text-stone-400"}`}>
-                {item.marker}
-              </span>
-              {item.label}
-            </Link>
-          ))}
+        {/* Navigation Tabs */}
+        <nav aria-label="Menu Kreator" className="flex-1 p-3 space-y-1 overflow-y-auto">
+          {navItems.map((item) => {
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setActiveTab(item.id)}
+                className={`interactive-tab w-full flex items-start gap-3 rounded-2xl p-3 text-left transition-all ${
+                  isActive
+                    ? "bg-teal-900 text-white shadow-soft-md"
+                    : "text-nusa-700 hover:bg-nusa-100/80 hover:text-nusa-900"
+                }`}
+              >
+                <span className="text-lg leading-none mt-0.5">{item.icon}</span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold leading-tight">{item.label}</p>
+                  <p className={`text-[11px] truncate mt-0.5 ${isActive ? "text-teal-200" : "text-nusa-500"}`}>
+                    {item.subtitle}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
         </nav>
 
-        <div className="mx-4 mt-auto hidden rounded-2xl bg-mint p-4 text-leaf lg:absolute lg:bottom-5 lg:block lg:w-[216px]">
-          <strong className="text-sm">Need context?</strong>
-          <p className="mt-1 text-xs leading-5 text-leaf/75">
-            Technical proof stays available without interrupting the creator journey.
+        {/* Help & Support Card */}
+        <div className="p-4 m-3 rounded-2xl bg-nusa-50 border border-nusa-200 text-xs text-nusa-600">
+          <p className="font-bold text-nusa-900">🛡️ Jaminan Keamanan Vault</p>
+          <p className="mt-1 text-[11px] leading-relaxed text-nusa-500">
+            Karya asli dienkripsi langsung di perangkat Anda sebelum diunggah.
           </p>
-          <Link href="/#how-it-works" className="mt-3 inline-flex text-xs font-bold underline underline-offset-4">
-            Review the protection flow
-          </Link>
         </div>
       </aside>
 
-      <main className="min-w-0">
-        <header className="flex min-h-20 items-center justify-between gap-4 border-b border-stone-200 bg-white px-5 py-4 md:px-8">
-          <div>
-            <p className="text-xs font-medium text-stone-500">Workspace / Overview</p>
-            <p className="mt-1 text-sm font-semibold text-ink">Consent-first creator protection</p>
+      {/* MAIN WORKSPACE CONTENT */}
+      <main className="min-w-0 flex flex-col">
+        
+        {/* Top App Header */}
+        <header className="flex h-16 items-center justify-between border-b border-nusa-200 bg-white px-6 md:px-8">
+          <div className="flex items-center gap-2 text-sm font-bold text-nusa-900">
+            <span>{navItems.find((n) => n.id === activeTab)?.icon}</span>
+            <span>{navItems.find((n) => n.id === activeTab)?.label}</span>
           </div>
-          <ConnectButton label="Connect account" accountStatus="avatar" chainStatus="icon" showBalance={false} />
+
+          <div className="flex items-center gap-3">
+            {activeTab !== "studio" && (
+              <button
+                type="button"
+                onClick={() => setActiveTab("studio")}
+                className="interactive-btn hidden sm:inline-flex items-center gap-1.5 rounded-xl bg-teal-900 px-4 py-2 text-xs font-bold text-white shadow-soft-md hover:bg-teal-800"
+              >
+                <span>+</span> Lindungi Karya Baru
+              </button>
+            )}
+            <ConnectButton
+              label="Hubungkan Wallet"
+              accountStatus="avatar"
+              chainStatus="icon"
+              showBalance={false}
+            />
+          </div>
         </header>
 
-        <div className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-10">
-          <section className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-coral">Creator overview</p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
-                Protect the work. Keep the choice.
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600">
-                Track experimental protected previews, AI-training consent, and commercial licensing without
-                exposing the clean original.
-              </p>
-            </div>
-            <Link href="/#studio" className="inline-flex justify-center rounded-xl bg-coral px-5 py-3 text-sm font-semibold text-white hover:bg-coral-dark">
-              Protect a new work
-            </Link>
-          </section>
+        {/* Tab Body Content */}
+        <div className="p-6 md:p-8 max-w-7xl w-full mx-auto space-y-8">
 
-          <section aria-label="Creator summary" className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <SummaryCard label="Protected works" value={assets.isLoading ? "Loading" : `${records.length}`} note="Indexed protocol records" />
-            <SummaryCard label="Licenses available" value={assets.isLoading ? "Loading" : `${licenseReady}`} note="Commercial terms recorded" />
-            <SummaryCard label="AI training allowed" value={assets.isLoading ? "Loading" : `${licensedForAI}`} note="Explicit licensed consent" tone="coral" />
-            <SummaryCard label="Account trust" value="SAMPLE" note="Mock verification only" tone="amber" />
-          </section>
-
-          <section className="mt-5 rounded-3xl border border-stone-200 bg-white p-6 md:flex md:items-center md:justify-between md:gap-6">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-leaf">License proceeds</p>
-              <strong className="mt-2 block text-2xl">{proceeds.isLoading ? "Loading…" : `${formatEther(proceeds.amount)} ${process.env.NEXT_PUBLIC_CHAIN_ID === "97" ? "BNB" : "ETH"}`}</strong>
-              <p className="mt-1 text-xs leading-5 text-stone-500">Purchases credit this contract balance. Withdrawal requires an explicit creator transaction.</p>
-            </div>
-            <button type="button" onClick={() => void proceeds.withdraw().catch(() => undefined)} disabled={!account.address || !proceeds.isConfigured || proceeds.amount === 0n || proceeds.state.phase === "awaiting_wallet" || proceeds.state.phase === "confirming"} className="mt-4 rounded-xl bg-leaf px-5 py-3 text-sm font-semibold text-white disabled:opacity-50 md:mt-0">
-              Withdraw to connected wallet
-            </button>
-            <OperationStatus state={proceeds.state} />
-          </section>
-
-          <section className="mt-5 grid gap-5 xl:grid-cols-[1.55fr_1fr]">
-            <article className="rounded-3xl border border-stone-200 bg-white p-6 md:p-7">
-              <div className="flex flex-wrap items-start justify-between gap-3">
+          {/* ════════════ 01. RINGKASAN FINANSIAL (OVERVIEW) ════════════ */}
+          {activeTab === "overview" && (
+            <div className="space-y-8">
+              
+              {/* Header Title & Action */}
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-nusa-200 pb-6">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-leaf">Protection coverage</p>
-                  <h2 className="mt-2 text-xl font-semibold">Every work carries an explicit AI choice</h2>
+                  <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
+                    Dompet & Pendapatan Lisensi
+                  </span>
+                  <h1 className="text-3xl font-extrabold text-nusa-900 tracking-tight mt-3">
+                    Ringkasan Royalti & Hak Cipta
+                  </h1>
+                  <p className="text-sm text-nusa-600 mt-1">
+                    Semua transaksi lisensi komersial dikreditkan otomatis ke dompet Anda melalui smart contract BNB Chain.
+                  </p>
                 </div>
-                <DataState isLoading={assets.isLoading} isError={assets.isError} />
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("studio")}
+                  className="interactive-btn rounded-xl bg-teal-900 px-5 py-2.5 text-xs font-bold text-white shadow-soft-md hover:bg-teal-800"
+                >
+                  + Upload Desain Baru
+                </button>
               </div>
 
-              <div className="mt-8 grid gap-6 md:grid-cols-[1fr_220px] md:items-end">
-                <div>
-                  <div className="flex h-5 overflow-hidden rounded-full bg-stone-100" aria-label="AI consent distribution">
+              {/* Highlight Financial Box (Real Balance & Withdraw) */}
+              <div className="rounded-3xl border border-nusa-200 bg-white p-7 shadow-soft">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  <div>
+                    <div className="flex items-center gap-2 text-xs font-bold text-teal-800 uppercase tracking-wider">
+                      <span>💰</span> Saldo Hasil Lisensi Tersedia
+                    </div>
+                    <div className="mt-3 flex items-baseline gap-3">
+                      <span className="text-4xl font-extrabold text-nusa-900 font-mono">
+                        {proceeds.isLoading ? "Memuat…" : formatEther(proceeds.amount)}
+                      </span>
+                      <span className="text-base font-bold text-teal-700">{chainLabel}</span>
+                      <span className="text-sm text-nusa-500 font-medium">
+                        (Estimasi ≈ Rp {estimatedIdr})
+                      </span>
+                    </div>
+                    <p className="mt-2 text-xs text-nusa-500 max-w-lg leading-relaxed">
+                      Dana penjualan lisensi disimpan secara aman di kontrak pintar. Anda dapat menariknya ke dompet kapan saja tanpa potongan biaya platform tersembunyi.
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => void proceeds.withdraw().catch(() => undefined)}
+                      disabled={!account.address || !proceeds.isConfigured || proceeds.amount === 0n || proceeds.state.phase === "awaiting_wallet" || proceeds.state.phase === "confirming"}
+                      className="interactive-btn rounded-xl bg-teal-900 px-7 py-3 text-xs font-bold text-white shadow-soft-md disabled:opacity-40 hover:bg-teal-800"
+                    >
+                      Tarik Dana ke Dompet
+                    </button>
+                    <OperationStatus state={proceeds.state} />
+                  </div>
+                </div>
+              </div>
+
+              {/* 4 Economic & Protection Cards */}
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="interactive-card rounded-2xl border border-nusa-200 bg-white p-5 shadow-soft hover:shadow-soft-md hover:border-teal-200">
+                  <div className="flex justify-between items-center text-xs font-semibold text-nusa-500">
+                    <span>Total Karya Terlindungi</span>
+                    <span className="text-xl">🖼️</span>
+                  </div>
+                  <p className="text-3xl font-extrabold text-teal-900 font-mono mt-2">
+                    {assets.isLoading ? "..." : records.length}
+                  </p>
+                  <p className="text-xs text-nusa-500 mt-1">Aset terdaftar di blockchain</p>
+                </div>
+
+                <div className="interactive-card rounded-2xl border border-nusa-200 bg-white p-5 shadow-soft hover:shadow-soft-md hover:border-teal-200">
+                  <div className="flex justify-between items-center text-xs font-semibold text-nusa-500">
+                    <span>Lisensi Siap Jual</span>
+                    <span className="text-xl">🏷️</span>
+                  </div>
+                  <p className="text-3xl font-extrabold text-teal-900 font-mono mt-2">
+                    {assets.isLoading ? "..." : licenseReady}
+                  </p>
+                  <p className="text-xs text-nusa-500 mt-1">Dengan biaya komersial aktif</p>
+                </div>
+
+                <div className="interactive-card rounded-2xl border border-nusa-200 bg-white p-5 shadow-soft hover:shadow-soft-md hover:border-coral-200">
+                  <div className="flex justify-between items-center text-xs font-semibold text-nusa-500">
+                    <span>Izin AI Diberikan</span>
+                    <span className="text-xl">🤖</span>
+                  </div>
+                  <p className="text-3xl font-extrabold text-coral font-mono mt-2">
+                    {assets.isLoading ? "..." : licensedForAI}
+                  </p>
+                  <p className="text-xs text-nusa-500 mt-1">Karya berlisensi model AI</p>
+                </div>
+
+                <div className="interactive-card rounded-2xl border border-nusa-200 bg-white p-5 shadow-soft hover:shadow-soft-md hover:border-teal-200">
+                  <div className="flex justify-between items-center text-xs font-semibold text-nusa-500">
+                    <span>AI Scraper Diblokir</span>
+                    <span className="text-xl">🔒</span>
+                  </div>
+                  <p className="text-3xl font-extrabold text-teal-900 font-mono mt-2">
+                    {assets.isLoading ? "..." : protectedFromAI}
+                  </p>
+                  <p className="text-xs text-nusa-500 mt-1">Hanya pratinjau noise</p>
+                </div>
+              </div>
+
+              {/* Two Column Section: Consent Status & Quick Asset List */}
+              <div className="grid gap-6 lg:grid-cols-2">
+                {/* AI Consent Ratio Card */}
+                <div className="rounded-3xl border border-nusa-200 bg-white p-6 shadow-soft">
+                  <h3 className="font-bold text-nusa-900 text-base">Distribusi Kebijakan AI Training</h3>
+                  <p className="text-xs text-nusa-500 mt-1">
+                    Persentase karya yang Anda izinkan vs tolak untuk pelatihan kecerdasan buatan.
+                  </p>
+
+                  <div className="mt-5 flex h-4 overflow-hidden rounded-full bg-nusa-100">
                     {records.length > 0 ? (
                       <>
-                        <span className="bg-leaf" style={{ width: `${(protectedFromAI / records.length) * 100}%` }} />
-                        <span className="bg-coral" style={{ width: `${(licensedForAI / records.length) * 100}%` }} />
+                        <div className="bg-teal-900" style={{ width: `${(protectedFromAI / records.length) * 100}%` }} />
+                        <div className="bg-coral" style={{ width: `${(licensedForAI / records.length) * 100}%` }} />
                       </>
                     ) : (
-                      <span className="w-full bg-stone-200" />
+                      <div className="w-full bg-nusa-200" />
                     )}
                   </div>
-                  <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-xs text-stone-600">
-                    <span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-leaf" />No AI training: {protectedFromAI}</span>
-                    <span className="flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-full bg-coral" />Licensed AI training: {licensedForAI}</span>
+
+                  <div className="mt-4 flex items-center justify-between text-xs font-medium">
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-2.5 w-2.5 rounded-full bg-teal-900" />
+                      Tolak AI: {protectedFromAI} Karya
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-2.5 w-2.5 rounded-full bg-coral" />
+                      Izinkan AI: {licensedForAI} Karya
+                    </span>
                   </div>
                 </div>
-                <div className="rounded-2xl bg-sand p-4">
-                  <span className="text-xs text-stone-500">Public exposure model</span>
-                  <strong className="mt-1 block text-sm text-leaf">Experimental preview only</strong>
-                  <p className="mt-1 text-xs leading-5 text-stone-500">The browser encrypts clean sources. Persistence and key delivery require separately configured services.</p>
-                </div>
-              </div>
-            </article>
 
-            <article className="rounded-3xl bg-leaf p-6 text-white md:p-7">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-200">Quick actions</p>
-              <div className="mt-5 grid gap-3">
-                <QuickAction href="/#studio" index="01" title="Protect a work" detail="Create an experimental preview and register consent." />
-                <QuickAction href="/#gallery" index="02" title="Explore clear licenses" detail="Review works with explicit commercial terms." />
-                <QuickAction href="#recent-works" index="03" title="Review AI choices" detail="Check the consent attached to indexed works." />
-              </div>
-            </article>
-          </section>
-
-          <section className="mt-5 grid gap-5 xl:grid-cols-[1.55fr_1fr]">
-            <RecentWorks assets={records} isLoading={assets.isLoading} isError={assets.isError} />
-
-            <div className="grid gap-5">
-              <article id="trust-profile" className="rounded-3xl border border-stone-200 bg-white p-6">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-coral">Trust profile</p>
-                    <h2 className="mt-2 text-xl font-semibold">Identity is separate from ownership</h2>
+                {/* Quick Asset List */}
+                <div className="rounded-3xl border border-nusa-200 bg-white p-6 shadow-soft">
+                  <div className="flex items-center justify-between pb-3 border-b border-nusa-100">
+                    <h3 className="font-bold text-nusa-900 text-base">Karya Terdaftar Terkini</h3>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab("assets")}
+                      className="text-xs font-bold text-teal-800 hover:underline"
+                    >
+                      Buka Semua →
+                    </button>
                   </div>
-                  <span className="rounded-full bg-amber-100 px-3 py-1 text-[10px] font-bold text-amber-800">SAMPLE KYC</span>
-                </div>
-                <dl className="mt-5 space-y-3 text-sm">
-                  <StatusRow label="Wallet connection" value={account.isConnected ? "Connected" : "Not connected"} />
-                  <StatusRow label="Protocol addresses" value={contractsConfigured ? "Configured" : "Demo mode"} />
-                  <StatusRow label="Identity verification" value="Not submitted" />
-                </dl>
-                <p className="mt-5 rounded-2xl bg-sand p-3 text-xs leading-5 text-stone-600">
-                  Verification supports trust. It never guarantees an asset, business outcome, or investment return.
-                </p>
-              </article>
 
-              <article className="rounded-3xl border border-amber-200 bg-amber-50 p-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-amber-800">AI asset audit</p>
-                <h2 className="mt-2 text-lg font-semibold">Understand before licensing</h2>
-                <p className="my-4 text-sm leading-6 text-stone-600">
-                  Future audit results will explain provenance and licensing red flags without issuing buy, sell, or return predictions.
-                </p>
-                <AiDisclaimer />
-              </article>
+                  {records.length === 0 ? (
+                    <div className="py-8 text-center text-xs text-nusa-400">
+                      Belum ada karya yang terdaftar.
+                    </div>
+                  ) : (
+                    <div className="mt-3 space-y-2.5">
+                      {records.slice(0, 3).map((a) => (
+                        <div key={`${a.chain_id}:${a.token_id}`} className="flex items-center justify-between p-3 rounded-2xl bg-nusa-50 text-xs">
+                          <span className="font-bold text-nusa-900">Karya #{a.token_id}</span>
+                          <span className={a.allow_ai_training ? "text-coral font-semibold" : "text-teal-900 font-semibold"}>
+                            {a.allow_ai_training ? "✓ Izin AI" : "✕ Tanpa AI"}
+                          </span>
+                          <span className="font-bold text-nusa-800">
+                            {a.commercial_license_fee_wei ? `${formatEther(BigInt(a.commercial_license_fee_wei))} BNB` : "Gratis"}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
             </div>
-          </section>
+          )}
+
+          {/* ════════════ 02. LINDUNGI KARYA BARU (STUDIO) ════════════ */}
+          {activeTab === "studio" && (
+            <div className="space-y-6">
+              <div className="border-b border-nusa-200 pb-5">
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
+                  Formulir Pendaftaran
+                </span>
+                <h1 className="text-3xl font-extrabold text-nusa-900 tracking-tight mt-3">
+                  Lindungi & Daftarkan Desain Anda
+                </h1>
+                <p className="text-sm text-nusa-600 mt-1">
+                  Upload file desain Anda. Sistem kami akan membuatkan preview anti-scraping dan mengunci file resolusi tinggi di dalam Vault terenkripsi.
+                </p>
+              </div>
+
+              <div className="max-w-3xl">
+                <ProtectionForm />
+              </div>
+            </div>
+          )}
+
+          {/* ════════════ 03. GALERI KARYA SAYA (ASSETS) ════════════ */}
+          {activeTab === "assets" && (
+            <div className="space-y-6">
+              <div className="border-b border-nusa-200 pb-5 flex justify-between items-end">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
+                    Koleksi Saya
+                  </span>
+                  <h1 className="text-3xl font-extrabold text-nusa-900 tracking-tight mt-3">
+                    Katalog Karya Terdaftar
+                  </h1>
+                </div>
+                <span className="text-xs text-nusa-500 font-medium">
+                  Total: {records.length} Karya
+                </span>
+              </div>
+
+              {records.length === 0 ? (
+                <div className="rounded-3xl border-2 border-dashed border-nusa-300 bg-white p-12 text-center">
+                  <p className="font-bold text-base text-nusa-900">Belum ada karya yang terdaftar.</p>
+                  <p className="text-xs text-nusa-500 mt-1">Mulai upload karya pertama Anda sekarang.</p>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("studio")}
+                    className="mt-4 rounded-xl bg-teal-900 px-5 py-2.5 text-xs font-bold text-white shadow-soft-md"
+                  >
+                    Buka Formulir Pendaftaran
+                  </button>
+                </div>
+              ) : (
+                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                  {records.map((asset) => (
+                    <div key={`${asset.chain_id}:${asset.token_id}`} className="rounded-3xl border border-nusa-200 bg-white p-5 shadow-soft">
+                      <div className="flex items-center justify-between pb-3 border-b border-nusa-100">
+                        <span className="font-bold text-sm text-nusa-900">Karya #{asset.token_id}</span>
+                        <span className="text-[11px] bg-teal-100 text-teal-900 px-2.5 py-0.5 rounded-full font-bold">Terdaftar</span>
+                      </div>
+                      <div className="mt-4 space-y-2 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-nusa-500">Izin AI:</span>
+                          <span className="font-semibold">{asset.allow_ai_training ? "Diizinkan" : "Ditolak"}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-nusa-500">Biaya Lisensi:</span>
+                          <span className="font-mono font-bold text-teal-900 text-sm">
+                            {asset.commercial_license_fee_wei ? `${formatEther(BigInt(asset.commercial_license_fee_wei))} BNB` : "Gratis"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ════════════ 04. PENJUALAN & LISENSI (LICENSES) ════════════ */}
+          {activeTab === "licenses" && (
+            <div className="space-y-6">
+              <div className="border-b border-nusa-200 pb-5">
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
+                  Laporan Keuangan
+                </span>
+                <h1 className="text-3xl font-extrabold text-nusa-900 tracking-tight mt-3">
+                  Riwayat Lisensi & Penjualan
+                </h1>
+              </div>
+
+              <div className="rounded-3xl border border-nusa-200 bg-white p-8 text-center shadow-soft">
+                <span className="text-3xl block mb-2">📄</span>
+                <p className="font-bold text-nusa-900">Riwayat Penjualan Lisensi</p>
+                <p className="text-xs text-nusa-500 mt-1 max-w-md mx-auto leading-relaxed">
+                  Setiap kali ada pembeli yang membeli lisensi komersial karya Anda, catatan pembayaran on-chain akan otomatis tampil di sini.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* ════════════ 05. PROFIL KEAMANAN (TRUST) ════════════ */}
+          {activeTab === "trust" && (
+            <div className="space-y-6">
+              <div className="border-b border-nusa-200 pb-5">
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
+                  Keamanan & Kepatuhan
+                </span>
+                <h1 className="text-3xl font-extrabold text-nusa-900 tracking-tight mt-3">
+                  Status Keamanan Akun
+                </h1>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="rounded-3xl border border-nusa-200 bg-white p-6 shadow-soft space-y-3 text-xs">
+                  <p className="font-bold text-sm text-nusa-900">Pemeriksaan Keamanan</p>
+                  <div className="flex justify-between py-2.5 border-b border-nusa-100">
+                    <span className="text-nusa-600">Koneksi Dompet Web3:</span>
+                    <span className="font-bold text-emerald-700">{account.isConnected ? "✓ Terhubung" : "Belum Terhubung"}</span>
+                  </div>
+                  <div className="flex justify-between py-2.5 border-b border-nusa-100">
+                    <span className="text-nusa-600">Jaringan Blockchain:</span>
+                    <span className="font-bold text-teal-900">{contractsConfigured ? "BNB Smart Chain Testnet" : "Mode Demo"}</span>
+                  </div>
+                  <div className="flex justify-between py-2.5 border-b border-nusa-100">
+                    <span className="text-nusa-600">Verifikasi Dokumen UMKM:</span>
+                    <span className="font-bold text-amber-700">Contoh / Sample Verifikasi</span>
+                  </div>
+                </div>
+
+                <div className="rounded-3xl border border-amber-200 bg-amber-50/70 p-6 shadow-soft">
+                  <p className="font-bold text-sm text-nusa-900">Catatan Penting AI & Hukum</p>
+                  <p className="text-xs text-nusa-600 mt-2 mb-4 leading-relaxed">
+                    Sesuai panduan PRD dan regulasi kepatuhan 2026, Trovaya menyajikan analisis data untuk tujuan edukasi. Trovaya membantu mencatat bukti klaim hak cipta, namun bukan pengganti lembaga peradilan atau penasihat hukum.
+                  </p>
+                  <AiDisclaimer />
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </main>
     </div>
   );
-}
-
-function SummaryCard({ label, value, note, tone = "teal" }: { label: string; value: string; note: string; tone?: "teal" | "coral" | "amber" }) {
-  const toneClass = tone === "coral" ? "text-coral" : tone === "amber" ? "text-amber-700" : "text-leaf";
-  return (
-    <article className="rounded-2xl border border-stone-200 bg-white p-5">
-      <p className="text-xs font-medium text-stone-500">{label}</p>
-      <strong className={`mt-3 block text-3xl tracking-tight ${toneClass}`}>{value}</strong>
-      <p className="mt-2 text-xs text-stone-500">{note}</p>
-    </article>
-  );
-}
-
-function QuickAction({ href, index, title, detail }: { href: string; index: string; title: string; detail: string }) {
-  return (
-    <Link href={href} className="group flex items-center gap-4 rounded-2xl bg-white/10 p-3.5 hover:bg-white/15">
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white text-[10px] font-bold text-leaf">{index}</span>
-      <span>
-        <strong className="block text-sm">{title}</strong>
-        <small className="mt-1 block leading-5 text-emerald-100">{detail}</small>
-      </span>
-    </Link>
-  );
-}
-
-function RecentWorks({ assets, isLoading, isError }: { assets: IndexedAsset[]; isLoading: boolean; isError: boolean }) {
-  return (
-    <article id="recent-works" className="rounded-3xl border border-stone-200 bg-white p-6 md:p-7">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-leaf">Recent works</p>
-          <h2 className="mt-2 text-xl font-semibold">Indexed protection records</h2>
-        </div>
-        <Link href="/#gallery" className="text-xs font-bold text-leaf underline underline-offset-4">View gallery</Link>
-      </div>
-
-      {isLoading && <p className="mt-6 text-sm text-stone-500">Loading indexed works…</p>}
-      {isError && <p role="alert" className="mt-6 rounded-2xl bg-red-50 p-4 text-sm text-red-700">Indexed works are unavailable. Protection actions remain separate from this cached view.</p>}
-      {!isLoading && !isError && assets.length === 0 && (
-        <div className="mt-6 rounded-2xl border border-dashed border-stone-300 bg-stone-50 p-6 text-center">
-          <strong className="text-sm">No indexed work yet</strong>
-          <p className="mt-2 text-xs leading-5 text-stone-500">Protect a first creation or connect Supabase to populate this workspace.</p>
-          <Link href="/#studio" className="mt-4 inline-flex rounded-xl bg-leaf px-4 py-2 text-xs font-semibold text-white">Open Protection Studio</Link>
-        </div>
-      )}
-      {assets.length > 0 && (
-        <div className="mt-5 divide-y divide-stone-100">
-          {assets.slice(0, 4).map((asset) => <WorkRow key={`${asset.chain_id}:${asset.token_id}`} asset={asset} />)}
-        </div>
-      )}
-    </article>
-  );
-}
-
-function WorkRow({ asset }: { asset: IndexedAsset }) {
-  const gateway = process.env.NEXT_PUBLIC_IPFS_GATEWAY ?? "https://gateway.pinata.cloud/ipfs";
-  const isRemoteImage = Boolean(asset.public_poisoned_cid && !asset.public_poisoned_cid.startsWith("demo-"));
-  const fee = asset.commercial_license_fee_wei
-    ? `${formatEther(BigInt(asset.commercial_license_fee_wei))} ${asset.chain_id === 97 ? "BNB" : "ETH"}`
-    : "Terms pending";
-
-  return (
-    <div className="grid grid-cols-[48px_minmax(0,1fr)] items-center gap-3 py-4 sm:grid-cols-[48px_minmax(0,1fr)_auto_auto]">
-      {isRemoteImage ? (
-        <Image unoptimized width={48} height={48} src={`${gateway}/${asset.public_poisoned_cid}`} alt="Protected public preview" className="h-12 w-12 rounded-xl object-cover" />
-      ) : (
-        <span className="grid h-12 w-12 place-items-center rounded-xl bg-mint text-[10px] font-bold text-leaf">IP</span>
-      )}
-      <span className="min-w-0">
-        <strong className="block truncate text-sm">Experimental preview #{asset.token_id}</strong>
-        <small className="mt-1 block truncate text-xs text-stone-500">Creator {asset.creator_wallet}</small>
-      </span>
-      <span className="col-start-2 rounded-full bg-stone-100 px-3 py-1 text-[10px] font-semibold text-stone-600 sm:col-start-auto">
-        {asset.allow_ai_training ? "Licensed AI consent" : "No AI training"}
-      </span>
-      <strong className="col-start-2 text-xs text-leaf sm:col-start-auto sm:text-right">{fee}</strong>
-    </div>
-  );
-}
-
-function StatusRow({ label, value }: { label: string; value: string }) {
-  return <div className="flex items-center justify-between gap-4 border-b border-stone-100 pb-3"><dt className="text-stone-500">{label}</dt><dd className="text-right font-semibold">{value}</dd></div>;
-}
-
-function DataState({ isLoading, isError }: { isLoading: boolean; isError: boolean }) {
-  const label = isLoading ? "Loading index" : isError ? "Index unavailable" : "Indexed data";
-  const color = isError ? "bg-red-50 text-red-700" : "bg-mint text-leaf";
-  return <span className={`rounded-full px-3 py-1 text-[10px] font-bold ${color}`}>{label}</span>;
 }

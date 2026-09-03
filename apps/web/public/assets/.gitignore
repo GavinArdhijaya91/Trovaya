@@ -1,0 +1,41 @@
+# Abaikan file RAW / sumber besar — hanya commit hasil kompres untuk web
+# Lihat README.md untuk aturan ukuran (maks 500KB per file)
+
+# RAW kamera & editing
+*.raw
+*.cr2
+*.cr3
+*.nef
+*.arw
+*.raf
+*.rw2
+*.orf
+*.dng
+*.psd
+*.psb
+*.tiff
+*.tif
+*.bmp
+*.exr
+
+# Archive besar (opsional)
+*.zip
+*.rar
+*.7z
+
+# OS junk
+Thumbs.db
+.DS_Store
+
+# Kecualikan file yang memang perlu di-track
+!.gitkeep
+!README.md
+!*.jpg
+!*.jpeg
+!*.png
+!*.webp
+!*.avif
+!*.svg
+
+# Catatan: .gitignore tidak bisa filter berdasarkan ukuran.
+# Tetap kompres manual sebelum commit. CI akan cek file >500KB via PR check jika ada.
