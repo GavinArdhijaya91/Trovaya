@@ -22,6 +22,8 @@ let stopping = false;
 
 const mintEvent = parseAbiItem("event IPMinted(uint256 indexed tokenId,address indexed creator,bool allowAITraining)");
 const licenseEvent = parseAbiItem("event LicensePurchased(uint256 indexed tokenId,address indexed buyer,uint256 fee)");
+type MintLog = { args: { tokenId: bigint; creator: Address; allowAITraining: boolean }; blockNumber: bigint; blockHash: `0x${string}`; transactionHash: `0x${string}`; logIndex: number };
+type LicenseLog = { args: { tokenId: bigint; buyer: Address; fee: bigint }; blockNumber: bigint; blockHash: `0x${string}`; transactionHash: `0x${string}`; logIndex: number };
 
 async function rpc<T>(name: string, operation: () => Promise<T>): Promise<T> {
   return withRetry(operation, {
@@ -59,13 +61,13 @@ async function reconcileReorg(chainId: number, cursor: { last_block: string; las
 
 async function syncChunk(chainId: number, fromBlock: bigint, toBlock: bigint): Promise<void> {
   const startedAt = Date.now();
-  let mints: Awaited<ReturnType<typeof client.getLogs>> = [];
-  let licenses: Awaited<ReturnType<typeof client.getLogs>> = [];
+  let mints: MintLog[] = [];
+  let licenses: LicenseLog[] = [];
   let endBlock: Awaited<ReturnType<typeof client.getBlock>>;
   try {
     [mints, licenses, endBlock] = await Promise.all([
-      rpc("get_mint_logs", () => client.getLogs({ address: contractAddress, event: mintEvent, fromBlock, toBlock })),
-      rpc("get_license_logs", () => client.getLogs({ address: contractAddress, event: licenseEvent, fromBlock, toBlock })),
+      rpc("get_mint_logs", () => client.getLogs({ address: contractAddress, event: mintEvent, fromBlock, toBlock })) as Promise<MintLog[]>,
+      rpc("get_license_logs", () => client.getLogs({ address: contractAddress, event: licenseEvent, fromBlock, toBlock })) as Promise<LicenseLog[]>,
       rpc("get_chunk_end_block", () => client.getBlock({ blockNumber: toBlock })),
     ]);
   } catch (e) {
