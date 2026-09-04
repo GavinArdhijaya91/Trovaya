@@ -3,6 +3,45 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.8.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.7.0...v0.8.0) (2026-09-04)
+
+
+### Features
+
+* **web:** add BNB network and wallet status components ([43abe47](https://github.com/GavinArdhijaya91/Trovaya/commit/43abe472f82a45ea608e02fe96ee2660da950163))
+* **web:** add landing content components and demo assets ([21916ac](https://github.com/GavinArdhijaya91/Trovaya/commit/21916ac4ef0a98019b4ab8a9c0ce4b3c89024a2c))
+* **web:** add on-chain fallback for assets when API lag ([59d2435](https://github.com/GavinArdhijaya91/Trovaya/commit/59d24358b0372625ec8d71403de330ab46a7c32d))
+* **web:** add smooth-scroll provider for landing navigation ([95e2de1](https://github.com/GavinArdhijaya91/Trovaya/commit/95e2de148aea954d3a64af081fac61d3f60738f4))
+* **web:** enforce asset quality policy ([c0349d8](https://github.com/GavinArdhijaya91/Trovaya/commit/c0349d8c6a4b45eec42e943e266793a08dc6fe0a))
+* **web:** rebuild landing page composition ([33f7210](https://github.com/GavinArdhijaya91/Trovaya/commit/33f7210c47e0711025d476de4c6e8f65ad44db9f))
+* **web:** redesign landing and dashboard with tabbed workspace ([32262a4](https://github.com/GavinArdhijaya91/Trovaya/commit/32262a4afc7c7a48ff4180843a738ee25b257c6c))
+* **web:** refactor creator-dashboard into tabbed workspace ([5f605f1](https://github.com/GavinArdhijaya91/Trovaya/commit/5f605f108d733bf6d358d5136b3f81497a0725d2))
+
+
+### Fixes
+
+* **event-indexer:** handle BNB data-seed limit exceeded with adaptive split ([cf6ff12](https://github.com/GavinArdhijaya91/Trovaya/commit/cf6ff1223cc0b7c0702586218789068bc1c3fd1e))
+* **poison-engine:** implement Gaussian blur anti-scraping per PRD opsi 2 ([38e6594](https://github.com/GavinArdhijaya91/Trovaya/commit/38e659407963927f24e3ddf041b666636ea7b7b1))
+* protocol sdk clean lint ([0470186](https://github.com/GavinArdhijaya91/Trovaya/commit/04701862dfa2ce67169d24f1984ee9f7b4aa73dc))
+* protocol sdk clean lint ([97e499d](https://github.com/GavinArdhijaya91/Trovaya/commit/97e499d8f13aeb48c1176cada0c1c9f66e1f7007))
+* **vault:** enforce 2m TTL with created_at and atomic RPC consume ([3c457ee](https://github.com/GavinArdhijaya91/Trovaya/commit/3c457ee9aac07029e3e43195fb8c3ebcca1d7a1e))
+* **web:** avoid reading ref during render ([3997fb2](https://github.com/GavinArdhijaya91/Trovaya/commit/3997fb2c523058b1ea887a9109aeee0ad65f954d))
+* **web:** configure explicit BSC testnet RPC ([a0b0106](https://github.com/GavinArdhijaya91/Trovaya/commit/a0b01067707eca345af6fbb11f4a8836d4d97cec))
+* **web:** infer on-chain log types ([d58949b](https://github.com/GavinArdhijaya91/Trovaya/commit/d58949b59a5692e6c19d29e9ba34df4926779f4f))
+* **web:** remove unused FAQ ref import ([cf398cf](https://github.com/GavinArdhijaya91/Trovaya/commit/cf398cf71427c5757776b619a7c44d0b2fcec71b))
+* **web:** retry transient vault RPC calls ([39e4f7b](https://github.com/GavinArdhijaya91/Trovaya/commit/39e4f7b657f93adabbd043adb440a3f30c280eee))
+* **web:** surface vault key registration error detail ([51bbd40](https://github.com/GavinArdhijaya91/Trovaya/commit/51bbd400ccfe65509d4ab6b5b82b1a0f6365f810))
+
+
+### Documentation
+
+* clarify local development setup ([a488f05](https://github.com/GavinArdhijaya91/Trovaya/commit/a488f0541c5c6eacea65b19a253245af307a0cf3))
+
+
+### Refactoring
+
+* **event-indexer:** type mint/license logs explicitly ([cfb736f](https://github.com/GavinArdhijaya91/Trovaya/commit/cfb736fdfe44f1b30a4b550ed654ecdd12abf420))
+
 ## [0.7.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.6.0...v0.7.0) (2026-09-01)
 
 
