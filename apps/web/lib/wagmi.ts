@@ -17,8 +17,8 @@ export const wagmiConfig = validProjectId
       projectId: validProjectId,
       chains,
       transports: {
-        [bscTestnet.id]: http(bscTestnetRpcUrl),
-        [polygonAmoy.id]: http(),
+        [bscTestnet.id]: http(bscTestnetRpcUrl, { retryCount: 3, retryDelay: 500 }),
+        [polygonAmoy.id]: http(undefined, { retryCount: 3, retryDelay: 500 }),
       },
       ssr: true,
     })
@@ -26,8 +26,8 @@ export const wagmiConfig = validProjectId
       chains,
       connectors: [injected()],
       transports: {
-        [bscTestnet.id]: http(bscTestnetRpcUrl),
-        [polygonAmoy.id]: http(),
+        [bscTestnet.id]: http(bscTestnetRpcUrl, { retryCount: 3, retryDelay: 500 }),
+        [polygonAmoy.id]: http(undefined, { retryCount: 3, retryDelay: 500 }),
       },
       ssr: true,
     });

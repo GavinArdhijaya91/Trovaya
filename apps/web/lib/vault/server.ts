@@ -12,7 +12,7 @@ export function getVaultServices(): { config: VaultServerConfig; db: SupabaseCli
   return {
     config,
     db: createClient(config.supabaseUrl, config.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } }),
-    chain: createPublicClient({ transport: http(config.rpcUrl) }),
+    chain: createPublicClient({ transport: http(config.rpcUrl, { retryCount: 3, retryDelay: 500 }) }),
   };
 }
 
