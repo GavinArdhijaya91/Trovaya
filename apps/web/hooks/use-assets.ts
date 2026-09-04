@@ -15,7 +15,7 @@ const mintEvent = parseAbiItem("event IPMinted(uint256 indexed tokenId,address i
 async function fetchOnChainFallback(): Promise<IndexedAsset[]> {
   const addresses = getClientContractAddresses();
   if (!addresses) return [];
-  const rpcUrl = process.env.NEXT_PUBLIC_BSC_RPC_URL ?? "https://data-seed-prebsc-1-s1.bnbchain.org:8545";
+  const rpcUrl = process.env.NEXT_PUBLIC_BSC_RPC_URL ?? "https://data-seed-prebsc-2-s1.bnbchain.org:8545";
   const client = createPublicClient({ chain: bscTestnet, transport: http(rpcUrl) });
   // Ambil tip dulu biar range kecil dan tidak kena limit exceeded data-seed
   const latest = await client.getBlockNumber();
