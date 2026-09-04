@@ -174,7 +174,7 @@ async function main(): Promise<void> {
   metric("indexer_stopped", { graceful: true });
 }
 
-void main().catch(async (error: unknown) => {
+void main().catch(async(error: unknown) => {
   console.error(error);
   await sql.end({ timeout: 5 });
   process.exitCode = 1;

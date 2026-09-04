@@ -43,9 +43,44 @@ corepack install --global pnpm@9.15.4
 pnpm.cmd install --frozen-lockfile
 pnpm.cmd build
 Copy-Item apps/web/.env.example apps/web/.env.local
-Copy-Item services/event-indexer/.env.example services/event-indexer/.env
 pnpm.cmd demo:check
+```
+
+For the UI preview, start the web app in Terminal 1:
+
+```powershell
 pnpm.cmd dev:web
+```
+
+To test protected image previews, prepare the poison engine once in Terminal 2,
+then start it:
+
+```powershell
+cd services/poison-engine
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+cd ../..
+pnpm.cmd dev:poison
+```
+
+To view gallery data from Supabase, configure `SUPABASE_URL` and
+`SUPABASE_ANON_KEY` in `apps/web/.env.local`, apply the migrations described in
+[Verify the Supabase public-gallery boundary](#verify-the-supabase-public-gallery-boundary),
+and restart `pnpm.cmd dev:web`. The Supabase CLI is optional; if it is not
+installed, use `npx supabase@latest` for its commands:
+
+```powershell
+npx supabase@latest login
+npx supabase@latest link --project-ref ACTUAL_PROJECT_REF
+npx supabase@latest db push
+```
+
+Run the indexer only when its database and blockchain environment variables are
+configured. Copy the example, edit the required values, then start it:
+
+```powershell
+Copy-Item services/event-indexer/.env.example services/event-indexer/.env
+pnpm.cmd dev:indexer
 ```
 
 macOS or Linux:
@@ -56,8 +91,11 @@ corepack install --global pnpm@9.15.4
 pnpm install --frozen-lockfile
 pnpm build
 cp apps/web/.env.example apps/web/.env.local
-pnpm dev:web
 ```
+
+Start the web app with `pnpm dev:web`. For the poison engine setup and the
+optional Supabase/indexer flows, follow the same sequence in the
+[Local Development Guide](docs/guides/LOCAL_DEVELOPMENT.md).
 
 Open:
 

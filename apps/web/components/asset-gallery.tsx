@@ -64,6 +64,15 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
   const persistenceLabel = isDemo ? "DEMO ID · NOT IPFS" : cid ? "IPFS REFERENCE" : "NO PUBLIC REFERENCE";
   const [terms, setTerms] = useState<VersionedLicenseTerms>();
   const [termsError, setTermsError] = useState<string>();
+  const [originalExtension, setOriginalExtension] = useState("png");
+  const [qualityInfo, setQualityInfo] = useState<{
+    width: number;
+    height: number;
+    aspectRatio: number;
+    megapixels: number;
+    sizeBytes: number;
+    tier: string;
+  }>();
   const [deliveryState, setDeliveryState] = useState<"idle" | "pending" | "failed">("idle");
   const [deliveryError, setDeliveryError] = useState<string>();
   const [forceUnblurPreview, setForceUnblurPreview] = useState(false);
@@ -105,6 +114,46 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
     return () => { active = false; controller.abort(); };
   }, [asset.license_terms_hash, asset.license_terms_uri, gateway]);
 
+  useEffect(() => {
+    let active = true;
+    if (!asset.token_uri?.startsWith("ipfs://")) return () => { active = false; };
+    const controller = new AbortController();
+    void fetch(`${gateway}/${asset.token_uri.slice(7)}`, { signal: controller.signal })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Metadata karya tidak dapat dimuat.");
+        return response.json() as Promise<{
+          originalFile?: { extension?: string };
+          qualityPolicy?: {
+            resolution?: { width?: number; height?: number };
+            aspectRatio?: number;
+            megapixels?: number;
+            sizeBytes?: number;
+            tier?: string;
+          };
+        }>;
+      })
+      .then((metadata) => {
+        const extension = metadata.originalFile?.extension?.toLowerCase();
+        if (active && extension && ["png", "jpg", "webp"].includes(extension)) setOriginalExtension(extension);
+        const policy = metadata.qualityPolicy;
+        if (
+          active && policy?.resolution?.width && policy.resolution.height && policy.aspectRatio &&
+          policy.megapixels !== undefined && policy.sizeBytes !== undefined && policy.tier
+        ) {
+          setQualityInfo({
+            width: policy.resolution.width,
+            height: policy.resolution.height,
+            aspectRatio: policy.aspectRatio,
+            megapixels: policy.megapixels,
+            sizeBytes: policy.sizeBytes,
+            tier: policy.tier,
+          });
+        }
+      })
+      .catch(() => undefined);
+    return () => { active = false; controller.abort(); };
+  }, [asset.token_uri, gateway]);
+
   async function buy() {
     if (!asset.commercial_license_fee_wei || !asset.license_terms_hash || !asset.license_terms_version || !terms) return;
     await license.purchaseLicense(asset.token_id, asset.commercial_license_fee_wei, asset.license_terms_hash as `0x${string}`, asset.license_terms_version);
@@ -133,7 +182,7 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
       const url = URL.createObjectURL(original);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `trovaya-original-token-${asset.token_id}.png`;
+      link.download = `trovaya-original-token-${asset.token_id}.${originalExtension}`;
       link.click();
       URL.revokeObjectURL(url);
       setDeliveryState("idle");
@@ -228,6 +277,16 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
         <p className="mt-2 truncate text-xs text-slate-500 font-mono">
           Kreator: {asset.creator_wallet}
         </p>
+
+        {qualityInfo && (
+          <div className="mt-3 rounded-2xl border border-emerald-100 bg-emerald-50/60 p-3 text-[11px] text-slate-700">
+            <p className="font-semibold text-leaf">Spesifikasi original berlisensi</p>
+            <p className="mt-1">
+              {qualityInfo.width}×{qualityInfo.height}px · {qualityInfo.megapixels} MP · rasio {qualityInfo.aspectRatio}:1
+            </p>
+            <p className="mt-1">{formatBytes(qualityInfo.sizeBytes)} · tier {qualityInfo.tier}</p>
+          </div>
+        )}
 
         <div className="mt-4 rounded-2xl bg-sand/60 p-3.5 border border-slate-200/60">
           <div className="flex items-baseline justify-between">
@@ -327,4 +386,8 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
       </div>
     </article>
   );
+}
+
+function formatBytes(bytes: number): string {
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MiB`;
 }

@@ -5,6 +5,7 @@ export const configSchemas = {
       NEXT_PUBLIC_POISON_ENGINE_URL: { type: "url", default: "http://localhost:8000" },
       NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: { type: "walletConnect", optional: true },
       NEXT_PUBLIC_CHAIN_ID: { type: "positiveInteger", default: "97" },
+      NEXT_PUBLIC_BSC_RPC_URL: { type: "url", optional: true },
       NEXT_PUBLIC_TROVAYA_IP_NFT_ADDRESS: { type: "address", optional: true },
       NEXT_PUBLIC_TROVAYA_VAULT_ADDRESS: { type: "address", optional: true },
       NEXT_PUBLIC_IPFS_GATEWAY: { type: "url", default: "https://gateway.pinata.cloud/ipfs" },
