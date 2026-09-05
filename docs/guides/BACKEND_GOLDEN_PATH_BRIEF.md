@@ -60,7 +60,7 @@ Setiap tahap harus memiliki status yang mudah dipahami, seperti menunggu, berhas
 
 4. STATUS FITUR SAAT INI
 
-Sudah memiliki dasar implementasi:
+A. Sudah memiliki dasar implementasi
 
 1. Creator dapat menghubungkan wallet.
 2. Karya dapat diproses melalui Poison Engine.
@@ -73,7 +73,7 @@ Sudah memiliki dasar implementasi:
 9. Alur pembelian lisensi dan vault delivery sudah memiliki pemeriksaan akses.
 10. Tampilan sudah memberi label demo, testnet, mock KYC, dan non-advisory.
 
-Belum boleh dianggap sebagai layanan produksi:
+B. Belum boleh dianggap sebagai layanan produksi
 
 1. KYC atau verifikasi identitas dunia nyata.
 2. Jaminan bahwa karya tidak dapat disalin atau digunakan untuk pelatihan AI.
@@ -101,11 +101,17 @@ Label tersebut tidak boleh dihilangkan hanya agar demo terlihat lebih matang.
 
 6. PEMBAGIAN PERAN TIM
 
+A. Project manager
+
 Project manager memastikan urutan demo disepakati, definisi selesai tidak hanya berdasarkan tampilan, label demo tetap terlihat, dan setiap tahap memiliki bukti validasi.
 
 Project manager juga mencatat perubahan scope dan memastikan keputusan bisnis, legal, serta privasi tidak dianggap selesai hanya karena kode sudah dibuat.
 
+B. Developer
+
 Developer memastikan data berasal dari sumber yang benar, transaksi gagal tidak ditampilkan sebagai transaksi sukses, dan file private, key, KYC, serta session tidak bocor.
+
+C. Tanggung jawab bersama
 
 Developer juga memastikan pengulangan proses tidak menggandakan transaksi, wallet buyer dan seller dapat dibedakan, error mudah dipahami, dan API tetap stabil untuk frontend atau WebGL.
 
@@ -120,25 +126,25 @@ Hal yang harus disepakati bersama:
 
 7. FOKUS VALIDASI
 
-Alur creator
+A. Alur creator
 
 Creator harus dapat mengunggah karya, melihat preview, menyetujui metadata dan lisensi, lalu mendaftarkan karya.
 
 Bukti yang diperlukan adalah preview, hash transformasi, metadata, status penyimpanan, transaction hash, dan token ID.
 
-Alur buyer
+B. Alur buyer
 
 Buyer harus dapat melihat karya, membaca ketentuan lisensi, membeli lisensi, dan meminta akses ke vault.
 
 Bukti yang diperlukan adalah wallet buyer, hash dan versi terms, biaya, status transaksi, status izin, dan hasil pengiriman file.
 
-Alur histori
+C. Alur histori
 
 Workspace harus dapat menampilkan siapa melakukan apa, terhadap karya mana, kapan dilakukan, dan apa hasilnya.
 
 Wallet address dapat digunakan sebagai identitas samaran, misalnya 0x12ab...89ef. Wallet address bukan KYC dan bukan nama legal.
 
-Alur kegagalan
+D. Alur kegagalan
 
 Tim harus dapat menunjukkan perilaku aplikasi ketika Poison Engine tidak tersedia, Pinata gagal, transaksi ditolak, indexer terlambat, AI Reviewer tidak tersedia, lisensi kedaluwarsa, atau akses vault ditolak.
 
@@ -197,12 +203,12 @@ Alur demo dapat disebut siap jika:
 5. Transaksi testnet bukan transaksi produksi.
 6. Vault authorization bukan berarti semua orang dapat mengakses file asli.
 
-12. DOKUMEN TERKAIT
+12. PENUTUP
 
-BACKEND_GOLDEN_PATH_PLAN.md berisi rencana teknis dan kriteria penerimaan.
+Dokumen ini digunakan sebagai bahan pembicaraan bersama selama pengembangan
+Trovaya. Setiap perubahan besar pada alur, status fitur, keamanan, atau scope
+perlu dibahas dan disepakati bersama oleh developer dan project manager.
 
-TRUST_AND_IDENTITY.md berisi batasan identity, account, dan mock KYC.
-
-MASTER_SPEC.md berisi spesifikasi produk dan kebijakan klaim.
-
-INTEGRATION.md berisi panduan integrasi service dan deployment.
+Target awal bukan membuat semua fitur langsung sempurna. Target awal adalah
+memastikan satu alur utama dapat berjalan, dapat dijelaskan, dapat diuji, dan
+tidak membuat klaim yang melebihi kemampuan sistem.
