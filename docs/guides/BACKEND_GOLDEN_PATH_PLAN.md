@@ -10,12 +10,36 @@ alur demo utama. Pekerjaan frontend/WebGL berada di track terpisah.
 Membuktikan satu alur Trovaya yang dapat diulang:
 
 ```text
-upload -> protected preview -> encrypt source -> persist -> mint -> index
-       -> review evidence -> purchase license -> vault delivery
+connect wallet -> creator consent -> optional mock KYC -> upload
+     -> fixed protected preview -> watermark/identity metadata
+     -> encrypt source -> persist -> review evidence -> mint -> index
+     -> publish public preview -> purchase license -> vault delivery
 ```
 
 Setiap capability yang belum production-grade harus tetap diberi label
 experimental, demo, mock, atau rules-only.
+
+## KYC dan Identitas
+
+KYC **belum menjadi bagian dari implementasi upload saat ini**. Yang tersedia
+sekarang adalah wallet signing, metadata creator, dan dokumen desain mock-KYC.
+Mock-KYC harus diposisikan sebagai trust signal terpisah, bukan bukti identitas
+atau keaslian karya.
+
+Workflow sementara:
+
+1. Creator menghubungkan wallet dan mengonfirmasi consent.
+2. Creator dapat mengisi mock-KYC; dokumen diberi watermark `SAMPLE/CONTOH`
+  dan status tetap `mock/not_verified`.
+3. Creator mengunggah karya dan mengonfirmasi ringkasan sebelum proses dimulai.
+4. Poison Engine menghasilkan protected preview dengan konfigurasi tetap dan
+  hash transformasi yang ditampilkan.
+5. Sistem menambahkan watermark/status identitas pada metadata publik tanpa
+  menaruh dokumen KYC atau PII ke blockchain/IPFS publik.
+
+KYC production membutuhkan issuer, assurance level, expiry, revocation, appeal,
+retention, dan privacy review. Wallet ownership, AI Reviewer, atau token NFT
+tidak boleh dipresentasikan sebagai KYC.
 
 ## Urutan Pekerjaan
 
@@ -37,6 +61,10 @@ Acceptance:
 
 - Uji upload file yang didukung.
 - Verifikasi Poison Engine menghasilkan preview yang diberi label experimental.
+- Bekukan parameter transformasi pada satu versi/configuration ID; jangan
+  menerima perubahan intensitas setelah preview/hash dibuat.
+- Tampilkan preview, watermark, identity status, dan consent summary untuk
+  konfirmasi creator sebelum pinning dan mint.
 - Verifikasi original dienkripsi sebelum persistence.
 - Uji mode Pinata dan mode demo secara terpisah.
 - Pastikan demo identifier tidak dipresentasikan sebagai CID IPFS.
@@ -45,12 +73,18 @@ Acceptance:
 
 - Preview, encrypted source, metadata, dan license terms memiliki status yang
   dapat dibedakan.
+- Parameter protected preview dan hash transformasi konsisten antara preview,
+  metadata, dan evidence artifact.
+- Mock-KYC hanya menghasilkan status `mock/not_verified` dan tidak mengunggah
+  PII ke public storage.
 - Failure Pinata tidak mengklaim persistence berhasil.
 - Batas ukuran, format, dan latency tetap dipatuhi.
 
 ### Hari 3 - Mint dan indexing
 
 - Mint dari fresh non-admin wallet di BSC testnet.
+- Mint hanya setelah creator mengonfirmasi preview, identity status, consent,
+  terms, fee, dan persistence summary.
 - Pastikan token creator, terms hash/version, consent, fee, dan references cocok.
 - Jalankan indexer dari deployment block.
 - Verifikasi row gallery dan allowlist public tidak membocorkan vault/key/session.
@@ -93,6 +127,19 @@ Acceptance:
 - AI summary tidak mengubah rules engine sebagai sumber authoritative.
 - Evidence artifact dapat divalidasi tanpa secret.
 
+### Keamanan transaksi dan data
+
+- Mint, purchase, vault unlock, dan withdrawal harus menampilkan chain, target,
+  token ID, fee, terms hash/version, dan destination sebelum signature.
+- Setiap wallet challenge harus single-use, memiliki expiry, dan diikat ke
+  operasi serta token ID yang tepat.
+- Jangan menaruh private key, seed phrase, raw KYC, OTP, master key, content key,
+  plaintext source, atau session token di evidence, metadata publik, atau logs.
+- IPFS/public metadata hanya berisi protected preview dan allowlisted provenance;
+  encrypted vault reference bukan bukti bahwa plaintext dapat diakses.
+- Retry harus idempotent atau dapat dideteksi agar tidak menggandakan mint,
+  purchase, pinning, atau key registration.
+
 ## Kontrak Frontend/WebGL
 
 Frontend hanya perlu bergantung pada kontrak berikut:
@@ -104,6 +151,8 @@ Frontend hanya perlu bergantung pada kontrak berikut:
   `disclaimer`.
 - License state: terms verified, purchase state, authorization state, delivery
   state, expiry, dan revocation.
+- Identity state: wallet verified, mock-KYC status, issuer/assurance label,
+  expiry, dan revocation. Raw KYC documents are never part of this contract.
 
 WebGL boleh mengganti tampilan dan preview interaction tanpa mengubah rules
 engine, indexer schema, contract semantics, atau reviewer response contract.
