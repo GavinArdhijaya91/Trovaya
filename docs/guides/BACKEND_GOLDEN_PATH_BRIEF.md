@@ -170,14 +170,85 @@ Status harus membedakan menunggu, berhasil, gagal, kedaluwarsa, dan dicabut. Sum
 
 9. PERTANYAAN UNTUK DISKUSI TIM
 
-1. Apakah mock KYC cukup untuk demo, atau perlu dibuat sebagai halaman terpisah?
-2. Apakah preview memakai satu konfigurasi tetap selama hackathon?
-3. Data apa yang harus tampil di history creator dan buyer?
-4. Apakah CSV cukup, atau perlu juga menyediakan PDF?
-5. Berapa lama waktu tunggu yang masih dianggap wajar untuk indexer dan vault?
-6. Bagaimana aplikasi memberi tahu pengguna bahwa transaksi masih menunggu?
-7. Fitur apa yang wajib untuk penilaian hackathon dan apa yang ditunda?
-8. Bagian mana yang akan diganti oleh frontend atau WebGL tanpa mengubah backend?
+1. Mock KYC dan identitas creator
+
+KYC production belum tersedia dan belum boleh diklaim sebagai fitur yang sudah
+selesai. Untuk demo, apakah status mock KYC dengan label NOT VERIFIED sudah
+cukup, atau project manager membutuhkan halaman terpisah agar alur pengunggahan
+dokumen contoh lebih mudah dipahami?
+
+Keputusan yang dibutuhkan: cukup tampilkan status mock pada workspace, atau buat
+halaman demo khusus untuk mengunggah dokumen contoh dengan watermark SAMPLE.
+
+2. Konfigurasi protected preview
+
+Preview harus konsisten agar hasil demo dapat dibandingkan dan tidak terlihat
+berubah-ubah. Apakah kita menyetujui satu konfigurasi Poison Engine yang tetap
+selama hackathon, tanpa slider atau perubahan intensitas dari pengguna?
+
+Keputusan yang dibutuhkan: tetapkan satu configuration ID, tingkat proteksi,
+dan aturan perubahan yang hanya boleh dilakukan oleh developer.
+
+3. Isi history creator dan buyer
+
+History akan digunakan seperti activity log pada aplikasi SaaS. Creator perlu
+melihat pendaftaran karya, pembelian lisensi, pendapatan, withdrawal, dan
+perubahan akses vault. Buyer perlu melihat pembelian, terms yang diterima,
+permintaan akses, status delivery, masa berlaku, dan pencabutan akses.
+
+Keputusan yang dibutuhkan: tentukan kolom minimum yang tampil, seperti waktu,
+jenis aktivitas, Asset ID, wallet address singkat, jumlah transaksi, status,
+transaction hash, dan link explorer.
+
+4. Bentuk export transaksi
+
+Pengguna mungkin membutuhkan bukti transaksi atau file untuk analisis. CSV
+lebih cocok untuk data yang ingin difilter, sedangkan PDF lebih cocok untuk
+dibaca atau dicetak.
+
+Keputusan yang dibutuhkan: apakah kebutuhan hackathon cukup dengan history di
+workspace dan CSV, atau perlu ditambahkan PDF printable sebagai bukti transaksi
+demo?
+
+5. Batas waktu proses
+
+Indexer dan vault delivery tidak selalu selesai seketika. Pengguna perlu tahu
+kapan harus menunggu dan kapan harus mencoba kembali.
+
+Keputusan yang dibutuhkan: tentukan batas waktu yang masih dianggap normal,
+misalnya beberapa detik untuk indexer dan kurang dari satu menit untuk proses
+vault. Setelah batas tersebut terlewati, aplikasi harus menampilkan status
+delayed atau failed.
+
+6. Tampilan transaksi yang masih menunggu
+
+Transaksi blockchain dapat masih menunggu konfirmasi, sementara indexer juga
+dapat terlambat membaca transaksi yang sudah dikirim. Status pending tidak
+boleh ditampilkan sebagai transaksi berhasil.
+
+Keputusan yang dibutuhkan: sepakati teks status, indikator proses, tombol retry,
+dan informasi yang ditampilkan ketika pengguna menutup atau memuat ulang
+halaman.
+
+7. Prioritas fitur hackathon
+
+Tidak semua fitur harus selesai untuk demo. Alur paling penting adalah creator
+mendaftarkan karya, buyer membeli lisensi, indexer mencatat aktivitas, dan
+vault delivery memeriksa hak akses.
+
+Keputusan yang dibutuhkan: tandai fitur sebagai wajib, penting jika sempat,
+atau ditunda. Contoh fitur yang dapat ditunda adalah PDF, SBT, social
+publishing, analytics, dan KYC production.
+
+8. Batas perubahan frontend dan WebGL
+
+Frontend atau WebGL dapat mengganti tampilan, animasi, dan cara preview
+ditampilkan. Namun perubahan tersebut tidak boleh mengubah aturan lisensi,
+format data, status transaksi, keamanan vault, atau kontrak AI Reviewer.
+
+Keputusan yang dibutuhkan: sepakati API, data asset, data reviewer, data
+history, dan status transaksi yang harus tetap kompatibel setelah frontend baru
+dibuat.
 
 10. SYARAT DEMO DIANGGAP SIAP
 
