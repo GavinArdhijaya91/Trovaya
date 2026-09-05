@@ -15,8 +15,8 @@ pinned: false
 Rules-first, non-advisory asset evidence reviewer. The Gradio Space exposes a
 browser test UI and the `review_asset` Gradio API:
 
-- `POST /call/review_asset`
-- `GET /call/review_asset/{event_id}`
+- `POST /gradio_api/call/review_asset`
+- `GET /gradio_api/call/review_asset/{event_id}`
 
 The Trovaya web application proxies this API and sends public asset evidence
 only.
@@ -35,7 +35,7 @@ Verify the deployment from the Space UI or its Gradio API before connecting the
 web app:
 
 ```text
-POST https://<org>-<space>.hf.space/call/review_asset
+POST https://<org>-<space>.hf.space/gradio_api/call/review_asset
 ```
 
 Set the Space secrets/variables for cloud mode:

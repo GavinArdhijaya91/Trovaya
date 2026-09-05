@@ -20,12 +20,12 @@ export async function POST(request: NextRequest) {
   }
   try {
     const baseUrl = reviewerUrl.replace(/\/$/, "");
-    const job = await requestJson<{ event_id: string }>(`${baseUrl}/call/review_asset`, {
+    const job = await requestJson<{ event_id: string }>(`${baseUrl}/gradio_api/call/review_asset`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ data: [JSON.stringify(body)] }),
     }, { attempts: 1 });
-    const resultResponse = await fetch(`${baseUrl}/call/review_asset/${encodeURIComponent(job.event_id)}`);
+    const resultResponse = await fetch(`${baseUrl}/gradio_api/call/review_asset/${encodeURIComponent(job.event_id)}`);
     if (!resultResponse.ok) throw new Error("Reviewer job gagal.");
     const result = parseGradioResult(await resultResponse.text());
     return NextResponse.json(result);

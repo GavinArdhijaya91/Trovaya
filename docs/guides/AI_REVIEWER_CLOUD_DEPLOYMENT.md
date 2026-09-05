@@ -16,7 +16,7 @@ into the Space repository. The included `README.md` declares the Gradio SDK
 and port `7860`. Gradio exposes the `review_asset` API through:
 
 ```text
-/call/review_asset
+/gradio_api/call/review_asset
 ```
 
 Set these Space variables/secrets:
