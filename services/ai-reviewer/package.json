@@ -1,0 +1,12 @@
+{
+  "name": "@trovaya/ai-reviewer",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node ../poison-engine/scripts/python.mjs -m uvicorn app.main:app --reload --port 8100",
+    "start": "node ../poison-engine/scripts/start.mjs",
+    "test": "node ../poison-engine/scripts/python.mjs -m pytest -p no:cacheprovider",
+    "lint": "node ../poison-engine/scripts/python.mjs -m ruff check --no-cache app tests",
+    "build": "node ../poison-engine/scripts/python.mjs -m compileall -q app"
+  }
+}
