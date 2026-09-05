@@ -13,8 +13,30 @@ import { getClientContractAddresses } from "@/lib/contracts";
 import { useLicenseProceeds } from "@/hooks/use-license-proceeds";
 import { OperationStatus } from "@/components/operation-status";
 import { BnbTestnetBadge } from "@/components/bnb-network-badge";
+import { AssetReviewer } from "@/components/asset-reviewer";
+import type { AssetReviewInput } from "@/lib/reviewer-types";
 
 type Tab = "overview" | "studio" | "assets" | "licenses" | "trust";
+
+function buildReviewInput(asset: NonNullable<ReturnType<typeof useAssets>["data"]>[number]): AssetReviewInput {
+  const isDemo = Boolean(asset.public_poisoned_cid?.startsWith("demo-"));
+  return {
+    token_id: asset.token_id,
+    persistence_mode: isDemo ? "demo" : asset.public_poisoned_cid ? "pinata" : "unknown",
+    public_preview_cid: Boolean(asset.public_poisoned_cid && !isDemo),
+    encrypted_vault_cid: false,
+    license_terms_cid: Boolean(asset.license_terms_uri?.startsWith("ipfs://")),
+    preview_protection: "experimental",
+    creator_identity: "unknown",
+    license: {
+      terms_hash_verified: Boolean(asset.license_terms_hash && asset.license_terms_uri?.startsWith("ipfs://")),
+      duration_days: asset.license_duration_seconds
+        ? Math.max(1, Math.round(Number(asset.license_duration_seconds) / 86400))
+        : undefined,
+      allow_ai_training: asset.allow_ai_training,
+    },
+  };
+}
 
 const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
   { id: "overview",  label: "Ringkasan Finansial", icon: "📊", subtitle: "Saldo royalti & metrik karya" },
@@ -394,6 +416,7 @@ export function CreatorDashboard(){
                           </span>
                         </div>
                       </div>
+                      <AssetReviewer input={buildReviewInput(asset)} />
                     </div>
                   ))}
                 </div>
