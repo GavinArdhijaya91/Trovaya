@@ -12,15 +12,16 @@ export function getVaultServices(): { config: VaultServerConfig; db: SupabaseCli
   return {
     config,
     db: createClient(config.supabaseUrl, config.serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } }),
-    chain: createPublicClient({ transport: http(config.rpcUrl) }),
+    chain: createPublicClient({ transport: http(config.rpcUrl, { retryCount: 3, retryDelay: 500 }) }),
   };
 }
 
 export function buildChallenge(wallet: Address, chainId: number, tokenId: string, purpose: ChallengePurpose) {
   const nonce = randomBytes(32).toString("hex");
-  const expiresAt = new Date(Date.now() + 5 * 60_000).toISOString();
+  const createdAt = new Date().toISOString();
+  const expiresAt = new Date(Date.parse(createdAt) + 2 * 60_000).toISOString();
   const message = ["Trovaya secure vault", `Purpose: ${purpose}`, `Wallet: ${wallet.toLowerCase()}`, `Chain ID: ${chainId}`, `Token ID: ${tokenId}`, `Nonce: ${nonce}`, `Expires: ${expiresAt}`].join("\n");
-  return { message, messageHash: createHash("sha256").update(message).digest("hex"), expiresAt };
+  return { message, messageHash: createHash("sha256").update(message).digest("hex"), createdAt, expiresAt };
 }
 
 export async function consumeChallenge(input: { challengeId: string; walletAddress: Address; message: string; signature: Hex }, purpose: ChallengePurpose) {
@@ -36,13 +37,13 @@ export async function consumeChallenge(input: { challengeId: string; walletAddre
   }
   const valid = await services.chain.verifyMessage({ address: input.walletAddress, message: input.message, signature: input.signature });
   if (!valid) {
-    const { error: attemptError } = await services.db.from("vault_delivery_challenges").update({ failed_attempts: challenge.failed_attempts + 1 }).eq("id", challenge.id).is("consumed_at", null);
+    const { error: attemptError } = await services.db.rpc("record_vault_challenge_failure", { p_challenge_id: challenge.id });
     if (attemptError) throw new VaultError(503, "Percobaan signature belum dapat dicatat.");
     throw new VaultError(401, "Signature wallet tidak valid.");
   }
-  const { data: consumed, error: consumeError } = await services.db.from("vault_delivery_challenges").update({ consumed_at: new Date().toISOString() }).eq("id", challenge.id).is("consumed_at", null).select("id").maybeSingle();
-  if (consumeError) throw new VaultError(503, "Challenge belum dapat dikonsumsi.");
-  if (!consumed) throw new VaultError(409, "Challenge sudah digunakan.");
+  const { data: consumed, error: consumeError } = await services.db.rpc("consume_vault_delivery_challenge", { p_challenge_id: challenge.id });
+  if (consumeError) throw new VaultError(503, `Challenge belum dapat dikonsumsi: ${consumeError.message}`);
+  if (!consumed?.length) throw new VaultError(409, "Challenge sudah digunakan atau kedaluwarsa.");
   return { ...services, tokenId: String(challenge.token_id), chainId: Number(challenge.chain_id) };
 }
 

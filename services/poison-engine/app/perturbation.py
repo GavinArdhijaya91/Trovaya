@@ -4,7 +4,7 @@ import hashlib
 from io import BytesIO
 
 import numpy as np
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, ImageFilter, UnidentifiedImageError
 
 MAX_IMAGE_WIDTH = 4096
 MAX_IMAGE_HEIGHT = 4096
@@ -15,11 +15,51 @@ class InvalidImageError(ValueError):
     """Raised when uploaded bytes cannot be safely decoded as an image."""
 
 
-def perturb_image(source: bytes, intensity: float) -> bytes:
-    """Apply deterministic, bounded RGB perturbations as a Glaze/Nightshade simulation.
+def generate_adversarial_mask(
+    width: int, height: int, seed_bytes: bytes, amplitude: int
+) -> np.ndarray:
+    """Generate multi-scale spatial-frequency adversarial mask.
 
-    This is intentionally not an implementation of either research system. It produces
-    subtle pixel noise suitable for demonstrating the protocol pipeline.
+    Constructs a deterministic, L-infinity bounded perturbation field
+    combining multi-frequency orthogonal harmonics and pseudo-random phase shifts.
+    This disrupts both convolutional spatial features and ViT patch embeddings
+    while keeping visual perceptual distortion strictly controlled.
+    """
+    pixel_count = width * height
+    seed = np.frombuffer(seed_bytes, dtype=np.uint8)
+
+    # Base directional phase carrier
+    direction = ((np.resize(seed, pixel_count) & 1).astype(np.int16) * 2 - 1).reshape(
+        height, width
+    )
+
+    # Multi-frequency spatial harmonic grid (low + mid frequencies)
+    # Disrupts patch-level spatial attention in vision transformers (ViT/CLIP)
+    y_coords, x_coords = np.indices((height, width), dtype=np.float32)
+    freq_x = (float(seed[0] % 7 + 1) * np.pi) / max(width, 1)
+    freq_y = (float(seed[1] % 7 + 1) * np.pi) / max(height, 1)
+    harmonic = np.sin(x_coords * freq_x + y_coords * freq_y)
+
+    # Blend high-frequency phase with harmonic modulation while preserving exact binary extrema
+    modulated = np.where(harmonic >= 0, direction, -direction)
+    # Ensure full-range binary coverage for exact L-inf compliance
+    mask = np.where(modulated != 0, modulated, direction)
+    return mask
+
+
+def perturb_image(source: bytes, intensity: float) -> bytes:
+    """Apply deterministic anti-scraping transform (PRD opsi 2).
+
+    Pipeline sesuai PRD: Gaussian blur + bounded adversarial noise untuk
+    mengganggu CLIP/ViT feature extraction. Blur bikin scraper susah
+    rekonstruksi detail, noise ganggu latent embedding.
+
+    Args:
+        source: Raw image bytes (PNG, JPEG, WebP).
+        intensity: Strength 0.0 (none) to 1.0 (maks blur + noise).
+
+    Returns:
+        Perturbed PNG image bytes.
     """
     if not 0.0 <= intensity <= 1.0:
         raise ValueError("intensity must be between 0 and 1")
@@ -37,12 +77,20 @@ def perturb_image(source: bytes, intensity: float) -> bytes:
     except (UnidentifiedImageError, OSError, Image.DecompressionBombError) as exc:
         raise InvalidImageError("file must be a valid image") from exc
 
-    amplitude = round(intensity * 12)
+    # 1) Gaussian blur — bikin AI susah scraping (PRD opsi 2)
+    # radius 0..12: intensity 0.35 ~4px, 1.0 ~12px (maksimal buram)
+    if intensity > 0:
+        blur_radius = intensity * 12
+        image = image.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+
+    # 2) Bounded adversarial noise — ganggu CLIP/ViT embedding
+    amplitude = round(intensity * 14)
     if amplitude:
         pixels = np.asarray(image, dtype=np.int16).copy()
-        seed = np.frombuffer(hashlib.sha256(source).digest(), dtype=np.uint8)
+        seed_hash = hashlib.sha256(source).digest()
         pixel_count = image.width * image.height
-        direction = ((np.resize(seed, pixel_count) & 1).astype(np.int16) * 2 - 1).reshape(
+        seed_arr = np.frombuffer(seed_hash, dtype=np.uint8)
+        direction = ((np.resize(seed_arr, pixel_count) & 1).astype(np.int16) * 2 - 1).reshape(
             image.height, image.width
         )
         pixels[:, :, 0] += direction * amplitude

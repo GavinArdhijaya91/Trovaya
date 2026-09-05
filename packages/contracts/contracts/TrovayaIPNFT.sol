@@ -106,9 +106,6 @@ contract TrovayaIPNFT is
             || licenseDurationSeconds > MAX_LICENSE_DURATION) revert InvalidLicenseTerms();
 
         tokenId = _nextTokenId++;
-        _safeMint(creator, tokenId);
-        _setTokenURI(tokenId, tokenURI_);
-        _setTokenRoyalty(tokenId, creator, royaltyBps);
         _ipMetadata[tokenId] = IPMetadata({
             creator: creator,
             allowAITraining: allowAITraining,
@@ -121,6 +118,9 @@ contract TrovayaIPNFT is
             licenseTermsVersion: licenseTermsVersion,
             licenseDurationSeconds: licenseDurationSeconds
         });
+        _setTokenURI(tokenId, tokenURI_);
+        _setTokenRoyalty(tokenId, creator, royaltyBps);
+        _safeMint(creator, tokenId);
 
         emit IPMinted(tokenId, creator, allowAITraining);
     }

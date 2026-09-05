@@ -117,7 +117,9 @@ INDEXER_START_BLOCK
 DATABASE_URL
 ```
 
-Apply files from `services/event-indexer/migrations` in numeric order. Then start the worker:
+Apply files from `services/event-indexer/migrations` in numeric order. This directory is the
+canonical operational schema; timestamped Supabase copies are protected by `pnpm migrations:check`.
+Then start the worker:
 
 ```powershell
 pnpm.cmd dev:indexer
@@ -179,10 +181,15 @@ Each runtime has an adjacent `.env.example`. Copy the example and edit only the 
 ## Quality gates
 
 ```powershell
+pnpm.cmd env:check
+pnpm.cmd migrations:check
 pnpm.cmd lint
 pnpm.cmd test
 pnpm.cmd build
 ```
+
+With Docker available, `pnpm.cmd smoke:local` additionally verifies the complete local chain to
+public-gallery projection. See [`../DEPLOYMENT.md`](../DEPLOYMENT.md) for production runtime contracts.
 
 Use `pnpm` on macOS or Linux. All tasks must succeed before pull-request handoff.
 

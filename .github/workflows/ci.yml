@@ -67,6 +67,12 @@ jobs:
             exit 1
           fi
 
+      - name: Validate environment contracts
+        run: pnpm env:check
+
+      - name: Check migration mirrors
+        run: pnpm migrations:check
+
       - name: Lint
         id: lint
         run: pnpm lint

@@ -11,9 +11,11 @@ import { createLicenseTerms } from "@/lib/license-terms";
 import { registerContentKey } from "@/lib/vault-client";
 import { protectImage, type PoisonResult } from "@/lib/poison-api";
 import { OperationStatus } from "@/components/operation-status";
+import { inspectAssetFile, type AssetQualityMetadata } from "@/lib/asset-quality";
 
 export function ProtectionForm() {
   const [file, setFile] = useState<File>();
+  const [quality, setQuality] = useState<AssetQualityMetadata>();
   const [intensity, setIntensity] = useState(0.35);
   const [allowAITraining, setAllowAITraining] = useState(false);
   const [licenseFee, setLicenseFee] = useState("0.01");
@@ -31,14 +33,19 @@ export function ProtectionForm() {
   const [keyDeliveryStatus, setKeyDeliveryStatus] = useState<"idle" | "registering" | "registered" | "unavailable">("idle");
   const [pendingKey, setPendingKey] = useState<{ tokenId: string; keyBase64: string }>();
 
+  const [keyError, setKeyError] = useState<string>();
   async function completeKeyRegistration(key: { tokenId: string; keyBase64: string }) {
     if (!account.address) throw new Error("Wallet creator tidak lagi terhubung.");
     setKeyDeliveryStatus("registering");
+    setKeyError(undefined);
     try {
       await registerContentKey({ walletAddress: account.address, tokenId: key.tokenId, contentKey: key.keyBase64, signMessage: (message) => signer.signMessageAsync({ message }) });
       setPendingKey(undefined);
       setKeyDeliveryStatus("registered");
     } catch (caught) {
+      const msg = caught instanceof Error ? caught.message : String(caught);
+      setKeyError(msg);
+      console.error("[vault] registerContentKey failed:", msg);
       setKeyDeliveryStatus("unavailable");
       throw caught;
     }
@@ -53,6 +60,8 @@ export function ProtectionForm() {
     setKeyDeliveryStatus("idle");
     setPendingKey(undefined);
     try {
+      const assetQuality = await inspectAssetFile(file);
+      setQuality(assetQuality);
       const protectedImage = await protectImage(file, intensity);
       setResult(protectedImage);
       const [publicPin, encrypted] = await Promise.all([
@@ -69,6 +78,21 @@ export function ProtectionForm() {
         protectionMode: protectedImage.protection_mode,
         persistenceMode: resolvePersistenceMode([publicPin, vaultPin]),
         allowAITraining,
+        qualityPolicy: {
+          version: assetQuality.policyVersion,
+          tier: assetQuality.tier,
+          resolution: { width: assetQuality.width, height: assetQuality.height },
+          aspectRatio: assetQuality.aspectRatio,
+          megapixels: assetQuality.megapixels,
+          sizeBytes: assetQuality.sizeBytes,
+          mimeType: assetQuality.mimeType,
+          fileExtension: assetQuality.fileExtension,
+        },
+        originalFile: {
+          name: assetQuality.originalFileName,
+          mimeType: assetQuality.mimeType,
+          extension: assetQuality.fileExtension,
+        },
         publicPoisonedCid: publicPin.cid,
         encryptedVaultCid: vaultPin.cid,
         licenseTermsURI: contentUri(termsPin),
@@ -113,7 +137,7 @@ export function ProtectionForm() {
     </div>
     <label className="block rounded-2xl border-2 border-dashed border-emerald-200 bg-mint/30 p-8 text-center">
       <span className="block font-medium">Pilih karya atau gambar produk</span>
-      <span className="mt-1 block text-sm text-slate-500">PNG, JPG, atau WebP · maksimal 15 MB</span>
+      <span className="mt-1 block text-sm text-slate-500">PNG, JPG, atau WebP · maksimal 15 MiB · 512–8192 px · rasio 0,5–2:1</span>
       <input className="mt-4 block w-full text-sm" type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => setFile(event.target.files?.[0])} />
     </label>
     <label className="mt-6 block text-sm font-medium">Kekuatan proteksi: {Math.round(intensity * 100)}%
@@ -148,6 +172,7 @@ export function ProtectionForm() {
     {keyDeliveryStatus === "registered" && <p className="mt-3 rounded-xl bg-mint p-3 text-xs text-leaf">Content key sudah dibungkus oleh secure vault dan dihapus dari state halaman.</p>}
     {keyDeliveryStatus === "unavailable" && pendingKey && <div className="mt-3 rounded-xl bg-amber-50 p-3 text-xs text-amber-800">
       <p>Pendaftaran on-chain berhasil, tetapi content key belum tersimpan. Key hanya berada di memori halaman ini; jangan tutup atau muat ulang sebelum retry berhasil.</p>
+      {keyError && <p className="mt-2 rounded bg-white p-2 font-mono text-[11px] text-red-700 border border-amber-200">Detail: {keyError}</p>}
       <button type="button" onClick={() => void completeKeyRegistration(pendingKey).catch(() => undefined)} className="mt-2 rounded-lg bg-amber-800 px-3 py-2 font-semibold text-white">Retry secure key registration</button>
     </div>}
     {persistenceMode && <div className={`mt-4 rounded-xl p-3 text-sm ${persistenceMode === "pinata" ? "bg-mint text-leaf" : "bg-amber-50 text-amber-800"}`}>
@@ -162,6 +187,7 @@ export function ProtectionForm() {
       <Image unoptimized width={120} height={120} src={result.poisoned_image_base64} alt="Pratinjau eksperimental" className="aspect-square w-full rounded-xl object-cover" />
       <div className="min-w-0 self-center"><p className="font-semibold text-leaf">Pratinjau eksperimental siap</p><p className="mt-1 text-xs text-slate-600">Transformasi deterministik; efektivitas adversarial tidak diklaim.</p><p className="mt-1 truncate text-xs text-slate-500">Hash transformasi: {result.perturbation_hash}</p></div>
     </div>}
+    {quality && <p className="mt-4 rounded-xl bg-mint p-3 text-xs leading-5 text-leaf">Quality policy v{quality.policyVersion}: {quality.width}×{quality.height}px · {quality.megapixels} MP · tier {quality.tier} · .{quality.fileExtension}</p>}
   </form>;
 }
 

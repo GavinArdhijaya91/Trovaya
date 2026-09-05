@@ -7,6 +7,7 @@ import { isValidWalletConnectProjectId } from "@/lib/walletconnect-config";
 const chains = [bscTestnet, polygonAmoy] as const;
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
 const validProjectId = isValidWalletConnectProjectId(projectId) ? projectId : undefined;
+const bscTestnetRpcUrl = process.env.NEXT_PUBLIC_BSC_RPC_URL ?? "https://data-seed-prebsc-2-s1.bnbchain.org:8545";
 
 export const walletConnectEnabled = Boolean(validProjectId);
 
@@ -15,14 +16,18 @@ export const wagmiConfig = validProjectId
       appName: "Trovaya",
       projectId: validProjectId,
       chains,
+      transports: {
+        [bscTestnet.id]: http(bscTestnetRpcUrl, { retryCount: 3, retryDelay: 500 }),
+        [polygonAmoy.id]: http(undefined, { retryCount: 3, retryDelay: 500 }),
+      },
       ssr: true,
     })
   : createConfig({
       chains,
       connectors: [injected()],
       transports: {
-        [bscTestnet.id]: http(),
-        [polygonAmoy.id]: http(),
+        [bscTestnet.id]: http(bscTestnetRpcUrl, { retryCount: 3, retryDelay: 500 }),
+        [polygonAmoy.id]: http(undefined, { retryCount: 3, retryDelay: 500 }),
       },
       ssr: true,
     });
