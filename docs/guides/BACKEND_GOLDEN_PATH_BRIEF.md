@@ -2,6 +2,22 @@ RENCANA ALUR UTAMA BACKEND TROVAYA
 
 Status: Draft untuk diskusi tim dan kebutuhan hackathon
 
+SUMBER DAN BATASAN BRIEF
+
+Brief ini disusun berdasarkan kondisi repository Trovaya saat ini, alur yang
+sudah terlihat pada implementasi, serta arah produk yang tertulis dalam PRD dan
+dokumen spesifikasi proyek.
+
+Brief ini bukan keputusan final, bukan kontrak kerja, dan bukan pernyataan
+bahwa semua fitur sudah selesai. Isinya adalah bahan pembicaraan untuk
+memastikan developer dan project manager memiliki konteks yang sama sebelum
+menentukan prioritas, menerima hasil kerja, atau mengubah scope.
+
+Jika isi brief berbeda dengan kondisi kode terbaru, kondisi kode, hasil test,
+dan keputusan tim harus diperiksa kembali. Pertanyaan di dalam brief juga
+bukan asumsi bahwa fitur tersebut wajib dibuat; setiap pertanyaan membutuhkan
+keputusan bersama.
+
 1. TUJUAN DOKUMEN
 
 Trovaya memiliki beberapa proses yang saling berhubungan. Proses tersebut meliputi unggah karya, pembuatan preview terlindungi, penyimpanan file asli, pencatatan transaksi, lisensi, pemeriksaan AI, dan pemberian akses ke file asli.
@@ -170,6 +186,11 @@ Status harus membedakan menunggu, berhasil, gagal, kedaluwarsa, dan dicabut. Sum
 
 9. PERTANYAAN UNTUK DISKUSI TIM
 
+Pertanyaan berikut dibuat berdasarkan gap antara kebutuhan yang tertulis dalam
+PRD, alur yang direncanakan, dan kemampuan yang saat ini terlihat di repo.
+Pertanyaan ini bukan instruksi sepihak. Tujuannya adalah meminta keputusan
+yang jelas dari tim.
+
 1. Mock KYC dan identitas creator
 
 KYC production belum tersedia dan belum boleh diklaim sebagai fitur yang sudah
@@ -177,8 +198,6 @@ selesai. Untuk demo, apakah status mock KYC dengan label NOT VERIFIED sudah
 cukup, atau project manager membutuhkan halaman terpisah agar alur pengunggahan
 dokumen contoh lebih mudah dipahami?
 
-Keputusan yang dibutuhkan: cukup tampilkan status mock pada workspace, atau buat
-halaman demo khusus untuk mengunggah dokumen contoh dengan watermark SAMPLE.
 
 2. Konfigurasi protected preview
 
