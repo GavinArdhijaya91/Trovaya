@@ -19,6 +19,24 @@ connect wallet -> creator consent -> optional mock KYC -> upload
 Setiap capability yang belum production-grade harus tetap diberi label
 experimental, demo, mock, atau rules-only.
 
+## Label Transparansi Hackathon
+
+Selama fitur production belum tersedia, UI dan evidence harus menampilkan label
+yang mudah terlihat:
+
+- Transaksi: `DEMO HACKATHON` dan `BSC Testnet`; jangan menyebutnya transaksi
+  production atau mainnet.
+- KYC/identitas: `mock/not_verified`; wallet ownership tidak sama dengan KYC
+  dan tidak membuktikan keaslian karya.
+- Protected preview: `EXPERIMENTAL PREVIEW`; jangan mengklaim jaminan anti-scraping.
+- Persistence: `MODE DEMO` bila identifier bukan CID IPFS nyata.
+- AI Reviewer: `rules-only` atau `rules + AI`, selalu dengan disclaimer
+  non-advisory.
+
+Label ini wajib muncul di Protection Studio, Workspace transaksi, profil trust,
+public gallery, dan evidence artifact. Label dapat dihapus atau diganti hanya
+setelah capability production memiliki acceptance evidence yang sesuai.
+
 ## KYC dan Identitas
 
 KYC **belum menjadi bagian dari implementasi upload saat ini**. Yang tersedia
@@ -104,6 +122,9 @@ Acceptance:
 - Uji unauthorized, expired, revoked, dan replayed challenge.
 - Pastikan browser menerima ciphertext/wrapped key, bukan master key atau plaintext
   dari service.
+- Bentuk transaction receipt terstruktur setelah purchase, authorization, dan
+  delivery; simpan referensi transaction hash, token ID, terms hash/version,
+  buyer/creator address yang sudah dipendekkan, fee, chain, dan timestamp.
 
 Acceptance:
 
@@ -111,6 +132,38 @@ Acceptance:
 - Buyer tanpa izin ditolak.
 - Expiry dan revocation menolak delivery baru.
 - Evidence tidak memuat key, signature, nonce, atau plaintext.
+
+### Receipt dan export histori transaksi
+
+Pengguna perlu dapat meninjau histori pembelian dan mengunduh bukti transaksi.
+Sumber kebenaran tetap receipt on-chain dan event indexer; PDF/CSV hanya format
+turunan untuk dibaca atau dianalisis.
+
+Rencana implementasi bertahap:
+
+1. **Transaction history:** tampilkan purchase, license terms accepted, vault
+   authorization, delivery status, dan withdrawal dengan status pending,
+   confirmed, atau failed.
+2. **Canonical receipt:** bentuk JSON versioned yang berisi chain ID, token ID,
+   transaction hash, block number, event type, fee, terms hash/version, status,
+   timestamp, dan label `DEMO HACKATHON`/`BSC Testnet`.
+3. **CSV export:** sediakan export untuk analisis histori, tanpa raw KYC,
+   content key, signature, nonce, session token, atau plaintext source.
+4. **Printable PDF:** buat PDF dari canonical receipt untuk kebutuhan arsip
+   pengguna. PDF menampilkan disclaimer bahwa ini bukti pencatatan transaksi,
+   bukan sertifikat hak cipta, KYC, atau nasihat hukum/finansial.
+
+Acceptance:
+
+- Receipt hanya dibuat dari data yang tervalidasi oleh indexer atau response
+  transaksi yang confirmed.
+- Pending/failed transaction tidak boleh tampil sebagai pembelian sukses.
+- Receipt dapat diverifikasi kembali memakai chain ID, contract address, token
+  ID, transaction hash, terms hash/version, dan block explorer link.
+- Export tidak membocorkan data private dan tetap mempertahankan label demo,
+  testnet, mock-KYC, serta non-advisory.
+- PDF dan CSV tidak menjadi input authoritative untuk vault delivery atau
+  keputusan akses.
 
 ### Hari 5 - AI Reviewer dan demo evidence
 
@@ -163,8 +216,11 @@ engine, indexer schema, contract semantics, atau reviewer response contract.
 - Semua service failure path memiliki fallback atau error yang jelas.
 - `pnpm demo:check:live`, lint, test, dan build lulus.
 - Golden-path evidence tervalidasi.
+- Histori transaksi menampilkan receipt confirmed dan export CSV/printable PDF
+  tidak membocorkan data private.
 - Tidak ada klaim bahwa protected preview menjamin anti-scraping.
 - Tidak ada secret, plaintext source, atau private vault material di public output.
+- Label demo/testnet/mock-KYC terlihat pada UI dan evidence sebelum demo dimulai.
 
 ## Di Luar Scope Sementara
 
