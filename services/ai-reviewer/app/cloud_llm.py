@@ -5,7 +5,6 @@ import urllib.request
 from .config import settings
 from .models import ReviewFlag
 
-
 SYSTEM_PROMPT = """You are a non-advisory asset information formatter. Summarize only the supplied evidence and flags in Indonesian. Never recommend buying, selling, trusting, or claiming authenticity, copyright validity, legal safety, or scraping prevention. Return only JSON with a summary string under 280 characters."""
 
 
