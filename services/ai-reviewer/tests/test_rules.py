@@ -1,5 +1,5 @@
 from app.models import AssetReviewRequest, LicenseEvidence
-from app.rules import build_flags, build_evidence
+from app.rules import build_evidence, build_flags
 
 
 def test_rules_are_factual_and_non_advisory():
