@@ -186,7 +186,17 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
       })
       .catch(() => undefined);
     return () => { active = false; controller.abort(); };
-  }, [asset.token_uri, gateway]);
+  }, [
+    asset.allow_ai_training,
+    asset.license_duration_seconds,
+    asset.license_terms_hash,
+    asset.license_terms_uri,
+    asset.token_id,
+    asset.token_uri,
+    cid,
+    gateway,
+    isDemo,
+  ]);
 
   async function buy() {
     if (!asset.commercial_license_fee_wei || !asset.license_terms_hash || !asset.license_terms_version || !terms) return;
