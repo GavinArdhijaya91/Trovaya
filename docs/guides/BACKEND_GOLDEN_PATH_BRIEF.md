@@ -114,7 +114,22 @@ MOCK atau NOT VERIFIED berarti identitas belum diverifikasi oleh pihak ketiga.
 
 EXPERIMENTAL PREVIEW berarti preview masih berupa percobaan dan bukan jaminan perlindungan.
 
-RULES-ONLY berarti hasil hanya berasal dari aturan sistem.
+RULES-ONLY berarti hasil review dibuat sepenuhnya dari aturan sistem yang sudah
+ditentukan sebelumnya. Sistem memeriksa data yang tersedia, seperti status
+preview, referensi penyimpanan, terms lisensi, identitas creator, dan izin
+pelatihan AI, lalu menghasilkan evidence dan tanda peringatan berdasarkan
+kondisi tersebut.
+
+Dalam mode ini, model AI tidak digunakan. Mode ini tetap dapat berjalan ketika
+API model sedang tidak tersedia, mengalami batas penggunaan, atau gagal
+memberikan respons. Karena itu, RULES-ONLY adalah fallback yang lebih
+terkendali, bukan tanda bahwa AI telah memberikan pendapat.
+
+Aturan sistem juga tidak membuktikan keaslian karya, hak cipta, atau keamanan
+hukum. Aturan hanya merangkum evidence yang tersedia dan menunjukkan hal-hal
+yang masih belum terbukti. Contohnya, jika hash metadata belum diverifikasi,
+sistem dapat memberi tanda bahwa metadata belum terverifikasi; sistem tidak
+boleh menyimpulkan bahwa karya tersebut palsu.
 
 RULES PLUS AI berarti AI membantu membuat ringkasan, tetapi bukan sumber kebenaran dan bukan penasihat hukum atau finansial.
 
