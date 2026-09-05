@@ -202,6 +202,35 @@ belum menjadi activity stream terpadu. Implementasikan projection terpisah yang
 allowlisted dan jangan mencampurkan raw KYC, session, key, signature, nonce,
 atau plaintext ke history publik.
 
+### Matriks akses buyer dan seller
+
+Role bisnis berikut harus dibedakan dari role administrasi smart contract:
+
+| Actor | Boleh | Tidak boleh |
+| --- | --- | --- |
+| Seller/creator | Membuat asset, menetapkan consent/terms/fee, menerima proceeds, meminta withdrawal, dan mencabut grant vault sesuai aturan | Mengakses wallet buyer, secret buyer, atau mengklaim KYC production |
+| Buyer/licensee | Membeli license dengan terms hash/version yang cocok, menerima receipt, meminta vault unlock, dan mengunduh source setelah authorization | Mengubah terms asset, mengubah creator, mencabut akses, atau mengambil source tanpa grant |
+| Contract admin | Mengelola role protocol, pause/unpause, dan konfigurasi verifier sesuai contract rules | Mengubah receipt immutable atau membaca private key/content key |
+| Indexer/system | Memproyeksikan event confirmed, status, dan activity history | Menjadi actor transaksi, memberi akses vault, atau menggantikan signature wallet |
+
+Aturan penting: wallet address seller/buyer adalah identitas pseudonymous untuk
+activity log, bukan role permanen dan bukan KYC. Role harus ditentukan dari
+hubungan actor terhadap `tokenId`, receipt license, ownership/creator metadata,
+dan event chain yang sudah confirmed. UI boleh menampilkan label `Seller`,
+`Buyer`, `Creator`, atau `System` hanya jika hubungan tersebut dapat dibuktikan
+dari data yang tervalidasi.
+
+Acceptance role/access:
+
+- Buyer tanpa `hasCommercialLicense` tidak dapat memanggil jalur license vault
+  delivery.
+- Buyer dengan license yang expired atau revoked ditolak untuk delivery baru.
+- Seller/creator dapat revoke grant sesuai aturan, tetapi tidak dapat membaca
+  secret buyer.
+- Admin/pauser/minter tidak otomatis menjadi seller atau buyer.
+- Activity history menampilkan actor, counterparty, role context, dan status
+  tanpa membocorkan material private.
+
 ### Hari 5 - AI Reviewer dan demo evidence
 
 - Kirim evidence public asset ke AI Reviewer.
