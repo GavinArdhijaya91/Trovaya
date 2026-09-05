@@ -22,6 +22,7 @@
     "dev:reviewer": "pnpm --filter @trovaya/ai-reviewer dev",
     "dev:indexer": "pnpm --filter @trovaya/event-indexer dev",
     "demo:check": "node scripts/check-demo-readiness.mjs",
+    "demo:check:live": "node scripts/check-demo-readiness.mjs --live",
     "demo:evidence": "node scripts/validate-demo-evidence.mjs",
     "protection:evidence": "node scripts/validate-protection-evidence.mjs"
   },
