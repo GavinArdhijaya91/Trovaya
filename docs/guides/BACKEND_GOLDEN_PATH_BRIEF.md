@@ -16,6 +16,21 @@ Dokumen ini dibuat sebagai penghubung komunikasi antara developer dan project ma
 
 Rencana teknis yang lebih lengkap terdapat di dokumen BACKEND_GOLDEN_PATH_PLAN.md.
 
+PENJELASAN ISTILAH GOLDEN PATH
+
+Golden Path berarti jalur utama yang paling penting dan paling ideal bagi
+pengguna. Dalam Trovaya, Golden Path adalah perjalanan lengkap dari creator
+mengunggah karya sampai buyer membeli lisensi dan menerima akses yang sah ke
+file asli.
+
+Golden Path bukan berarti semua kemungkinan yang dapat terjadi dalam aplikasi.
+Jalur ini digunakan sebagai standar pertama untuk memastikan bahwa bagian
+terpenting produk dapat berjalan dari awal sampai akhir.
+
+Jika Golden Path sudah berhasil, tim dapat mengembangkan jalur tambahan seperti
+penanganan error, pembatalan transaksi, expired license, revoked access,
+activity history, dan tampilan WebGL.
+
 2. GAMBARAN PRODUK
 
 Trovaya membantu creator mendaftarkan karya, membuat preview yang lebih aman untuk ditampilkan, menyimpan file asli secara terenkripsi, dan mencatat ketentuan lisensi.
