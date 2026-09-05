@@ -4,6 +4,7 @@ import json
 import os
 
 import gradio as gr
+import spaces
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -36,6 +37,7 @@ def review_asset_endpoint(payload: dict) -> JSONResponse:
         return JSONResponse({"detail": f"Review payload tidak valid: {error}"}, status_code=422)
 
 
+@spaces.GPU
 def review_json(payload: str) -> str:
     try:
         parsed = json.loads(payload)
