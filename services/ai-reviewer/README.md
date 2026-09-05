@@ -13,13 +13,13 @@ pinned: false
 # Trovaya AI Reviewer
 
 Rules-first, non-advisory asset evidence reviewer. The Gradio Space exposes a
-browser test UI and a REST endpoint:
+browser test UI and the `review_asset` Gradio API:
 
-- `GET /health`
-- `POST /api/v1/reviews/assets`
+- `POST /call/review_asset`
+- `GET /call/review_asset/{event_id}`
 
-The Trovaya web application uses the REST endpoint and sends public asset
-evidence only.
+The Trovaya web application proxies this API and sends public asset evidence
+only.
 
 ## Deploy to Hugging Face Spaces
 
@@ -31,11 +31,11 @@ environment, for example:
 AI_REVIEWER_URL=https://<org>-<space>.hf.space
 ```
 
-Verify the deployment before connecting the web app:
+Verify the deployment from the Space UI or its Gradio API before connecting the
+web app:
 
 ```text
-GET https://<org>-<space>.hf.space/health
-POST https://<org>-<space>.hf.space/api/v1/reviews/assets
+POST https://<org>-<space>.hf.space/call/review_asset
 ```
 
 Set the Space secrets/variables for cloud mode:

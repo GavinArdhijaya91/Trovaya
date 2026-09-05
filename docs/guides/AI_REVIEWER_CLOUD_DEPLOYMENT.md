@@ -4,19 +4,19 @@ The AI Reviewer can run on Hugging Face Spaces with OpenRouter as its cloud LLM.
 engine remains authoritative; a provider failure falls back to a rules-only
 summary.
 
-## Hugging Face Docker Space
+## Hugging Face Gradio Space
 
-Create a new **Docker Space**. Copy the contents of:
+Create a new **Gradio Space**. Copy the contents of:
 
 ```text
 services/ai-reviewer
 ```
 
-into the Space repository. The included `README.md` declares the Docker SDK
-and port `8100`. The Space health endpoint is:
+into the Space repository. The included `README.md` declares the Gradio SDK
+and port `7860`. Gradio exposes the `review_asset` API through:
 
 ```text
-/health
+/call/review_asset
 ```
 
 Set these Space variables/secrets:
