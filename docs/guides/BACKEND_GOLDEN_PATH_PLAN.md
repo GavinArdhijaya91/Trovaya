@@ -231,6 +231,65 @@ Acceptance role/access:
 - Activity history menampilkan actor, counterparty, role context, dan status
   tanpa membocorkan material private.
 
+### Hardening event indexer dan formatting log
+
+Indexer diperlakukan sebagai read-model dan security boundary. Ia tidak boleh
+menjadi sumber otorisasi atau menulis balik ke blockchain.
+
+Format canonical setiap event:
+
+```text
+chain_id, contract_address, block_number, block_hash,
+transaction_hash, transaction_index, log_index,
+event_type, token_id, actor_wallet, counterparty_wallet,
+amount, currency, status, occurred_at, finalized_at
+```
+
+Aturan formatting:
+
+- Normalisasi address menjadi lowercase setelah validasi EVM address.
+- Simpan nilai token/fee sebagai decimal string atau numeric aman; jangan ubah
+  wei menjadi floating point sebelum UI memformatnya.
+- Urutkan history berdasarkan block number, transaction index, lalu log index;
+  timestamp hanya untuk display.
+- Gunakan `(chain_id, contract_address, transaction_hash, log_index)` sebagai
+  identity deduplication.
+- Simpan provenance block/hash dan confirmation status agar UI dapat membedakan
+  `pending`, `confirmed`, `reorged`, dan `failed`.
+- Decode hanya event ABI yang di-allowlist. Event atau field asing disimpan
+  sebagai metric terbatas atau diabaikan, bukan diteruskan mentah ke UI.
+
+Hardening keamanan:
+
+- RPC URL, contract address, expected chain ID, start block, dan confirmation
+  policy hanya berasal dari environment tervalidasi; tidak boleh dikontrol oleh
+  request browser.
+- Database credential indexer write-only untuk tabel projection yang diperlukan;
+  public/anon/authenticated memakai view allowlist dan tidak mendapat akses ke
+  cursor, raw vault reference, key records, KYC, atau session data.
+- Semua query tetap parameterized. Jangan menerima nama tabel, kolom, chain,
+  atau SQL fragment dari input user.
+- Terapkan batas chunk, retry, concurrency, payload size, dan log retention agar
+  RPC/database exhaustion tidak mudah dipicu attacker.
+- Jangan mencatat RPC credential, database URL, raw response, signature, nonce,
+  content key, OTP, atau plaintext ke logs. Error hanya memakai kategori dan
+  correlation ID.
+- Reorg harus menandai atau menghapus projection non-canonical secara atomik,
+  lalu replay dari safe rollback point. History tidak boleh tetap menampilkan
+  pembayaran dari block yang sudah orphaned.
+- Activity API membaca projection confirmed dan memakai pagination/cursor; jangan
+  melakukan unrestricted table scan dari browser.
+
+Acceptance hardening:
+
+- Log fixture dapat diformat deterministically dan hasilnya sama setelah replay.
+- Duplicate logs tidak menggandakan payment/history.
+- Wrong-chain, wrong-contract, malformed address/hash, oversized block range,
+  RPC timeout, database failure, dan reorg menghasilkan failure yang fail-closed.
+- Public query tidak dapat membaca atau menulis tabel internal indexer.
+- History buyer/seller menampilkan wallet pseudonymous yang benar dan tidak
+  mempromosikannya menjadi KYC atau identitas legal.
+
 ### Hari 5 - AI Reviewer dan demo evidence
 
 - Kirim evidence public asset ke AI Reviewer.
