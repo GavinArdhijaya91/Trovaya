@@ -1,40 +1,12 @@
 from __future__ import annotations
 
 import json
-import os
 
 import gradio as gr
 import spaces
-import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 
 from app.models import AssetReviewRequest
 from app.reviewer import review_asset
-
-
-api = FastAPI(title="Trovaya AI Reviewer", version="0.1.0")
-api.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["GET", "POST"],
-    allow_headers=["*"],
-)
-
-
-@api.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
-
-
-@api.post("/api/v1/reviews/assets")
-def review_asset_endpoint(payload: dict) -> JSONResponse:
-    try:
-        review = review_asset(AssetReviewRequest.model_validate(payload))
-        return JSONResponse(review.model_dump())
-    except Exception as error:
-        return JSONResponse({"detail": f"Review payload tidak valid: {error}"}, status_code=422)
 
 
 @spaces.GPU
@@ -60,7 +32,5 @@ demo = gr.Interface(
     api_name="review_asset",
 )
 
-app = gr.mount_gradio_app(api, demo, path="/")
-
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=7860)
+    demo.queue().launch(server_name="0.0.0.0", server_port=7860)
