@@ -135,6 +135,10 @@ export function ProtectionForm() {
       <div><p className="text-sm font-semibold text-leaf">STUDIO PROTEKSI</p><h2 className="mt-1 text-2xl font-semibold">Daftarkan karya terlindungi</h2></div>
       <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">EXPERIMENTAL PREVIEW</span>
     </div>
+    <div className="mb-6 grid gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-900 sm:grid-cols-2">
+      <p><strong>DEMO HACKATHON:</strong> transaksi memakai BSC Testnet dan belum merupakan layanan produksi.</p>
+      <p><strong>IDENTITAS:</strong> KYC belum diverifikasi. Status creator dan karya tidak membuktikan keaslian atau hak cipta.</p>
+    </div>
     <label className="block rounded-2xl border-2 border-dashed border-emerald-200 bg-mint/30 p-8 text-center">
       <span className="block font-medium">Pilih karya atau gambar produk</span>
       <span className="mt-1 block text-sm text-slate-500">PNG, JPG, atau WebP · maksimal 15 MiB · 512–8192 px · rasio 0,5–2:1</span>

@@ -29,6 +29,10 @@ export function AssetGallery() {
           On-Chain Provenance (BSC Testnet)
         </div>
       </div>
+      <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
+        <strong>DEMO HACKATHON:</strong> transaksi dan status identitas di galeri
+        ini hanya untuk pengujian testnet. KYC belum diverifikasi secara produksi.
+      </p>
 
       {assets.isLoading && (
         <div className="mt-8 rounded-3xl border border-slate-200 bg-white/70 p-12 text-center">

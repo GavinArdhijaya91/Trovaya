@@ -436,6 +436,12 @@ export function CreatorDashboard(){
                 </h1>
               </div>
 
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-900">
+                <strong>DEMO HACKATHON — TRANSAKSI TESTNET.</strong> Catatan lisensi,
+                royalti, withdrawal, dan vault di workspace ini belum merupakan
+                layanan produksi atau nasihat hukum/finansial.
+              </div>
+
               <div className="rounded-3xl border border-nusa-200 bg-white p-8 text-center shadow-soft">
                 <span className="text-3xl block mb-2">📄</span>
                 <p className="font-bold text-nusa-900">Riwayat Penjualan Lisensi</p>
@@ -481,6 +487,10 @@ export function CreatorDashboard(){
                     Sesuai panduan PRD dan regulasi kepatuhan 2026, Trovaya menyajikan analisis data untuk tujuan edukasi. Trovaya membantu mencatat bukti klaim hak cipta, namun bukan pengganti lembaga peradilan atau penasihat hukum.
                   </p>
                   <AiDisclaimer />
+                  <p className="mt-4 rounded-xl border border-amber-300 bg-amber-100 p-3 text-xs font-semibold leading-5 text-amber-900">
+                    KYC saat ini hanya mock/not verified untuk kebutuhan demo.
+                    Trovaya belum melakukan verifikasi identitas produksi.
+                  </p>
                 </div>
               </div>
             </div>
