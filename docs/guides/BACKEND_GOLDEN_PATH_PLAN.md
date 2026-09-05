@@ -165,6 +165,43 @@ Acceptance:
 - PDF dan CSV tidak menjadi input authoritative untuk vault delivery atau
   keputusan akses.
 
+### Activity log dan identitas wallet
+
+History sebaiknya berbentuk activity log ala SaaS, bukan hanya daftar invoice.
+Setiap baris menjelaskan siapa melakukan apa, terhadap asset mana, kapan, dan
+apa statusnya.
+
+Event minimum yang perlu ditampilkan:
+
+- `IPMinted`: creator mendaftarkan asset.
+- `LicensePurchased`: buyer membeli license dari creator.
+- `LicenseTermsAccepted`: buyer menerima terms hash/version tertentu.
+- `ProceedsWithdrawn`: creator menarik proceeds ke recipient.
+- `VaultAccessGranted`: buyer atau creator mendapat grant vault.
+- `VaultAccessRevoked`: grant vault dicabut.
+- `ReviewRequested`/`ReviewCompleted`: AI Reviewer menghasilkan audit,
+  tanpa menyimpan prompt rahasia atau content key.
+- `PersistenceCompleted`/`PersistenceFailed`: preview, encrypted source,
+  terms, atau metadata berhasil/gagal dipersist.
+
+Identitas penjual dan pembeli untuk demo menggunakan wallet address sebagai
+identitas pseudonymous. UI menampilkan bentuk pendek seperti
+`0x12ab...89ef`, dengan tombol salin dan link block explorer; address lengkap
+tetap tersedia hanya bila pengguna memang memintanya. Jangan menjadikan wallet
+address sebagai KYC, nama legal, atau bukti identitas dunia nyata.
+
+Status activity harus membedakan `pending`, `confirmed`, `failed`, `expired`,
+dan `revoked`. Event yang belum confirmed tidak boleh disebut transaksi sukses.
+Indexer perlu menyimpan chain ID, contract address, transaction hash, block
+number/hash, log index, actor wallet, counterparty wallet bila public, token ID,
+event type, status, dan timestamp untuk deduplikasi serta reorg recovery.
+
+Gap implementasi saat ini: indexer baru memproyeksikan event mint dan purchase;
+withdrawal, vault access, terms acceptance, persistence, dan reviewer activity
+belum menjadi activity stream terpadu. Implementasikan projection terpisah yang
+allowlisted dan jangan mencampurkan raw KYC, session, key, signature, nonce,
+atau plaintext ke history publik.
+
 ### Hari 5 - AI Reviewer dan demo evidence
 
 - Kirim evidence public asset ke AI Reviewer.
