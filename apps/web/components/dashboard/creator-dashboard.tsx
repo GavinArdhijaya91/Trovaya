@@ -13,8 +13,30 @@ import { getClientContractAddresses } from "@/lib/contracts";
 import { useLicenseProceeds } from "@/hooks/use-license-proceeds";
 import { OperationStatus } from "@/components/operation-status";
 import { BnbTestnetBadge } from "@/components/bnb-network-badge";
+import { AssetReviewer } from "@/components/asset-reviewer";
+import type { AssetReviewInput } from "@/lib/reviewer-types";
 
 type Tab = "overview" | "studio" | "assets" | "licenses" | "trust";
+
+function buildReviewInput(asset: NonNullable<ReturnType<typeof useAssets>["data"]>[number]): AssetReviewInput {
+  const isDemo = Boolean(asset.public_poisoned_cid?.startsWith("demo-"));
+  return {
+    token_id: asset.token_id,
+    persistence_mode: isDemo ? "demo" : asset.public_poisoned_cid ? "pinata" : "unknown",
+    public_preview_cid: Boolean(asset.public_poisoned_cid && !isDemo),
+    encrypted_vault_cid: false,
+    license_terms_cid: Boolean(asset.license_terms_uri?.startsWith("ipfs://")),
+    preview_protection: "experimental",
+    creator_identity: "unknown",
+    license: {
+      terms_hash_verified: Boolean(asset.license_terms_hash && asset.license_terms_uri?.startsWith("ipfs://")),
+      duration_days: asset.license_duration_seconds
+        ? Math.max(1, Math.round(Number(asset.license_duration_seconds) / 86400))
+        : undefined,
+      allow_ai_training: asset.allow_ai_training,
+    },
+  };
+}
 
 const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
   { id: "overview",  label: "Ringkasan Finansial", icon: "📊", subtitle: "Saldo royalti & metrik karya" },
@@ -394,6 +416,7 @@ export function CreatorDashboard(){
                           </span>
                         </div>
                       </div>
+                      <AssetReviewer input={buildReviewInput(asset)} />
                     </div>
                   ))}
                 </div>
@@ -411,6 +434,12 @@ export function CreatorDashboard(){
                 <h1 className="text-3xl font-extrabold text-nusa-900 tracking-tight mt-3">
                   Riwayat Lisensi & Penjualan
                 </h1>
+              </div>
+
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-900">
+                <strong>DEMO HACKATHON — TRANSAKSI TESTNET.</strong> Catatan lisensi,
+                royalti, withdrawal, dan vault di workspace ini belum merupakan
+                layanan produksi atau nasihat hukum/finansial.
               </div>
 
               <div className="rounded-3xl border border-nusa-200 bg-white p-8 text-center shadow-soft">
@@ -458,6 +487,10 @@ export function CreatorDashboard(){
                     Sesuai panduan PRD dan regulasi kepatuhan 2026, Trovaya menyajikan analisis data untuk tujuan edukasi. Trovaya membantu mencatat bukti klaim hak cipta, namun bukan pengganti lembaga peradilan atau penasihat hukum.
                   </p>
                   <AiDisclaimer />
+                  <p className="mt-4 rounded-xl border border-amber-300 bg-amber-100 p-3 text-xs font-semibold leading-5 text-amber-900">
+                    KYC saat ini hanya mock/not verified untuk kebutuhan demo.
+                    Trovaya belum melakukan verifikasi identitas produksi.
+                  </p>
                 </div>
               </div>
             </div>

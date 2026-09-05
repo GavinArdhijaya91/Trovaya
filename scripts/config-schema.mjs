@@ -3,6 +3,7 @@ export const configSchemas = {
     example: "apps/web/.env.example",
     keys: {
       NEXT_PUBLIC_POISON_ENGINE_URL: { type: "url", default: "http://localhost:8000" },
+      AI_REVIEWER_URL: { type: "url", optional: true },
       NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: { type: "walletConnect", optional: true },
       NEXT_PUBLIC_CHAIN_ID: { type: "positiveInteger", default: "97" },
       NEXT_PUBLIC_BSC_RPC_URL: { type: "url", optional: true },
@@ -49,6 +50,19 @@ export const configSchemas = {
       TROVAYA_UVICORN_HOST: { type: "host", default: "0.0.0.0" },
       TROVAYA_UVICORN_PORT: { type: "positiveInteger", default: "8000" },
       TROVAYA_UVICORN_WORKERS: { type: "positiveInteger", default: "1" },
+    },
+  },
+  reviewer: {
+    example: "services/ai-reviewer/.env.example",
+    keys: {
+      AI_REVIEWER_PROVIDER: { type: "string", default: "ollama" },
+      OLLAMA_URL: { type: "url", optional: true },
+      OLLAMA_MODEL: { type: "string", optional: true },
+      OLLAMA_TIMEOUT_SECONDS: { type: "positiveInteger", optional: true },
+      CLOUD_LLM_URL: { type: "url", optional: true },
+      CLOUD_LLM_API_KEY: { type: "string", optional: true, secret: true },
+      CLOUD_LLM_MODEL: { type: "string", optional: true },
+      AI_REVIEWER_TIMEOUT_SECONDS: { type: "positiveInteger", optional: true },
     },
   },
   contracts: {

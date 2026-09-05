@@ -9,6 +9,8 @@ import { useLicenseActions } from "@/hooks/use-license-actions";
 import { OperationStatus } from "@/components/operation-status";
 import { verifyLicenseTermsJson, type VersionedLicenseTerms } from "@/lib/license-terms";
 import { decryptVaultFile, deliverContentKey } from "@/lib/vault-client";
+import { AssetReviewer } from "@/components/asset-reviewer";
+import type { AssetReviewInput } from "@/lib/reviewer-types";
 
 export function AssetGallery() {
   const assets = useAssets();
@@ -27,6 +29,10 @@ export function AssetGallery() {
           On-Chain Provenance (BSC Testnet)
         </div>
       </div>
+      <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
+        <strong>DEMO HACKATHON:</strong> transaksi dan status identitas di galeri
+        ini hanya untuk pengujian testnet. KYC belum diverifikasi secara produksi.
+      </p>
 
       {assets.isLoading && (
         <div className="mt-8 rounded-3xl border border-slate-200 bg-white/70 p-12 text-center">
@@ -73,6 +79,7 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
     sizeBytes: number;
     tier: string;
   }>();
+  const [reviewInput, setReviewInput] = useState<AssetReviewInput>();
   const [deliveryState, setDeliveryState] = useState<"idle" | "pending" | "failed">("idle");
   const [deliveryError, setDeliveryError] = useState<string>();
   const [forceUnblurPreview, setForceUnblurPreview] = useState(false);
@@ -123,6 +130,8 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
         if (!response.ok) throw new Error("Metadata karya tidak dapat dimuat.");
         return response.json() as Promise<{
           originalFile?: { extension?: string };
+          encryptedVaultCid?: string;
+          licenseTermsURI?: string;
           qualityPolicy?: {
             resolution?: { width?: number; height?: number };
             aspectRatio?: number;
@@ -149,10 +158,45 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
             tier: policy.tier,
           });
         }
+        if (active) {
+          setReviewInput({
+            token_id: asset.token_id,
+            persistence_mode: isDemo ? "demo" : cid ? "pinata" : "unknown",
+            public_preview_cid: Boolean(cid && !isDemo),
+            encrypted_vault_cid: Boolean(metadata.encryptedVaultCid),
+            license_terms_cid: Boolean(metadata.licenseTermsURI?.startsWith("ipfs://")),
+            preview_protection: "experimental",
+            creator_identity: "not_verified",
+            original_resolution: policy?.resolution?.width && policy.resolution.height
+              ? { width: policy.resolution.width, height: policy.resolution.height }
+              : undefined,
+            original_size_bytes: policy?.sizeBytes,
+            original_extension: extension && ["png", "jpg", "webp"].includes(extension)
+              ? extension as "png" | "jpg" | "webp"
+              : undefined,
+            license: {
+              terms_hash_verified: Boolean(asset.license_terms_hash && asset.license_terms_uri?.startsWith("ipfs://")),
+              duration_days: asset.license_duration_seconds
+                ? Math.max(1, Math.round(Number(asset.license_duration_seconds) / 86400))
+                : undefined,
+              allow_ai_training: asset.allow_ai_training,
+            },
+          });
+        }
       })
       .catch(() => undefined);
     return () => { active = false; controller.abort(); };
-  }, [asset.token_uri, gateway]);
+  }, [
+    asset.allow_ai_training,
+    asset.license_duration_seconds,
+    asset.license_terms_hash,
+    asset.license_terms_uri,
+    asset.token_id,
+    asset.token_uri,
+    cid,
+    gateway,
+    isDemo,
+  ]);
 
   async function buy() {
     if (!asset.commercial_license_fee_wei || !asset.license_terms_hash || !asset.license_terms_version || !terms) return;
@@ -287,6 +331,8 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
             <p className="mt-1">{formatBytes(qualityInfo.sizeBytes)} · tier {qualityInfo.tier}</p>
           </div>
         )}
+
+        {reviewInput && <AssetReviewer input={reviewInput} />}
 
         <div className="mt-4 rounded-2xl bg-sand/60 p-3.5 border border-slate-200/60">
           <div className="flex items-baseline justify-between">

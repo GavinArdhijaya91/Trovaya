@@ -5,6 +5,7 @@ const files = {
   web: "apps/web/.env.local",
   indexer: "services/event-indexer/.env",
 };
+const live = process.argv.includes("--live");
 
 function readEnv(file) {
   if (!existsSync(file)) return {};
@@ -25,6 +26,7 @@ const url = (value) => { try { return ["http:", "https:"].includes(new URL(value
 add("web env file", existsSync(files.web), files.web);
 add("indexer env file", existsSync(files.indexer), files.indexer);
 add("Poison Engine URL", url(env.web.NEXT_PUBLIC_POISON_ENGINE_URL), "browser-safe service URL");
+add("AI Reviewer URL", url(env.web.AI_REVIEWER_URL), "server-side Gradio Space URL");
 add("primary chain is BSC testnet", env.web.NEXT_PUBLIC_CHAIN_ID === "97", "NEXT_PUBLIC_CHAIN_ID=97");
 add("web IP NFT address", address(env.web.NEXT_PUBLIC_TROVAYA_IP_NFT_ADDRESS), "deployed 0x address");
 add("web Vault address", address(env.web.NEXT_PUBLIC_TROVAYA_VAULT_ADDRESS), "deployed 0x address");
@@ -50,7 +52,16 @@ add("indexer deployment block", positiveInteger(env.indexer.INDEXER_START_BLOCK)
 add("indexer database", present(env.indexer.DATABASE_URL), "PostgreSQL connection string");
 add("web/indexer contract match", address(env.web.NEXT_PUBLIC_TROVAYA_IP_NFT_ADDRESS) && env.web.NEXT_PUBLIC_TROVAYA_IP_NFT_ADDRESS.toLowerCase() === (env.indexer.TROVAYA_IP_NFT_ADDRESS ?? "").toLowerCase(), "same deployment");
 
+if (live && url(env.web.AI_REVIEWER_URL)) {
+  try {
+    const response = await fetch(`${env.web.AI_REVIEWER_URL.replace(/\/$/, "")}/config`);
+    add("AI Reviewer live", response.ok, response.ok ? "Gradio configuration is reachable" : `HTTP ${response.status}`);
+  } catch {
+    add("AI Reviewer live", false, "Gradio configuration is unreachable");
+  }
+}
+
 for (const check of checks) console.log(`${check.ok ? "PASS" : "FAIL"}  ${check.name} — ${check.detail}`);
 const failed = checks.filter((check) => !check.ok).length;
-console.log(`\n${checks.length - failed}/${checks.length} readiness checks passed. Values were not printed.`);
+console.log(`\n${checks.length - failed}/${checks.length} readiness checks passed${live ? " (live)" : ""}. Values were not printed.`);
 if (failed) process.exitCode = 1;
