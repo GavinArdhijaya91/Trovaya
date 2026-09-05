@@ -19,6 +19,7 @@
     "smoke:local": "node scripts/smoke-local.mjs",
     "dev:web": "pnpm --filter @trovaya/web dev",
     "dev:poison": "pnpm --filter @trovaya/poison-engine dev",
+    "dev:reviewer": "pnpm --filter @trovaya/ai-reviewer dev",
     "dev:indexer": "pnpm --filter @trovaya/event-indexer dev",
     "demo:check": "node scripts/check-demo-readiness.mjs",
     "demo:evidence": "node scripts/validate-demo-evidence.mjs",
