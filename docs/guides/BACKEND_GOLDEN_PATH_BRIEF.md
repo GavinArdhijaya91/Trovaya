@@ -4,19 +4,24 @@ Status: Draft untuk diskusi tim dan kebutuhan hackathon
 
 SUMBER DAN BATASAN BRIEF
 
-Brief ini disusun berdasarkan kondisi repository Trovaya saat ini, alur yang
-sudah terlihat pada implementasi, serta arah produk yang tertulis dalam PRD dan
-dokumen spesifikasi proyek.
+Menurut kondisi repository Trovaya saat ini, alur yang sudah terlihat pada
+implementasi, serta arah produk yang tertulis dalam PRD dan dokumen spesifikasi
+proyek, brief ini digunakan sebagai bahan awal pembicaraan tim.
+
+Penjelasan dalam brief ini adalah rangkuman berdasarkan hal-hal yang terlihat
+di repository dan sepengetahuan tim pada saat dokumen ini disusun. Isinya tidak
+dimaksudkan sebagai hasil audit independen atau jaminan bahwa setiap proses
+sudah berjalan di semua lingkungan.
 
 Brief ini bukan keputusan final, bukan kontrak kerja, dan bukan pernyataan
 bahwa semua fitur sudah selesai. Isinya adalah bahan pembicaraan untuk
 memastikan developer dan project manager memiliki konteks yang sama sebelum
 menentukan prioritas, menerima hasil kerja, atau mengubah scope.
 
-Jika isi brief berbeda dengan kondisi kode terbaru, kondisi kode, hasil test,
-dan keputusan tim harus diperiksa kembali. Pertanyaan di dalam brief juga
-bukan asumsi bahwa fitur tersebut wajib dibuat; setiap pertanyaan membutuhkan
-keputusan bersama.
+Jika isi brief berbeda dengan kondisi kode terbaru, hasil test, atau keputusan
+tim, informasi tersebut harus diperiksa kembali. Pertanyaan di dalam brief
+juga bukan asumsi bahwa fitur tersebut wajib dibuat; setiap pertanyaan
+membutuhkan keputusan bersama.
 
 1. TUJUAN DOKUMEN
 
