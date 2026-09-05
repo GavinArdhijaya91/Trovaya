@@ -3,6 +3,49 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.9.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.8.0...v0.9.0) (2026-09-05)
+
+
+### Features
+
+* ai reviewer hybrid ([8cf836e](https://github.com/GavinArdhijaya91/Trovaya/commit/8cf836e4083e8f644828a60d116648e3308565b5))
+* **ai-reviewer:** add reviewer service and deployment config ([b4b49c9](https://github.com/GavinArdhijaya91/Trovaya/commit/b4b49c9e0ed1a91851c7deb1126f5f6258f3ee99))
+* **demo:** add live reviewer readiness check ([45f3a00](https://github.com/GavinArdhijaya91/Trovaya/commit/45f3a00c7df3508019a6cc46cc127dce2a37002b))
+* **web:** add reviewer to creator workspace ([2f9e494](https://github.com/GavinArdhijaya91/Trovaya/commit/2f9e49412803ade66eb9519e339e0aa3884c0e1b))
+* **web:** integrate asset reviewer into gallery ([5ffbfe1](https://github.com/GavinArdhijaya91/Trovaya/commit/5ffbfe183f417302807de451200b9001e35f9ed9))
+* **web:** label demo transactions and mock KYC ([0505466](https://github.com/GavinArdhijaya91/Trovaya/commit/05054667c9136f8729a695457bf928b985570911))
+
+
+### Fixes
+
+* **ai-reviewer:** disable experimental Gradio SSR ([46895c5](https://github.com/GavinArdhijaya91/Trovaya/commit/46895c5f1a5ba2be3813160230c9ac537525c762))
+* **ai-reviewer:** match CI Ruff import layout ([d441824](https://github.com/GavinArdhijaya91/Trovaya/commit/d4418248c1251936629dbda875a1f23d2dd57d88))
+* **ai-reviewer:** normalize Ruff imports ([17d59b3](https://github.com/GavinArdhijaya91/Trovaya/commit/17d59b39a37acf8b6bf5fb21a7ee874b4ad0ea03))
+* **ai-reviewer:** satisfy CI Ruff import block formatting ([28aa33b](https://github.com/GavinArdhijaya91/Trovaya/commit/28aa33b2f3fcafef628f1fb6ddd77d51dbcb51a1))
+* **ai-reviewer:** support ZeroGPU Space startup ([1e3ceb4](https://github.com/GavinArdhijaya91/Trovaya/commit/1e3ceb4a84b6b9c806b32f01afc45db8963c4990))
+* **ai-reviewer:** use Gradio API for ZeroGPU ([e06a987](https://github.com/GavinArdhijaya91/Trovaya/commit/e06a98799488b3800a5472975bf52863ea412289))
+* **config:** use valid AI reviewer URL example ([61cd702](https://github.com/GavinArdhijaya91/Trovaya/commit/61cd702f1b4b6beb6f447960bfb7169b09e142d4))
+* **web:** satisfy exhaustive-deps for AssetCard review effect ([9f971d0](https://github.com/GavinArdhijaya91/Trovaya/commit/9f971d0529ac5d5de05daac1b51dae7480a9dc88))
+* **web:** use Gradio API prefix for reviewer ([380e0f2](https://github.com/GavinArdhijaya91/Trovaya/commit/380e0f25b029cbe3c88b5636269c5f11de5313d2))
+
+
+### Documentation
+
+* add backend golden path plan ([8a1a43e](https://github.com/GavinArdhijaya91/Trovaya/commit/8a1a43e110bd1f885f17b1e6942a99bf9b89fbdb))
+* add repository and PRD context to brief ([99989cb](https://github.com/GavinArdhijaya91/Trovaya/commit/99989cbf846d3bbe8e17240f2a5713ce4187544a))
+* **ai-reviewer:** document Gradio ZeroGPU API ([fe0c7f6](https://github.com/GavinArdhijaya91/Trovaya/commit/fe0c7f6dc51ccfba2da6bc3433bd85f5f2ae200e))
+* clarify golden path discussion questions ([c0843e0](https://github.com/GavinArdhijaya91/Trovaya/commit/c0843e0ad6d24c2806a181c04264a7760dae5d0c))
+* define buyer seller access roles ([957d75d](https://github.com/GavinArdhijaya91/Trovaya/commit/957d75d7e80dcad04b06396e9eb13fb99ff1f7f1))
+* define identity and transaction flow ([0efd18c](https://github.com/GavinArdhijaya91/Trovaya/commit/0efd18c862a0fa4a9662f8f47975403e4c4966df))
+* explain golden path terminology ([64b3c96](https://github.com/GavinArdhijaya91/Trovaya/commit/64b3c965e1ffd41e2d7554ff04cbf056889e7e10))
+* explain rules-only reviewer mode ([8fa424a](https://github.com/GavinArdhijaya91/Trovaya/commit/8fa424a476e95060e205b7879ae456a4f25baf60))
+* format golden path meeting brief ([c184a5a](https://github.com/GavinArdhijaya91/Trovaya/commit/c184a5a566d3674ff25a1c53315ce26b756aaf13))
+* plan transaction history exports ([1fa6011](https://github.com/GavinArdhijaya91/Trovaya/commit/1fa6011ba89296bf1b6b259d53741e6293cb6f6f))
+* plan wallet activity history ([e910b54](https://github.com/GavinArdhijaya91/Trovaya/commit/e910b541d832c088a95249161fc4f0f639fcc4db))
+* qualify repository-based brief statements ([dcab5ce](https://github.com/GavinArdhijaya91/Trovaya/commit/dcab5ce01e6cabebcbdfaa34e0cfc1c10d99bd94))
+* simplify golden path communication brief ([e4e21fa](https://github.com/GavinArdhijaya91/Trovaya/commit/e4e21fa62d22576eefe440a5cd5d6760965d08b3))
+* specify indexer log hardening ([e89fb3c](https://github.com/GavinArdhijaya91/Trovaya/commit/e89fb3c0ac284b2451c8d2a8c60297936b94c02b))
+
 ## [0.8.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.7.0...v0.8.0) (2026-09-04)
 
 
