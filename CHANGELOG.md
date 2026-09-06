@@ -3,6 +3,13 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.10.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.9.0...v0.10.0) (2026-09-06)
+
+
+### Features
+
+* **web:** add explore and artwork detail frontend ([145c72d](https://github.com/GavinArdhijaya91/Trovaya/commit/145c72db4a1ca8c795a9f64e2c89d65535c6ce12))
+
 ## [0.9.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.8.0...v0.9.0) (2026-09-05)
 
 
