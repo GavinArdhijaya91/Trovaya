@@ -437,7 +437,7 @@ export function CreatorDashboard(){
               </div>
 
               <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-900">
-                <strong>DEMO HACKATHON — TRANSAKSI TESTNET.</strong> Catatan lisensi,
+                <strong>DEMO HACKATHON TRANSAKSI TESTNET.</strong> Catatan lisensi,
                 royalti, withdrawal, dan vault di workspace ini belum merupakan
                 layanan produksi atau nasihat hukum/finansial.
               </div>
