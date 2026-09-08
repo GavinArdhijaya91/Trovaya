@@ -130,43 +130,44 @@ export function ProtectionForm() {
     }
   }
 
-  return <form onSubmit={submit} className="rounded-3xl bg-white p-6 shadow-soft md:p-8">
-    <div className="mb-6 flex items-center justify-between">
-      <div><p className="text-sm font-semibold text-leaf">STUDIO PROTEKSI</p><h2 className="mt-1 text-2xl font-semibold">Daftarkan karya terlindungi</h2></div>
-      <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">EXPERIMENTAL PREVIEW</span>
+  return <form onSubmit={submit} className="rounded-2xl border border-nusa-200 bg-white p-6 shadow-soft md:p-8">
+    <div className="mb-6 flex items-center justify-between gap-3">
+      <div><p className="text-xs font-bold tracking-wider text-teal-700 uppercase">Studio proteksi</p><h2 className="mt-1 text-2xl font-extrabold tracking-tight text-nusa-900">Daftarkan karya terlindungi</h2></div>
+      <span className="rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-bold text-amber-800">Experimental</span>
     </div>
+    <div className="batik-divider mb-6" />
     <div className="mb-6 grid gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-900 sm:grid-cols-2">
       <p><strong>DEMO HACKATHON:</strong> transaksi memakai BSC Testnet dan belum merupakan layanan produksi.</p>
       <p><strong>IDENTITAS:</strong> KYC belum diverifikasi. Status creator dan karya tidak membuktikan keaslian atau hak cipta.</p>
     </div>
-    <label className="block rounded-2xl border-2 border-dashed border-emerald-200 bg-mint/30 p-8 text-center">
-      <span className="block font-medium">Pilih karya atau gambar produk</span>
-      <span className="mt-1 block text-sm text-slate-500">PNG, JPG, atau WebP · maksimal 15 MiB · 512–8192 px · rasio 0,5–2:1</span>
+    <label className="block rounded-2xl border-2 border-dashed border-teal-200 bg-teal-50/40 p-8 text-center cursor-pointer hover:bg-teal-50 transition-colors">
+      <span className="block font-bold text-nusa-900">Pilih karya atau gambar produk</span>
+      <span className="mt-1 block text-sm text-nusa-600">PNG, JPG, atau WebP · maksimal 15 MiB · 512–8192 px · rasio 0,5–2:1</span>
       <input className="mt-4 block w-full text-sm" type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => setFile(event.target.files?.[0])} />
     </label>
-    <label className="mt-6 block text-sm font-medium">Kekuatan proteksi: {Math.round(intensity * 100)}%
-      <input className="mt-3 w-full accent-emerald-700" type="range" min="0" max="1" step="0.05" value={intensity} onChange={(event) => setIntensity(Number(event.target.value))} />
+    <label className="mt-6 block text-sm font-bold text-nusa-900">Kekuatan proteksi: {Math.round(intensity * 100)}%
+      <input className="mt-3 w-full accent-teal-700" type="range" min="0" max="1" step="0.05" value={intensity} onChange={(event) => setIntensity(Number(event.target.value))} />
     </label>
     <p className="mt-3 rounded-xl bg-amber-50 p-3 text-xs leading-5 text-amber-800">
       Transformasi piksel ini adalah eksperimen demo, bukan Glaze/Nightshade dan belum terbukti mencegah scraping atau pelatihan AI.
     </p>
     <div className="mt-6 grid gap-4 sm:grid-cols-2">
-      <label className="text-sm font-medium">Biaya lisensi komersial
-        <input className="mt-2 w-full rounded-xl border border-slate-300 px-3 py-2" type="number" min="0.000001" step="0.001" value={licenseFee} onChange={(event) => setLicenseFee(event.target.value)} />
+      <label className="text-sm font-bold text-nusa-900">Biaya lisensi komersial
+        <input className="mt-2 w-full rounded-xl border border-nusa-200 bg-white px-3 py-2 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none" type="number" min="0.000001" step="0.001" value={licenseFee} onChange={(event) => setLicenseFee(event.target.value)} />
       </label>
-      <label className="flex items-center gap-3 rounded-xl bg-sand px-4 py-3 text-sm font-medium"><input type="checkbox" checked={allowAITraining} onChange={(event) => setAllowAITraining(event.target.checked)} />Izinkan pelatihan AI berlisensi</label>
+      <label className="flex items-center gap-3 rounded-xl bg-nusa-50 border border-nusa-200 px-4 py-3 text-sm font-bold text-nusa-900"><input type="checkbox" checked={allowAITraining} onChange={(event) => setAllowAITraining(event.target.checked)} />Izinkan pelatihan AI berlisensi</label>
     </div>
-    <fieldset className="mt-4 rounded-2xl border border-slate-200 p-4">
-      <legend className="px-2 text-sm font-semibold">Persyaratan lisensi v1</legend>
+    <fieldset className="mt-4 rounded-xl border border-nusa-200 bg-nusa-50/40 p-4">
+      <legend className="px-2 text-sm font-bold text-nusa-900">Persyaratan lisensi v1</legend>
       <div className="grid gap-3 sm:grid-cols-2">
-        <label className="text-sm">Durasi (hari)<input type="number" min="1" max="3650" value={durationDays} onChange={(event) => setDurationDays(Number(event.target.value))} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2" required /></label>
-        <label className="text-sm">Wilayah<input value={territory} onChange={(event) => setTerritory(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2" required /></label>
+        <label className="text-sm font-medium text-nusa-900">Durasi (hari)<input type="number" min="1" max="3650" value={durationDays} onChange={(event) => setDurationDays(Number(event.target.value))} className="mt-1 w-full rounded-xl border border-nusa-200 bg-white px-3 py-2 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none" required /></label>
+        <label className="text-sm font-medium text-nusa-900">Wilayah<input value={territory} onChange={(event) => setTerritory(event.target.value)} className="mt-1 w-full rounded-xl border border-nusa-200 bg-white px-3 py-2 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none" required /></label>
       </div>
-      <label className="mt-3 block text-sm">Penggunaan/media yang diizinkan<input value={permittedUse} onChange={(event) => setPermittedUse(event.target.value)} className="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2" required /></label>
-      <p className="mt-3 text-xs text-slate-600">Tipe: komersial · non-eksklusif · versi 1</p>
-      <label className="mt-2 flex items-center gap-2 text-sm"><input type="checkbox" checked={sublicensingAllowed} onChange={(event) => setSublicensingAllowed(event.target.checked)} />Izinkan sublicensing</label>
+      <label className="mt-3 block text-sm font-medium text-nusa-900">Penggunaan/media yang diizinkan<input value={permittedUse} onChange={(event) => setPermittedUse(event.target.value)} className="mt-1 w-full rounded-xl border border-nusa-200 bg-white px-3 py-2 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none" required /></label>
+      <p className="mt-3 text-xs text-nusa-600">Tipe: komersial · non-eksklusif · versi 1</p>
+      <label className="mt-2 flex items-center gap-2 text-sm font-medium text-nusa-900"><input type="checkbox" checked={sublicensingAllowed} onChange={(event) => setSublicensingAllowed(event.target.checked)} />Izinkan sublicensing</label>
     </fieldset>
-    <button className="mt-6 w-full rounded-xl bg-ink px-5 py-3 font-semibold text-white disabled:opacity-50" disabled={!file || isLoading || registration.isPending} type="submit">
+    <button className="interactive-btn mt-6 w-full rounded-xl bg-teal-900 px-5 py-3 font-bold text-white shadow-soft-md hover:bg-teal-700 disabled:opacity-50" disabled={!file || isLoading || registration.isPending} type="submit">
       {isLoading || registration.isPending ? "Memproses pendaftaran…" : "Lindungi dan daftarkan karya"}
     </button>
     {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}

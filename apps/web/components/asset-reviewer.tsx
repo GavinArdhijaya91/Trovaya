@@ -22,13 +22,16 @@ export function AssetReviewer({ input }: { input: AssetReviewInput }) {
   }
 
   return (
-    <div className="mt-3 rounded-2xl border border-nusa-200 bg-nusa-50/60 p-3">
+    <div className="mt-3 rounded-xl border border-nusa-200 bg-white p-3">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs font-bold text-nusa-900">Audit informasi asset</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs font-bold text-nusa-900">Audit informasi asset</p>
+            <span className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[9px] font-bold text-amber-800 tracking-wide">Edukatif, bukan saran finansial/hukum</span>
+          </div>
           <p className="mt-0.5 text-[10px] text-nusa-500">Evidence dan red flag, bukan rekomendasi.</p>
         </div>
-        <button type="button" onClick={() => void inspect()} disabled={loading} className="rounded-lg bg-teal-900 px-3 py-1.5 text-[10px] font-bold text-white disabled:opacity-50">
+        <button type="button" onClick={() => void inspect()} disabled={loading} className="interactive-btn rounded-lg bg-teal-900 px-3 py-1.5 text-[10px] font-bold text-white hover:bg-teal-700 disabled:opacity-50">
           {loading ? "Menganalisis…" : review ? "Perbarui audit" : "Lihat audit"}
         </button>
       </div>

@@ -30,7 +30,7 @@ export function HeroPoisonDemo() {
   const onPointerUp = useCallback(() => setDragging(false), []);
 
   return (
-    <div className="rounded-2xl border border-nusa-200 bg-white p-4 shadow-soft-md">
+    <div className="rounded-2xl border border-nusa-200 bg-white p-4 shadow-soft-md nusa-card">
       <div className="flex items-center justify-between border-b border-nusa-100 pb-3 mb-3">
         <span className="text-xs font-bold tracking-wider text-nusa-500 uppercase">Demo Preview Terproteksi</span>
         <span className="rounded-full bg-amber-50 border border-amber-200 px-2.5 py-0.5 text-[10px] font-bold text-amber-800">Experimental protection</span>
@@ -57,10 +57,10 @@ export function HeroPoisonDemo() {
             onError={(e) => ((e.target as HTMLImageElement).style.display = "none")}
           />
           <div className="absolute inset-0 bg-gradient-to-br from-teal-900 via-coral to-amber-200 -z-[1]" />
-          {/* Blur + violet tint + noise */}
-          <div className="absolute inset-0 backdrop-blur-[10px] bg-violet-900/25" />
-          <div className="absolute inset-0 opacity-[0.18] pw-grid-dark" aria-hidden="true" />
-          <div className="absolute inset-0 bg-violet-600/10" />
+          {/* Blur + teal/coral tint + batik motif — sesuai palet Trovaya, tanpa violet */}
+          <div className="absolute inset-0 backdrop-blur-[10px] bg-teal-900/20" />
+          <div className="absolute inset-0 opacity-[0.14] parang-watermark" aria-hidden="true" />
+          <div className="absolute inset-0 bg-[#085041]/[0.06]" />
         </div>
 
         {/* Top: CLEAR layer clipped by pos */}
