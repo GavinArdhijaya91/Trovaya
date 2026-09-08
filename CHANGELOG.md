@@ -3,6 +3,15 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.10.1](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.10.0...v0.10.1) (2026-09-08)
+
+
+### Fixes
+
+* **web:** restore RainbowKit avatar and stabilize BSC testnet RPC ([bf95165](https://github.com/GavinArdhijaya91/Trovaya/commit/bf9516513dd8a6cbf9aec611ea3f706642ce904a))
+* **web:** restore RainbowKit avatar and stabilize BSC testnet RPC ([8f68c8b](https://github.com/GavinArdhijaya91/Trovaya/commit/8f68c8b5df7b351d231c61b91d16a4cd3ae959ea))
+* **web:** suppress next/no-img-element for external avatar icons to pass lint ([d96cd2a](https://github.com/GavinArdhijaya91/Trovaya/commit/d96cd2a965b954e4d3bbf75eb182cce4f5690381))
+
 ## [0.10.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.9.0...v0.10.0) (2026-09-06)
 
 
