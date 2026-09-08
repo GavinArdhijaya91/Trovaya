@@ -3,6 +3,20 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.11.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.10.1...v0.11.0) (2026-09-08)
+
+
+### Features
+
+* **poison-engine:** add token tx poison engine ([0b77ca9](https://github.com/GavinArdhijaya91/Trovaya/commit/0b77ca9f00a42211ebc4a944d2ad17e70c1de5b5))
+* **web:** add Nusantara batik utilities and card tokens ([1be1678](https://github.com/GavinArdhijaya91/Trovaya/commit/1be1678b9b9613e19c05fa18b8d4603424f2deab))
+* **web:** restyle landing and protection flows to Trovaya Nusantara palette ([ac3ed8c](https://github.com/GavinArdhijaya91/Trovaya/commit/ac3ed8cfe45c4a4bc79a46f33f9ee61dc62463ec))
+
+
+### Fixes
+
+* **web:** remove em dash in DEMO HACKATHON label per anti-slop ([6ba54fa](https://github.com/GavinArdhijaya91/Trovaya/commit/6ba54fadcece38370ef0dc529beb198697cf4529))
+
 ## [0.10.1](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.10.0...v0.10.1) (2026-09-08)
 
 
