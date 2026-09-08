@@ -231,7 +231,7 @@ input:focus-visible {
   }
 }
 
-/* Pixelwhisk-inspired Architectural Grid & Structured Lines */
+/* Nusantara textile grid — ikat weave subtle */
 .pw-grid-bg {
   background-image: 
     linear-gradient(to right, rgba(180, 178, 169, 0.22) 1px, transparent 1px),
@@ -244,6 +244,35 @@ input:focus-visible {
     linear-gradient(to right, rgba(225, 245, 238, 0.08) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(225, 245, 238, 0.08) 1px, transparent 1px);
   background-size: 36px 36px;
+}
+
+/* Batik parang diagonal — Nusantara signature, low-opacity structural motif (§2) */
+.bat ik-parang,
+.batik-parang {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 14px,
+    rgba(8, 80, 65, 0.035) 14px 15px
+  );
+}
+.parang-watermark {
+  background-image:
+    repeating-linear-gradient(-45deg, transparent 0 22px, rgba(8,80,65,0.04) 22px 23px),
+    repeating-linear-gradient(45deg, transparent 0 22px, rgba(240,153,123,0.035) 22px 23px);
+}
+.batik-divider {
+  height: 1px;
+  background: repeating-linear-gradient(90deg, #D3D1C7 0 6px, transparent 6px 10px);
+  opacity: 0.9;
+}
+.nusa-card {
+  background: #FFFFFF;
+  border: 1px solid #D3D1C7;
+  box-shadow: 0 1px 3px rgba(44,44,42,0.06);
+}
+.nusa-card-hover:hover {
+  border-color: #9FE1CB;
+  background: #FFFFFF;
 }
 
 .pw-border-b {

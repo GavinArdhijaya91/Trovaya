@@ -12,7 +12,6 @@ import { FaqAccordion } from "@/components/faq-accordion";
 import { SmoothScrollProvider } from "@/components/smooth-scroll";
 import { CustomConnectButton } from "@/components/custom-connect-button";
 
-// ── Data sesuai trovaya-design-skills.md ──
 const masalah = [
   {
     icon: "🕸️",
@@ -145,8 +144,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. MASALAH: 3 kartu PRD 2.1 */}
-      <section id="masalah" className="py-16 md:py-20 border-b border-nusa-200">
+      {/* 2. MASALAH: 3 kartu PRD 2.1 — dengan batik divider */}
+      <section id="masalah" className="py-16 md:py-20 border-b border-nusa-200 relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 batik-parang opacity-40" aria-hidden="true" />
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">Masalah nyata</span>
@@ -247,9 +247,10 @@ export default function Home() {
       </section>
 
       {/* 6. BATASAN KAMI */}
-      <section id="batasan" className="py-16 md:py-20 border-b border-nusa-200">
-        <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <div className="mx-auto max-w-3xl rounded-2xl border border-amber-200 bg-amber-50/60 p-8">
+      <section id="batasan" className="py-16 md:py-20 border-b border-nusa-200 relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 parang-watermark opacity-30" aria-hidden="true" />
+        <div className="mx-auto max-w-7xl px-5 md:px-8 relative">
+          <div className="mx-auto max-w-3xl rounded-2xl border border-amber-200 bg-amber-50/60 p-8 shadow-soft">
             <span className="text-xs font-bold uppercase tracking-wider text-amber-800 bg-white border border-amber-200 px-3 py-1 rounded-full">Batasan Kami, kejujuran eksplisit</span>
             <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-nusa-900">Yang belum kami janjikan</h2>
             <ul className="mt-4 space-y-3 text-sm leading-relaxed text-nusa-700 list-disc pl-5">

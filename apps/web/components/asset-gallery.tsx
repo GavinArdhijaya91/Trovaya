@@ -18,35 +18,36 @@ export function AssetGallery() {
     <section className="mt-16" id="gallery">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <p className="text-sm font-semibold tracking-wider text-leaf uppercase">GALERI KARYA TERPROTEKSI</p>
-          <h2 className="mt-2 text-3xl font-semibold text-ink">Eksplorasi Karya Terdaftar & Terlindungi</h2>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-            Karya publik dilindungi dengan transformasi Poison Engine dan efek anti-scraping bot AI. Detail asli berkualitas penuh disimpan terenkripsi di High-Res Vault dan hanya dapat diakses setelah pembelian lisensi sah.
+          <p className="text-xs font-bold tracking-wider text-teal-700 uppercase">Galeri karya terproteksi</p>
+          <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-nusa-900">Eksplorasi karya terdaftar & terlindungi</h2>
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-nusa-600">
+            Karya publik parade dengan Poison Engine eksperimental. Detail asli kualitas penuh terenkripsi di Vault dan terbuka setelah lisensi & otorisasi terpisah.
           </p>
         </div>
-        <div className="flex items-center gap-2 rounded-2xl bg-mint/70 px-4 py-2.5 text-xs font-semibold text-leaf">
-          <span className="inline-block h-2 w-2 rounded-full bg-emerald-600 animate-pulse" />
-          On-Chain Provenance (BSC Testnet)
+        <div className="flex items-center gap-2 rounded-full bg-teal-50 border border-teal-200 px-4 py-2 text-xs font-bold text-teal-900">
+          <span className="inline-block h-2 w-2 rounded-full bg-teal-500 animate-pulse" />
+          On-chain provenance · BSC Testnet
         </div>
       </div>
+      <div className="batik-divider mt-4" />
       <p className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs leading-5 text-amber-900">
         <strong>DEMO HACKATHON:</strong> transaksi dan status identitas di galeri
         ini hanya untuk pengujian testnet. KYC belum diverifikasi secara produksi.
       </p>
 
       {assets.isLoading && (
-        <div className="mt-8 rounded-3xl border border-slate-200 bg-white/70 p-12 text-center">
-          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-leaf border-t-transparent" />
-          <p className="mt-4 text-sm font-medium text-slate-600">Memuat karya terindeks dari jaringan…</p>
+        <div className="mt-8 rounded-2xl border border-nusa-200 bg-white p-12 text-center shadow-soft">
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-teal-700 border-t-transparent" />
+          <p className="mt-4 text-sm font-medium text-nusa-600">Memuat karya terindeks dari jaringan…</p>
         </div>
       )}
 
       {assets.data?.length === 0 && (
-        <div className="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-mint text-xl text-leaf">🛡️</div>
-          <h3 className="mt-4 text-lg font-semibold text-ink">Belum ada karya terindeks</h3>
-          <p className="mt-2 text-sm text-slate-500 max-w-md mx-auto">
-            Daftarkan karya pertama Anda melalui Studio Proteksi di atas. Event indexer akan memvalidasi transaksi on-chain dan menampilkannya di galeri ini.
+        <div className="mt-8 rounded-2xl border border-dashed border-nusa-200 bg-white p-10 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 border border-teal-200 text-xl">🛡️</div>
+          <h3 className="mt-4 text-lg font-bold text-nusa-900">Belum ada karya terindeks</h3>
+          <p className="mt-2 text-sm text-nusa-600 max-w-md mx-auto">
+            Daftarkan karya pertama Anda melalui Studio Proteksi. Event indexer akan memvalidasi transaksi on-chain dan menampilkannya di sini.
           </p>
         </div>
       )}
@@ -237,9 +238,9 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
   }
 
   return (
-    <article className="group overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-soft transition-all duration-300 hover:shadow-soft-md">
-      {/* Visual Asset Stage with Anti-Scraping Defense */}
-      <div className="relative aspect-square w-full overflow-hidden bg-slate-900">
+    <article className="group overflow-hidden rounded-2xl border border-nusa-200 bg-white shadow-soft transition-all duration-300 hover:shadow-soft-md hover:border-teal-200">
+      {/* Visual — preview terpoison, subtle batik overlay */}
+      <div className="relative aspect-square w-full overflow-hidden bg-nusa-900">
         {cid && !isDemo ? (
           <>
             <Image
@@ -297,8 +298,8 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
             POISON PERTURBED
           </span>
           <span
-            className={`rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide ${
-              isDemo || !cid ? "bg-amber-100 text-amber-800" : "bg-mint text-leaf"
+            className={`rounded-full px-2.5 py-1 text-[10px] font-bold tracking-wide border ${
+              isDemo || !cid ? "bg-amber-50 text-amber-800 border-amber-200" : "bg-teal-50 text-teal-900 border-teal-200"
             }`}
           >
             {persistenceLabel}
@@ -306,7 +307,7 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
         </div>
 
         <div className="flex items-center justify-between gap-3">
-          <h3 className="text-lg font-bold text-ink">Karya #{asset.token_id}</h3>
+          <h3 className="text-lg font-bold text-nusa-900">Karya #{asset.token_id}</h3>
           <span
             className={`rounded-full px-2.5 py-1 text-xs font-medium ${
               asset.allow_ai_training
@@ -318,13 +319,13 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
           </span>
         </div>
 
-        <p className="mt-2 truncate text-xs text-slate-500 font-mono">
+        <p className="mt-2 truncate text-xs text-nusa-500 font-mono">
           Kreator: {asset.creator_wallet}
         </p>
 
         {qualityInfo && (
-          <div className="mt-3 rounded-2xl border border-emerald-100 bg-emerald-50/60 p-3 text-[11px] text-slate-700">
-            <p className="font-semibold text-leaf">Spesifikasi original berlisensi</p>
+          <div className="mt-3 rounded-xl border border-teal-200 bg-teal-50 p-3 text-[11px] text-nusa-700">
+            <p className="font-bold text-teal-900">Spesifikasi original berlisensi</p>
             <p className="mt-1">
               {qualityInfo.width}×{qualityInfo.height}px · {qualityInfo.megapixels} MP · rasio {qualityInfo.aspectRatio}:1
             </p>
@@ -334,10 +335,10 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
 
         {reviewInput && <AssetReviewer input={reviewInput} />}
 
-        <div className="mt-4 rounded-2xl bg-sand/60 p-3.5 border border-slate-200/60">
+        <div className="mt-4 rounded-xl bg-nusa-50 p-3.5 border border-nusa-200">
           <div className="flex items-baseline justify-between">
-            <span className="text-xs font-medium text-slate-600">Biaya Lisensi Komersial</span>
-            <span className="text-base font-bold text-ink">
+            <span className="text-xs font-medium text-nusa-600">Biaya lisensi komersial</span>
+            <span className="text-base font-bold text-nusa-900">
               {asset.commercial_license_fee_wei ? formatEther(BigInt(asset.commercial_license_fee_wei)) : "0.00"}{" "}
               <span className="text-xs font-semibold text-slate-500">{asset.chain_id === 97 ? "tBNB" : "ETH"}</span>
             </span>
@@ -375,7 +376,7 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
                 !asset.license_terms_version ||
                 !["idle", "failed"].includes(license.purchaseState.phase)
               }
-              className="w-full rounded-xl bg-coral px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-coral-dark disabled:opacity-50 transition-colors"
+              className="w-full rounded-xl bg-teal-900 px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-teal-700 disabled:opacity-50 transition-colors"
             >
               {license.purchaseState.phase === "confirming"
                 ? "Memproses di Blockchain…"
@@ -390,7 +391,7 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
               <button
                 onClick={authorizeVault}
                 disabled={!license.isConfigured || !["idle", "failed"].includes(license.unlockState.phase)}
-                className="w-full rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-white hover:bg-black disabled:opacity-50 transition-colors"
+                className="w-full rounded-xl bg-nusa-900 px-4 py-2.5 text-sm font-bold text-white hover:bg-black disabled:opacity-50 transition-colors"
               >
                 {license.unlockState.phase === "confirming"
                   ? "Mencatat Otorisasi…"
@@ -408,7 +409,7 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
             <button
               onClick={downloadOriginal}
               disabled={deliveryState === "pending" || !account.address}
-              className="w-full rounded-xl bg-leaf px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-800 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+              className="w-full rounded-xl bg-teal-900 px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-teal-700 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
             >
               {deliveryState === "pending" ? (
                 <>
