@@ -10,7 +10,7 @@ import { HeroPoisonDemo } from "@/components/hero-poison-demo";
 import { HelpTip } from "@/components/help-tip";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { SmoothScrollProvider } from "@/components/smooth-scroll";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { CustomConnectButton } from "@/components/custom-connect-button";
 
 // ── Data sesuai trovaya-design-skills.md ──
 const masalah = [
@@ -96,9 +96,6 @@ export default function Home() {
               <Image src="/trovaya-logo.svg" alt="Trovaya logo" width={32} height={32} priority />
               <span className="text-xl font-bold tracking-tight text-teal-900">Trovaya<span className="text-coral">.</span></span>
             </Link>
-            <div className="hidden sm:flex items-center pl-3 border-l border-nusa-200">
-              <BnbNetworkBadge size="sm" variant="outline" showPulse />
-            </div>
           </div>
           <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold text-nusa-700">
             <a href="#masalah" className="hover:text-teal-900 transition-colors">Masalah</a>
@@ -110,7 +107,7 @@ export default function Home() {
           </nav>
           <div className="flex items-center gap-3">
             <EmailAuth />
-            <ConnectButton label="Hubungkan Wallet" accountStatus="avatar" chainStatus="icon" showBalance={false} />
+            <CustomConnectButton label="Hubungkan Wallet" accountStatus="avatar" chainStatus="icon" showBalance={false} />
           </div>
         </div>
       </header>

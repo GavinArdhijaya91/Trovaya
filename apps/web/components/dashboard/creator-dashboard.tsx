@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { CustomConnectButton } from "@/components/custom-connect-button";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
@@ -157,7 +157,7 @@ export function CreatorDashboard(){
                 <span>+</span> Lindungi Karya Baru
               </button>
             )}
-            <ConnectButton
+            <CustomConnectButton
               label="Hubungkan Wallet"
               accountStatus="avatar"
               chainStatus="icon"

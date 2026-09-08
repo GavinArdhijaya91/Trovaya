@@ -1,6 +1,6 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { CustomConnectButton } from "@/components/custom-connect-button";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -67,7 +67,7 @@ export function SiteHeader() {
             <EmailAuth />
           </div>
 
-          <ConnectButton
+          <CustomConnectButton
             label="Connect account"
             accountStatus="avatar"
             chainStatus="icon"

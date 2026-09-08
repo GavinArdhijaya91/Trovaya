@@ -11,17 +11,17 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
-  scrollbar-gutter: stable;
 }
 body {
   margin: 0;
+  padding-right: 0 !important;
   background: #f1efe8;
   color: #2c2c2a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 /* Hanya elemen interaktif yang butuh transisi, hindari global `all` agar tidak trigger layout thrashing */
-a, button {
+a:not([data-rk] *), button:not([data-rk] *) {
   font: inherit;
 }
 a:focus-visible,
@@ -342,5 +342,66 @@ input:focus-visible {
 }
 .link-hover:hover::after {
   transform: scaleX(1);
+}
+
+/* ── Custom ConnectButton styles ── */
+
+/* Chevron SVG dalam custom connect button — transition harus di CSS, bukan inline style,
+   agar tidak di-override oleh Tailwind preflight / prefers-reduced-motion */
+.rk-chevron {
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.rk-chevron[data-open="true"] {
+  transform: rotate(180deg);
+}
+
+.rk-chevron[data-open="false"] {
+  transform: rotate(0deg);
+}
+
+.rk-connect-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 12px;
+  background: var(--rk-colors-connectButtonBackground, #ffffff);
+  color: var(--rk-colors-connectButtonText, #25292e);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.12s ease;
+}
+
+.rk-connect-btn:hover {
+  transform: scale(1.035);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.rk-connect-btn:active {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+
+/* Dialog / modal wallet list — gaya yang sudah ada sebelumnya */
+[data-rk] [role="dialog"] button {
+  padding: 14px 20px !important;
+  gap: 16px !important;
+  border-radius: 12px !important;
+  margin-bottom: 6px !important;
+  line-height: 1.5 !important;
+}
+
+[data-rk] [role="dialog"] button div {
+  gap: 14px !important;
 }
 
