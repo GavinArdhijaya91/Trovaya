@@ -35,6 +35,8 @@ export function useLicenseActions() {
       functionName: "purchaseCommercialLicense",
       args: [BigInt(tokenId), termsHash, termsVersion],
       value: BigInt(feeWei),
+      // BSC testnet cap 16_777_216, viem kadang estimate 35M saat RPC lag — cap manual agar eth_sendRawTransaction tidak reject
+      gas: 500_000n,
     });
   }
 
@@ -45,6 +47,7 @@ export function useLicenseActions() {
       abi: trovayaVaultAbi,
       functionName: "unlockWithLicense",
       args: [BigInt(tokenId)],
+      gas: 500_000n,
     });
   }
 
