@@ -179,6 +179,7 @@ export function CustomConnectButton({
                 ) : (
                   <>
                     {chain.hasIcon && chainStatus !== "none" && (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={chain.iconUrl}
                         alt={chain.name ?? "Chain icon"}
@@ -222,6 +223,7 @@ export function CustomConnectButton({
               >
                 {accountStatus !== "address" &&
                   (account.ensAvatar ? (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={account.ensAvatar}
                       alt={account.displayName}
