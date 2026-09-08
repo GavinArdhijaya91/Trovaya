@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { createPublicClient, http, parseAbiItem } from "viem";
+import { createPublicClient, fallback, http, parseAbiItem } from "viem";
 import { bscTestnet } from "viem/chains";
 import type { PublicAsset } from "@/lib/public-assets";
 import { getClientContractAddresses } from "@/lib/contracts";
@@ -15,8 +15,16 @@ const mintEvent = parseAbiItem("event IPMinted(uint256 indexed tokenId,address i
 async function fetchOnChainFallback(): Promise<IndexedAsset[]> {
   const addresses = getClientContractAddresses();
   if (!addresses) return [];
-  const rpcUrl = process.env.NEXT_PUBLIC_BSC_RPC_URL ?? "https://data-seed-prebsc-2-s1.bnbchain.org:8545";
-  const client = createPublicClient({ chain: bscTestnet, transport: http(rpcUrl) });
+  const rpcUrls = [...new Set([
+    process.env.NEXT_PUBLIC_BSC_RPC_URL,
+    "https://bsc-testnet.bnbchain.org",
+    "https://bsc-testnet-dataseed.bnbchain.org",
+    "https://bnb-testnet.api.onfinality.io/public",
+    "https://data-seed-prebsc-1-s1.bnbchain.org:8545",
+    "https://data-seed-prebsc-2-s1.bnbchain.org:8545",
+  ].filter((u): u is string => Boolean(u)))];
+  const transport = rpcUrls.length > 1 ? fallback(rpcUrls.map((u) => http(u, { timeout: 8_000 })), { rank: false }) : http(rpcUrls[0]!, { timeout: 8_000 });
+  const client = createPublicClient({ chain: bscTestnet, transport });
   // Ambil tip dulu biar range kecil dan tidak kena limit exceeded data-seed
   const latest = await client.getBlockNumber();
   const fromBlock = latest > 5000n ? latest - 5000n : 0n;
