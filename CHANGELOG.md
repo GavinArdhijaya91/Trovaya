@@ -3,6 +3,22 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.12.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.11.0...v0.12.0) (2026-09-09)
+
+
+### Features
+
+* **web:** redesign landing header hero and workspace dashboard per sample ([9545289](https://github.com/GavinArdhijaya91/Trovaya/commit/954528902b3595ffc92ea05d8f5aa311b02d73a3))
+* **web:** sesuaikan landing header dan hero dengan sample2 ([4759d59](https://github.com/GavinArdhijaya91/Trovaya/commit/4759d597abf672b0786dc2b0a2d0e1dddb152ac4))
+* **web:** sesuaikan workspace dashboard dengan sample1 ([8637572](https://github.com/GavinArdhijaya91/Trovaya/commit/8637572b66e20413d1d3cd95a403484e02c2ad5f))
+
+
+### Fixes
+
+* **security:** bump next to 16.3.3 and eslint-config-next to fix GHSA-p293/2xp9 and sharp ([874b71c](https://github.com/GavinArdhijaya91/Trovaya/commit/874b71ca1ceaaf5a5df3ed8047acdb74a28e7e70))
+* **web:** hapus import tak terpakai agar lint max-warnings 0 lolos ([6294f50](https://github.com/GavinArdhijaya91/Trovaya/commit/6294f506767ec6c6a6c56c23c69cd43d4856c524))
+* **web:** rapikan CTA footer dan form langganan, hilangkan em dash ([3c24970](https://github.com/GavinArdhijaya91/Trovaya/commit/3c24970370385a32332c25ee43b18be2497281a1))
+
 ## [0.11.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.10.1...v0.11.0) (2026-09-08)
 
 
