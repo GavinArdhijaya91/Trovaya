@@ -354,26 +354,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 10. CTA PENUTUP */}
-      <section className="mx-auto max-w-7xl px-5 -mb-16 relative z-20 md:px-8">
-        <div className="relative overflow-hidden rounded-2xl bg-teal-900 border border-teal-800 p-8 sm:p-12 text-white">
-          <div className="pointer-events-none absolute inset-0 pw-grid-dark opacity-40" aria-hidden="true" />
-          <div className="relative mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Mulai lindungi karyamu hari ini</h2>
-            <p className="mt-2 text-sm text-teal-100">Daftar di BSC Testnet, preview terpoison, vault terenkripsi, royalti ERC-2981.</p>
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Link href="/dashboard" className="interactive-btn rounded-xl bg-white px-7 py-3 text-sm font-bold text-teal-900 shadow-soft-md">Buka Workspace Kreator →</Link>
-              <a href="#cara-kerja" className="interactive-btn rounded-xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white hover:bg-white/15">Lihat cara kerja</a>
-            </div>
-            <div className="mt-6">
-              <NewsletterForm />
+      {/* 10. CTA PENUTUP — rapi, tidak overlap footer */}
+      <section className="bg-[#FDFCF7] border-t border-nusa-200 py-16 md:py-20">
+        <div className="mx-auto max-w-4xl px-5 md:px-8">
+          <div className="relative overflow-hidden rounded-2xl bg-teal-900 border border-teal-800 p-8 sm:p-10 md:p-12 text-white shadow-soft-lg">
+            <div className="pointer-events-none absolute inset-0 pw-grid-dark opacity-40" aria-hidden="true" />
+            <div className="relative text-center">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">Mulai lindungi karyamu hari ini</h2>
+              <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-teal-100">Daftar di BSC Testnet, preview terpoison, vault terenkripsi, royalti ERC-2981.</p>
+              <div className="mt-7 flex flex-wrap justify-center gap-3">
+                <Link href="/dashboard" className="interactive-btn inline-flex items-center justify-center rounded-xl bg-white px-7 py-3 text-sm font-bold text-teal-900 shadow-soft-md hover:bg-nusa-50">Buka Workspace Kreator →</Link>
+                <a href="#cara-kerja" className="interactive-btn inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white hover:bg-white/15">Lihat cara kerja</a>
+              </div>
+              <div className="mx-auto mt-8 max-w-xl border-t border-white/10 pt-7">
+                <p className="text-xs font-semibold tracking-widest text-teal-200 uppercase">Tetap update edukasi IP bukan spam</p>
+                <NewsletterForm />
+                <p className="mt-2 text-[11px] text-teal-200/70">Dengan berlangganan Anda menyetujui pembaruan edukatif. Bukan saran finansial/hukum.</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-white border-t border-nusa-200 pt-28 pb-12 text-nusa-900">
+      <footer className="bg-white border-t border-nusa-200 pt-12 pb-12 text-nusa-900">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="grid gap-10 md:grid-cols-12 lg:gap-12 pb-12 border-b border-nusa-200">
             <div className="md:col-span-4 space-y-4">
