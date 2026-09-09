@@ -2,11 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { AssetGallery } from "@/components/asset-gallery";
 import { IntroExperience } from "@/components/intro-experience";
-import { EmailAuth } from "@/components/email-auth";
 import { WalletConnectedBanner } from "@/components/wallet-connected-banner";
 import { BnbNetworkBadge } from "@/components/bnb-network-badge";
 import { NewsletterForm } from "@/components/newsletter-form";
-import { HeroPoisonDemo } from "@/components/hero-poison-demo";
 import { HelpTip } from "@/components/help-tip";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { SmoothScrollProvider } from "@/components/smooth-scroll";
@@ -43,6 +41,7 @@ const pillars = [
     desc: "Upload menjadi preview terpoison eksperimental untuk publik, lalu file asli terenkripsi di Vault. Lisensi on-chain mencatat provenance dan konsen.",
     href: "#cara-kerja",
   },
+
   {
     kicker: "Pilar 3: Understand",
     title: "Pahami, bukan dianjurkan",
@@ -83,63 +82,111 @@ const faqs = [
 export default function Home() {
   return (
     <SmoothScrollProvider>
-      <div className="min-h-screen text-nusa-900" style={{ background: "#F1EFE8" }}>
+      <div className="min-h-screen text-nusa-900" style={{ background: "#FDFCF7" }}>
       <IntroExperience />
       <WalletConnectedBanner />
 
-      {/* NAV */}
-      <header className="border-b border-nusa-200/80 bg-white/90 backdrop-blur-md sticky top-0 z-30">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center gap-2.5">
-              <Image src="/trovaya-logo.svg" alt="Trovaya logo" width={32} height={32} priority />
-              <span className="text-xl font-bold tracking-tight text-teal-900">Trovaya<span className="text-coral">.</span></span>
+      {/* NAV — sample2 compact, solid white, no translucency clash */}
+      <header className="sticky top-0 z-40 h-16 border-b border-nusa-200 bg-white">
+        <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-5 md:px-8">
+          <div className="flex items-center gap-8">
+            <Link href="/" className="flex items-center gap-2.5 shrink-0">
+              <Image src="/trovaya-logo.svg" alt="Trovaya logo" width={28} height={28} priority />
+              <span className="text-lg font-bold tracking-tight text-teal-900 leading-none">Trovaya<span className="text-coral">.</span> <span className="ml-1 hidden sm:inline text-[10px] font-medium tracking-widest text-nusa-400">IP PROTOCOL</span></span>
             </Link>
+            <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-nusa-600">
+              <a href="#cara-kerja" className="hover:text-teal-900 transition-colors">Cara Kerja</a>
+              <a href="#galeri" className="hover:text-teal-900 transition-colors">Marketplace</a>
+              <a href="#batasan" className="hover:text-teal-900 transition-colors">Edukasi</a>
+            </nav>
           </div>
-          <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold text-nusa-700">
-            <a href="#masalah" className="hover:text-teal-900 transition-colors">Masalah</a>
-            <a href="#pilar" className="hover:text-teal-900 transition-colors">Solusi</a>
-            <a href="#perbandingan" className="hover:text-teal-900 transition-colors">Perbandingan</a>
-            <a href="#cara-kerja" className="hover:text-teal-900 transition-colors">Cara Kerja</a>
-            <a href="#galeri" className="hover:text-teal-900 transition-colors">Katalog</a>
-            <Link href="/dashboard" className="text-teal-900 hover:text-teal-700 transition-colors font-bold">Workspace Kreator →</Link>
-          </nav>
-          <div className="flex items-center gap-3">
-            <EmailAuth />
-            <CustomConnectButton label="Hubungkan Wallet" accountStatus="avatar" chainStatus="icon" showBalance={false} />
+          <div className="flex items-center gap-3 shrink-0">
+            <span className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-3 py-1.5 text-[11px] font-bold text-teal-900 leading-none">● BNB TESTNET</span>
+            <Link href="/dashboard" className="inline-flex items-center justify-center rounded-lg bg-teal-900 px-5 py-2 text-xs font-bold text-white hover:bg-teal-700 transition-colors">Masuk</Link>
+            <CustomConnectButton label="" accountStatus="avatar" chainStatus="icon" showBalance={false} />
           </div>
         </div>
       </header>
 
-      {/* 1. HERO: klaim tajam + demo blur to clear */}
-      <section className="relative overflow-hidden border-b border-nusa-200 bg-white pt-10 pb-14 md:pt-16 md:pb-20">
-        <div className="pointer-events-none absolute inset-0 pw-grid-bg opacity-[0.035]" aria-hidden="true" />
-        <div className="pointer-events-none absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-nusa-200/60 to-transparent" aria-hidden="true" />
-        <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
-            <div className="lg:col-span-6">
-              <div className="inline-flex items-center gap-2 rounded-full bg-teal-50 border border-teal-200 px-3.5 py-1.5 text-xs font-semibold text-teal-900 mb-5">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" /> Consent-first IP registry · BSC Testnet
-              </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold tracking-tight text-nusa-900 leading-[1.05]">
-                Karyamu terlihat,<br /> <span className="text-teal-900">bukan terambil.</span>
-              </h1>
-              <p className="mt-4 text-base sm:text-lg leading-relaxed text-nusa-600 max-w-xl">
-                Preview publik terpoison untuk manusia tetap indah, untuk scraper jadi noise. File asli terkunci di Vault terenkripsi, hanya terbuka setelah lisensi & otorisasi terpisah.
-              </p>
-              <div className="mt-6 flex flex-wrap items-center gap-3">
-                <Link href="/dashboard" className="interactive-btn inline-flex items-center gap-2 rounded-xl bg-teal-900 px-7 py-3.5 text-sm font-bold text-white shadow-soft-md hover:bg-teal-700">Lindungi Karyamu →</Link>
-                <a href="#cara-kerja" className="interactive-btn inline-flex items-center gap-2 rounded-xl border border-nusa-300 bg-white px-6 py-3.5 text-sm font-semibold text-nusa-800 hover:bg-nusa-50">Lihat Cara Kerjanya</a>
-              </div>
-              <div className="mt-6 flex flex-wrap gap-2 text-xs">
-                <span className="rounded-full bg-white border border-nusa-200 px-3 py-1 font-medium text-nusa-700">Poison Engine: <span className="font-bold text-amber-700">Experimental</span></span>
-                <span className="rounded-full bg-white border border-nusa-200 px-3 py-1 font-medium text-nusa-700">Jaringan: <span className="font-bold">BSC Testnet</span> <HelpTip>Disebut juga jaringan blockchain untuk registrasi hash</HelpTip></span>
-              </div>
-              <p className="mt-3 text-xs leading-relaxed text-nusa-500">Bukti provenance & konsen, bukan pernyataan hak cipta otomatis. <span className="inline-flex items-center rounded bg-amber-50 border border-amber-200 px-1.5 py-0.5 text-[11px] font-bold text-amber-800 ml-1">Edukatif, bukan saran finansial/hukum</span></p>
+      {/* 1. HERO: sample2 — grid cream + dual preview card */}
+      <section className="relative overflow-hidden border-b border-nusa-200 bg-[#FDFCF7] pt-12 md:pt-16 pb-14 md:pb-16">
+        <div className="pointer-events-none absolute inset-0 opacity-[0.06]" aria-hidden="true" style={{ backgroundImage: "linear-gradient(to right, #D3D1C7 1px, transparent 1px), linear-gradient(to bottom, #D3D1C7 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+        <div className="mx-auto max-w-7xl px-5 md:px-8 relative">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white border border-nusa-200 px-3.5 py-1.5 text-[11px] font-bold tracking-widest text-nusa-600">
+              <span className="h-2 w-2 rounded-full bg-teal-700" /> PROTOKOL REGISTRASI & LISENSI IP DIGITAL
             </div>
-            <div className="lg:col-span-6">
-              <HeroPoisonDemo />
+            <h1 className="mt-6 text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold tracking-tight text-nusa-900 leading-[1.08]">
+              Karyamu Jadi Token.<br /> Aksesnya Kamu yang Atur.
+            </h1>
+            <div className="mt-7 flex flex-wrap justify-center gap-3">
+              <Link href="/dashboard" className="interactive-btn inline-flex items-center gap-2 rounded-lg bg-teal-900 px-7 py-3 text-sm font-bold text-white shadow-soft hover:bg-teal-700">Daftarkan Karya Saya <span aria-hidden>→</span></Link>
+              <a href="#cara-kerja" className="interactive-btn inline-flex items-center gap-2 rounded-lg border border-nusa-200 bg-white px-6 py-3 text-sm font-bold text-nusa-900 hover:bg-nusa-50">Lihat Alur Kerja <span aria-hidden>↗</span></a>
             </div>
+            <p className="mt-3 text-xs text-nusa-500">Bukti provenance & konsen di BSC Testnet · <span className="rounded bg-amber-50 border border-amber-200 px-1.5 py-0.5 font-bold text-amber-800">Edukatif, bukan saran finansial/hukum</span></p>
+          </div>
+
+          {/* Dual preview card — presis seperti sample2, tanpa bentrok negative margin */}
+          <div className="mx-auto mt-10 max-w-5xl rounded-2xl border border-nusa-200 bg-white p-4 sm:p-6 shadow-soft-lg">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-nusa-50 border border-nusa-100 px-4 py-3 text-[11px]">
+              <div className="flex items-center gap-4 font-semibold text-nusa-600">
+                <span className="uppercase tracking-widest">Asset Protocol</span>
+                <span className="font-mono text-nusa-900">TRV-ID-2025-0894</span>
+                <span className="hidden sm:inline text-nusa-300">•</span>
+                <span className="hidden sm:inline font-medium">Standard ERC-721IP • BNB Chain Ledger</span>
+              </div>
+              <span className="inline-flex items-center gap-1.5 font-semibold text-teal-900"><span className="grid h-5 w-5 place-items-center rounded-full bg-teal-50 border border-teal-200 text-[10px]">✓</span> DJKI Verified Registry</span>
+            </div>
+            <div className="relative mt-4 grid gap-4 md:grid-cols-2">
+              {/* Left: Pratinjau Publik */}
+              <div className="rounded-xl border border-nusa-200 bg-[#FAF9F5] p-3">
+                <div className="flex items-center justify-between text-[11px] font-bold">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white border border-nusa-200 px-2.5 py-1 text-nusa-700">🔒 PRATINJAU PUBLIK</span>
+                  <span className="text-nusa-500 font-medium">Layer 01: Scramble Glaze</span>
+                </div>
+                <div className="relative mt-3 aspect-[4/3] overflow-hidden rounded-lg bg-nusa-100 border border-nusa-200">
+                  <Image src="/assets/flower-photo.jpg" alt="Pratinjau terproteksi" fill className="object-cover opacity-90" sizes="50vw" />
+                  <div className="absolute inset-0 backdrop-blur-[12px] bg-teal-900/10" />
+                  <div className="absolute inset-0 opacity-20 parang-watermark" aria-hidden="true" />
+                  <div className="absolute inset-0 grid place-items-center p-4">
+                    <div className="rounded-xl bg-white/90 backdrop-blur border border-nusa-200 px-4 py-3 text-center shadow-soft">
+                      <div className="mx-auto grid h-8 w-8 place-items-center rounded-lg bg-white border border-nusa-200 shadow-sm">🛡️</div>
+                      <p className="mt-2 text-[11px] font-bold tracking-widest text-nusa-700">AI POISONING GLAZE</p>
+                      <p className="text-[11px] font-medium text-nusa-500">SHA-256 Preview</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-3 flex justify-between text-[11px] font-medium">
+                  <span className="text-nusa-600">Status: Terkunci • Resolusi Rendah</span>
+                  <span className="text-danger font-semibold">● Watermark Aktif</span>
+                </div>
+              </div>
+              {/* Center connector — absolute, tidak pakai negative margin */}
+              <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 md:flex">
+                <span className="rounded-full bg-teal-900 px-3.5 py-1.5 text-[11px] font-bold text-white shadow-soft-md border border-teal-700">TOKEN LISENSI →</span>
+              </div>
+              {/* Right: Akses Token Aktif */}
+              <div className="rounded-xl border border-nusa-200 bg-[#FAF9F5] p-3">
+                <div className="flex items-center justify-between text-[11px] font-bold">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-2.5 py-1 text-teal-900">🔓 AKSES TOKEN AKTIF</span>
+                  <span className="text-nusa-500 font-medium">Vault Validated #9102</span>
+                </div>
+                <div className="relative mt-3 aspect-[4/3] overflow-hidden rounded-lg bg-white border border-nusa-200">
+                  <Image src="/assets/flower-photo.jpg" alt="Original master clear" fill className="object-cover" sizes="50vw" />
+                  <div className="absolute right-2 top-2 rounded-md bg-white border border-nusa-200 px-2.5 py-1 text-[11px] font-bold text-nusa-700 shadow-soft flex items-center gap-1.5"><span className="grid h-3.5 w-3.5 place-items-center rounded-full border border-teal-600 text-[8px]">✓</span> Original 4K Master</div>
+                </div>
+                <div className="mt-3 flex justify-between text-[11px] font-medium">
+                  <span className="text-nusa-600">Status: Vault Terbuka • IPFS CID Decrypted</span>
+                  <span className="text-teal-700 font-semibold">● Lisensi Penuh</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-3 text-xs leading-relaxed border-t border-nusa-200/60 pt-8">
+            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">🏛</span><div><p className="font-bold text-nusa-900">Bukti Kepemilikan On-Chain</p><p className="text-nusa-600 mt-1">Pencatatan kepemilikan definitif bersertifikasi di BNB Chain ledger yang sah secara yuridis.</p></div></div>
+            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">🛡️</span><div><p className="font-bold text-nusa-900">Preview Aman dari AI Scraping</p><p className="text-nusa-600 mt-1">Teknologi watermarking dan perturbasi neural memproteksi karya dari pencurian model generatif.</p></div></div>
+            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">📄</span><div><p className="font-bold text-nusa-900">Lisensi Transparan</p><p className="text-nusa-600 mt-1">Hak komersial, derivatif, dan royalti diatur otomatis via smart contract berstandar global.</p></div></div>
           </div>
         </div>
       </section>
@@ -305,26 +352,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 10. CTA PENUTUP */}
-      <section className="mx-auto max-w-7xl px-5 -mb-16 relative z-20 md:px-8">
-        <div className="relative overflow-hidden rounded-2xl bg-teal-900 border border-teal-800 p-8 sm:p-12 text-white">
-          <div className="pointer-events-none absolute inset-0 pw-grid-dark opacity-40" aria-hidden="true" />
-          <div className="relative mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Mulai lindungi karyamu hari ini</h2>
-            <p className="mt-2 text-sm text-teal-100">Daftar di BSC Testnet, preview terpoison, vault terenkripsi, royalti ERC-2981.</p>
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              <Link href="/dashboard" className="interactive-btn rounded-xl bg-white px-7 py-3 text-sm font-bold text-teal-900 shadow-soft-md">Buka Workspace Kreator →</Link>
-              <a href="#cara-kerja" className="interactive-btn rounded-xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white hover:bg-white/15">Lihat cara kerja</a>
-            </div>
-            <div className="mt-6">
-              <NewsletterForm />
+      {/* 10. CTA PENUTUP — rapi, tidak overlap footer */}
+      <section className="bg-[#FDFCF7] border-t border-nusa-200 py-16 md:py-20">
+        <div className="mx-auto max-w-4xl px-5 md:px-8">
+          <div className="relative overflow-hidden rounded-2xl bg-teal-900 border border-teal-800 p-8 sm:p-10 md:p-12 text-white shadow-soft-lg">
+            <div className="pointer-events-none absolute inset-0 pw-grid-dark opacity-40" aria-hidden="true" />
+            <div className="relative text-center">
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">Mulai lindungi karyamu hari ini</h2>
+              <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-teal-100">Daftar di BSC Testnet, preview terpoison, vault terenkripsi, royalti ERC-2981.</p>
+              <div className="mt-7 flex flex-wrap justify-center gap-3">
+                <Link href="/dashboard" className="interactive-btn inline-flex items-center justify-center rounded-xl bg-white px-7 py-3 text-sm font-bold text-teal-900 shadow-soft-md hover:bg-nusa-50">Buka Workspace Kreator →</Link>
+                <a href="#cara-kerja" className="interactive-btn inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white hover:bg-white/15">Lihat cara kerja</a>
+              </div>
+              <div className="mx-auto mt-8 max-w-xl border-t border-white/10 pt-7">
+                <p className="text-xs font-semibold tracking-widest text-teal-200 uppercase">Tetap update edukasi IP bukan spam</p>
+                <NewsletterForm />
+                <p className="mt-2 text-[11px] text-teal-200/70">Dengan berlangganan Anda menyetujui pembaruan edukatif. Bukan saran finansial/hukum.</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-white border-t border-nusa-200 pt-28 pb-12 text-nusa-900">
+      <footer className="bg-white border-t border-nusa-200 pt-12 pb-12 text-nusa-900">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="grid gap-10 md:grid-cols-12 lg:gap-12 pb-12 border-b border-nusa-200">
             <div className="md:col-span-4 space-y-4">
