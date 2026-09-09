@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { CustomConnectButton } from "@/components/custom-connect-button";
 import { formatEther } from "viem";
@@ -12,7 +11,6 @@ import { useAssets } from "@/hooks/use-assets";
 import { getClientContractAddresses } from "@/lib/contracts";
 import { useLicenseProceeds } from "@/hooks/use-license-proceeds";
 import { OperationStatus } from "@/components/operation-status";
-import { BnbTestnetBadge } from "@/components/bnb-network-badge";
 import { AssetReviewer } from "@/components/asset-reviewer";
 import type { AssetReviewInput } from "@/lib/reviewer-types";
 
