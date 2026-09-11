@@ -41,7 +41,7 @@ def health() -> dict[str, str]:
 @app.post("/api/v1/poison", response_model=PoisonResponse, tags=["protection"])
 async def poison_image(
     file: Annotated[UploadFile, File()],
-    intensity: Annotated[float, Form(ge=0.0, le=1.0)] = 0.35,
+    intensity: Annotated[float, Form(ge=0.0, le=1.0)] = 0.80,
 ) -> PoisonResponse:
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE, "file must be an image")

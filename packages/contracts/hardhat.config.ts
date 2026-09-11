@@ -17,7 +17,7 @@ const config: HardhatUserConfig = {
       chainId: 31337,
       url: process.env.LOCAL_CHAIN_RPC_URL ?? "http://127.0.0.1:8545",
     },
-    bscTestnet: {
+    bscTestnet : {
       chainId: 97,
       url: process.env.BSC_TESTNET_RPC_URL ?? "https://data-seed-prebsc-1-s1.bnbchain.org:8545",
       accounts: deployerAccounts,

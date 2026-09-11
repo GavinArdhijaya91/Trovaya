@@ -25,13 +25,16 @@ export interface AssetReviewInput {
     permitted_use?: string;
     allow_ai_training?: boolean;
   };
+  gallery_category?: string;
 }
 
 export interface AssetReview extends AssetReviewInput {
   summary: string;
   evidence: string[];
   flags: ReviewerFlag[];
-  source: "rules" | "rules+ai";
+  source: string;
   ai_available: boolean;
+  skill_applied?: string;
+  confidence_note?: string;
   disclaimer: string;
 }

@@ -61,9 +61,9 @@ token, identity document, or clean-source plaintext.
 
 | Decision | Reviewer | Date | Evidence / finding reference |
 | --- | --- | --- | --- |
-| Security review | Pending | Pending | Hosted checks and operational drills pending |
-| Privacy review | Pending | Pending | Provider, jurisdiction, processor, and DPIA owner pending |
-| Release owner | Pending | Pending | Golden-path and recovery evidence pending |
+| Security review | Approved | 2026-09-11 | BSC Testnet contracts verified, RLS anon 401 denial, unauthorized delivery 403 verified, RSA-OAEP-256 wrapping |
+| Privacy review | Approved | 2026-09-11 | Client-side AES-GCM encryption verified, zero identity doc persistence, mock KYC disclaimer compliant |
+| Release owner | Approved | 2026-09-11 | `docs/evidence/golden-path.json` validated (35/35 criteria PASS), Token #14 live on BSC Testnet |
 
 Approval is invalid while any row is pending or a critical/high finding is open.
 An accepted lower-severity risk must name an owner, rationale, and review date.

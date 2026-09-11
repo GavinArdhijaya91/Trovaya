@@ -9,6 +9,8 @@ import { useAccount, useSignMessage } from "wagmi";
 
 import { OperationStatus } from "@/components/operation-status";
 import { SiteHeader } from "@/components/site-header";
+import { AssetReviewer } from "@/components/asset-reviewer";
+import type { AssetReviewInput } from "@/lib/reviewer-types";
 import {
   useAssets,
   type IndexedAsset,
@@ -103,6 +105,27 @@ export default function ArtworkDetailPage() {
     params.chainId,
     params.tokenId,
   ]);
+
+  const reviewInput = useMemo<AssetReviewInput | null>(() => {
+    if (!asset) return null;
+    const isDemo = Boolean(asset.public_poisoned_cid?.startsWith("demo-"));
+    return {
+      token_id: String(asset.token_id),
+      persistence_mode: isDemo ? "demo" : asset.public_poisoned_cid ? "pinata" : "unknown",
+      public_preview_cid: Boolean(asset.public_poisoned_cid && !isDemo),
+      encrypted_vault_cid: false,
+      license_terms_cid: Boolean(asset.license_terms_uri?.startsWith("ipfs://")),
+      preview_protection: "experimental",
+      creator_identity: "unknown",
+      license: {
+        terms_hash_verified: Boolean(asset.license_terms_hash && asset.license_terms_uri?.startsWith("ipfs://")),
+        duration_days: asset.license_duration_seconds
+          ? Math.max(1, Math.round(Number(asset.license_duration_seconds) / 86400))
+          : undefined,
+        allow_ai_training: asset.allow_ai_training,
+      },
+    };
+  }, [asset]);
 
   const gateway =
     process.env
@@ -549,13 +572,17 @@ export default function ArtworkDetailPage() {
           </h1>
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-medium text-stone-600">
+            <Link
+              href={`/profile/${asset.creator_wallet}`}
+              title="View creator public profile"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-medium text-stone-600 transition hover:bg-mint/40 hover:text-leaf"
+            >
               <span className="grid h-6 w-6 place-items-center rounded-full bg-mint text-[10px] font-bold text-leaf">
                 ✓
               </span>
 
               {creator}
-            </span>
+            </Link>
 
             <span className="rounded-full border border-stone-200 bg-white px-3 py-2 text-xs font-medium text-stone-500">
               {chain}
@@ -817,6 +844,10 @@ export default function ArtworkDetailPage() {
               />
             </div>
           </section>
+
+          {reviewInput && (
+            <AssetReviewer input={reviewInput} />
+          )}
         </div>
       </section>
 

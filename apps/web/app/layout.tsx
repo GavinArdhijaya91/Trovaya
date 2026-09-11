@@ -11,7 +11,7 @@ const inter = Inter({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-export const metadata: Metadata = {
+export const metadata : Metadata = {
   title: "Trovaya | Protect your creations",
   description: "Consent-first IP protection for creators and UMKMs.",
 };

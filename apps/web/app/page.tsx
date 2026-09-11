@@ -58,7 +58,7 @@ const comparisonRows = [
 ];
 
 const steps = [
-  { n: "01", title: "Upload karya", desc: "Pilih file PNG/JPG/WebP maks 15 MB.", maturity: "-" },
+  { n: "01", title: "Upload karya", desc: "Pilih file PNG/JPG/WebP maks 15 MB.", maturity: "Demo/Mock" },
   { n: "02", title: "Protected Preview", desc: "Poison Engine buat versi terdistorsi untuk publik.", maturity: "Experimental" },
   { n: "03", title: "Encrypt & Mint", desc: "File asli dienkripsi di perangkat → simpan ke IPFS → registrasi hash di BSC Testnet.", maturity: "BSC Testnet" },
   { n: "04", title: "Beli Lisensi", desc: "Pembeli bayar biaya lisensi komersial (BNB Testnet).", maturity: "BSC Testnet" },
@@ -135,29 +135,29 @@ export default function Home() {
                 <span className="hidden sm:inline text-nusa-300">•</span>
                 <span className="hidden sm:inline font-medium">Standard ERC-721IP • BNB Chain Ledger</span>
               </div>
-              <span className="inline-flex items-center gap-1.5 font-semibold text-teal-900"><span className="grid h-5 w-5 place-items-center rounded-full bg-teal-50 border border-teal-200 text-[10px]">✓</span> DJKI Verified Registry</span>
+              <span className="inline-flex items-center gap-1.5 font-semibold text-teal-900"><span className="grid h-5 w-5 place-items-center rounded-full bg-teal-50 border border-teal-200 text-[10px]">✓</span> On-Chain Registry · BSC Testnet · Tx Verifiable</span>
             </div>
             <div className="relative mt-4 grid gap-4 md:grid-cols-2">
               {/* Left: Pratinjau Publik */}
               <div className="rounded-xl border border-nusa-200 bg-[#FAF9F5] p-3">
                 <div className="flex items-center justify-between text-[11px] font-bold">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-white border border-nusa-200 px-2.5 py-1 text-nusa-700">🔒 PRATINJAU PUBLIK</span>
-                  <span className="text-nusa-500 font-medium">Layer 01: Scramble Glaze</span>
+                  <span className="text-nusa-500 font-medium">Layer 01: Perturbasi Bounded</span>
                 </div>
                 <div className="relative mt-3 aspect-[4/3] overflow-hidden rounded-lg bg-nusa-100 border border-nusa-200">
-                  <Image src="/assets/flower-photo.jpg" alt="Pratinjau terproteksi" fill className="object-cover opacity-90" sizes="50vw" />
-                  <div className="absolute inset-0 backdrop-blur-[12px] bg-teal-900/10" />
+                  <Image src="/assets/flower-photo-poisoned.png" alt="Pratinjau terproteksi poison-engine" fill className="object-cover" sizes="50vw" />
+                  <div className="absolute bottom-2 left-2 right-2 z-10 text-center">
+                    <span className="inline-block rounded bg-black/75 px-2.5 py-0.5 text-[9px] font-mono text-white/95">Output poison-engine · Watercolor Wash 80%</span>
+                  </div>
                   <div className="absolute inset-0 opacity-20 parang-watermark" aria-hidden="true" />
-                  <div className="absolute inset-0 grid place-items-center p-4">
-                    <div className="rounded-xl bg-white/90 backdrop-blur border border-nusa-200 px-4 py-3 text-center shadow-soft">
-                      <div className="mx-auto grid h-8 w-8 place-items-center rounded-lg bg-white border border-nusa-200 shadow-sm">🛡️</div>
-                      <p className="mt-2 text-[11px] font-bold tracking-widest text-nusa-700">AI POISONING GLAZE</p>
-                      <p className="text-[11px] font-medium text-nusa-500">SHA-256 Preview</p>
+                  <div className="absolute top-2 left-2">
+                    <div className="rounded-lg bg-black/70 backdrop-blur px-2 py-1 text-[9px] font-mono text-emerald-300 border border-white/10">
+                      SHA-256: 0x7012...6f27
                     </div>
                   </div>
                 </div>
                 <div className="mt-3 flex justify-between text-[11px] font-medium">
-                  <span className="text-nusa-600">Status: Terkunci • Resolusi Rendah</span>
+                  <span className="text-nusa-600">Status: Perturbasi Bounded • Warna Vignette</span>
                   <span className="text-danger font-semibold">● Watermark Aktif</span>
                 </div>
               </div>
@@ -169,7 +169,7 @@ export default function Home() {
               <div className="rounded-xl border border-nusa-200 bg-[#FAF9F5] p-3">
                 <div className="flex items-center justify-between text-[11px] font-bold">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-2.5 py-1 text-teal-900">🔓 AKSES TOKEN AKTIF</span>
-                  <span className="text-nusa-500 font-medium">Vault Validated #9102</span>
+                  <span className="text-nusa-500 font-medium">Vault Terotorisasi #9102</span>
                 </div>
                 <div className="relative mt-3 aspect-[4/3] overflow-hidden rounded-lg bg-white border border-nusa-200">
                   <Image src="/assets/flower-photo.jpg" alt="Original master clear" fill className="object-cover" sizes="50vw" />
@@ -185,7 +185,7 @@ export default function Home() {
 
           <div className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-3 text-xs leading-relaxed border-t border-nusa-200/60 pt-8">
             <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">🏛</span><div><p className="font-bold text-nusa-900">Bukti Kepemilikan On-Chain</p><p className="text-nusa-600 mt-1">Pencatatan kepemilikan definitif bersertifikasi di BNB Chain ledger yang sah secara yuridis.</p></div></div>
-            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">🛡️</span><div><p className="font-bold text-nusa-900">Preview Aman dari AI Scraping</p><p className="text-nusa-600 mt-1">Teknologi watermarking dan perturbasi neural memproteksi karya dari pencurian model generatif.</p></div></div>
+            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">🛡️</span><div><p className="font-bold text-nusa-900">Preview Terpoison Eksperimental</p><p className="text-nusa-600 mt-1">Preview terpoison eksperimental ditampilkan publik; file asli terenkripsi di Vault dengan AES-256.</p></div></div>
             <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">📄</span><div><p className="font-bold text-nusa-900">Lisensi Transparan</p><p className="text-nusa-600 mt-1">Hak komersial, derivatif, dan royalti diatur otomatis via smart contract berstandar global.</p></div></div>
           </div>
         </div>

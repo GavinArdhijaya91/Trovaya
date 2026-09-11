@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { CustomConnectButton } from "@/components/custom-connect-button";
 import { formatEther } from "viem";
@@ -14,7 +15,7 @@ import { OperationStatus } from "@/components/operation-status";
 import { AssetReviewer } from "@/components/asset-reviewer";
 import type { AssetReviewInput } from "@/lib/reviewer-types";
 
-type Tab = "overview" | "studio" | "assets" | "licenses" | "trust";
+type Tab = "overview" | "studio" | "assets" | "licenses" | "trust" | "reputation";
 
 function buildReviewInput(asset: NonNullable<ReturnType<typeof useAssets>["data"]>[number]): AssetReviewInput {
   const isDemo = Boolean(asset.public_poisoned_cid?.startsWith("demo-"));
@@ -37,11 +38,12 @@ function buildReviewInput(asset: NonNullable<ReturnType<typeof useAssets>["data"
 }
 
 const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
-  { id: "overview",  label: "Dashboar", icon: "▦", subtitle: "Ringkasan & saldo" },
-  { id: "assets",   label: "Marketplace",  icon: "🏪", subtitle: "Katalog aset" },
+  { id: "overview",  label: "Dashboard", icon: "▦", subtitle: "Ringkasan & saldo" },
+  { id: "assets",   label: "Aset Saya",  icon: "🎨", subtitle: "Katalog karya" },
   { id: "studio",   label: "Studio Proteksi",  icon: "🛡️", subtitle: "Upload & lisensi" },
+  { id: "reputation", label: "Reputasi & Badge", icon: "🏅", subtitle: "Status kredibilitas" },
   { id: "licenses", label: "Aktivitas",  icon: "📑", subtitle: "Riwayat transaksi" },
-  { id: "trust",    label: "Profil",      icon: "👤", subtitle: "Keamanan & KYC" },
+  { id: "trust",    label: "Profil & KYC",      icon: "👤", subtitle: "Keamanan akun" },
 ];
 
 export function CreatorDashboard(){
@@ -96,10 +98,29 @@ export function CreatorDashboard(){
             );
           })}
         </nav>
-        <div className="p-3 border-t border-nusa-200 text-[11px] text-nusa-500 space-y-1">
+        <div className="p-3 border-t border-nusa-200 text-[11px] text-nusa-500 space-y-2">
           <p className="flex justify-between font-bold">NODE HEALTH <span className="text-teal-700">● Operational</span></p>
           <p className="flex justify-between">Block Sync <span className="font-mono text-nusa-700">#38,912,401</span></p>
           <p className="truncate font-mono text-[10px] leading-tight">{shortAddress}</p>
+
+          <div className="pt-2 border-t border-nusa-200 space-y-1.5">
+            <Link
+              href="/marketplace"
+              className="flex items-center justify-center gap-2 w-full rounded-xl bg-teal-900 px-3 py-2 text-xs font-bold text-white hover:bg-teal-800 transition"
+            >
+              <span>🏪</span>
+              <span>Buka Marketplace</span>
+            </Link>
+
+            {account.address && (
+              <Link
+                href={`/profile/${account.address}`}
+                className="flex items-center justify-center gap-1 text-[10px] font-semibold text-teal-800 hover:underline"
+              >
+                <span>Lihat Profil Publik Saya ↗</span>
+              </Link>
+            )}
+          </div>
         </div>
       </aside>
 
@@ -429,6 +450,112 @@ export function CreatorDashboard(){
                   </p>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* ════════════ 06. REPUTASI & BADGE (BARU) ════════════ */}
+          {activeTab === "reputation" && (
+            <div className="space-y-6">
+              <div className="border-b border-nusa-200 pb-5">
+                <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">
+                  Kredibilitas Protokol
+                </span>
+                <h1 className="text-3xl font-extrabold text-nusa-900 tracking-tight mt-3">
+                  Reputasi & Lencana Kreator
+                </h1>
+                <p className="text-xs text-nusa-500 mt-1">
+                  Bukti rekam jejak integritas hak cipta dan lisensi on-chain yang transparan.
+                </p>
+              </div>
+
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                {/* Badge 1: Wallet Linked */}
+                <div className={`rounded-3xl border p-5 shadow-soft transition ${
+                  account.isConnected ? "border-emerald-200 bg-white" : "border-stone-200 bg-stone-50/70 opacity-60"
+                }`}>
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl">🔗</span>
+                    <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                      account.isConnected ? "bg-emerald-100 text-emerald-800" : "bg-stone-200 text-stone-600"
+                    }`}>
+                      {account.isConnected ? "Aktif" : "Belum"}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-bold text-sm text-nusa-900">Wallet Terhubung</h3>
+                  <p className="mt-1 text-xs text-nusa-600 leading-relaxed">
+                    Identitas dompet Web3 telah terhubung ke node jaringan blockchain.
+                  </p>
+                </div>
+
+                {/* Badge 2: On-chain Publisher */}
+                <div className={`rounded-3xl border p-5 shadow-soft transition ${
+                  records.length > 0 ? "border-emerald-200 bg-white" : "border-stone-200 bg-stone-50/70 opacity-60"
+                }`}>
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl">🎨</span>
+                    <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                      records.length > 0 ? "bg-emerald-100 text-emerald-800" : "bg-stone-200 text-stone-600"
+                    }`}>
+                      {records.length > 0 ? `${records.length} Karya` : "0 Karya"}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-bold text-sm text-nusa-900">Penerbit IP On-Chain</h3>
+                  <p className="mt-1 text-xs text-nusa-600 leading-relaxed">
+                    Telah mencetak karya dengan hash metadata dan vault permanen di blockchain.
+                  </p>
+                </div>
+
+                {/* Badge 3: Anti-Scraping Pioneer */}
+                <div className={`rounded-3xl border p-5 shadow-soft transition ${
+                  protectedFromAI > 0 ? "border-emerald-200 bg-white" : "border-stone-200 bg-stone-50/70 opacity-60"
+                }`}>
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl">🛡️</span>
+                    <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                      protectedFromAI > 0 ? "bg-emerald-100 text-emerald-800" : "bg-stone-200 text-stone-600"
+                    }`}>
+                      {protectedFromAI > 0 ? "Aktif" : "Belum"}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-bold text-sm text-nusa-900">Pelindung Anti-AI</h3>
+                  <p className="mt-1 text-xs text-nusa-600 leading-relaxed">
+                    Menerapkan proteksi poisoned derivative dan larangan pelatihan AI tanpa izin.
+                  </p>
+                </div>
+
+                {/* Badge 4: SBT Coming Soon */}
+                <div className="rounded-3xl border border-dashed border-stone-300 bg-white/60 p-5 shadow-soft">
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl">🏅</span>
+                    <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-[10px] font-bold text-amber-800">
+                      Riset v2
+                    </span>
+                  </div>
+                  <h3 className="mt-4 font-bold text-sm text-nusa-900">Soulbound Token (SBT)</h3>
+                  <p className="mt-1 text-xs text-nusa-600 leading-relaxed">
+                    Lencana reputasi non-transferable on-chain yang terikat dengan identitas DJKI.
+                  </p>
+                </div>
+              </div>
+
+              {/* Public Profile CTA Banner */}
+              {account.address && (
+                <div className="rounded-3xl border border-teal-200 bg-gradient-to-r from-teal-50 to-emerald-50 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h3 className="font-bold text-base text-teal-900">Halaman Profil Publik Kreator Anda</h3>
+                    <p className="text-xs text-teal-700 mt-0.5">
+                      Bagikan tautan profil publik ini kepada calon pembeli lisensi dan kurator.
+                    </p>
+                  </div>
+                  <Link
+                    href={`/profile/${account.address}`}
+                    className="inline-flex items-center gap-2 rounded-xl bg-teal-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-teal-800 transition shrink-0"
+                  >
+                    <span>Buka Halaman Profil</span>
+                    <span>↗</span>
+                  </Link>
+                </div>
+              )}
             </div>
           )}
 

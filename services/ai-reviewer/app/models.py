@@ -30,6 +30,7 @@ class AssetReviewRequest(BaseModel):
     original_size_bytes: int | None = Field(default=None, ge=0, le=15 * 1024 * 1024)
     original_extension: Literal["png", "jpg", "webp"] | None = None
     license: LicenseEvidence = Field(default_factory=LicenseEvidence)
+    gallery_category: str | None = Field(default=None, max_length=100)
 
 
 class ReviewFlag(BaseModel):
@@ -43,6 +44,8 @@ class ReviewResponse(BaseModel):
     summary: str
     evidence: list[str]
     flags: list[ReviewFlag]
-    source: Literal["rules", "rules+ai"]
+    source: str = "rules"
     ai_available: bool
+    skill_applied: str | None = None
+    confidence_note: str | None = None
     disclaimer: str = "Informasi edukatif, bukan rekomendasi pembelian atau nasihat finansial/hukum."
