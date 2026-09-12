@@ -1,9 +1,5 @@
-from typing import TYPE_CHECKING
-
 from .models import AssetReviewRequest, ReviewFlag
-
-if TYPE_CHECKING:
-    from .skills import SkillDefinition
+from .skills import SkillDefinition
 
 
 def build_evidence(request: AssetReviewRequest, skill: SkillDefinition | None = None) -> list[str]:

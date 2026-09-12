@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import logging
 import os
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .models import AssetReviewRequest
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -103,7 +106,7 @@ def load_yaml_skills(directory: str) -> dict[str, SkillDefinition]:
         return skills
 
     for filename in os.listdir(directory):
-        if not (filename.endswith(".yaml") or filename.endswith(".yml")):
+        if not filename.endswith((".yaml", ".yml")):
             continue
         filepath = os.path.join(directory, filename)
         try:
@@ -119,7 +122,8 @@ def load_yaml_skills(directory: str) -> dict[str, SkillDefinition]:
                     flags_extra=list(data.get("flags_extra", [])),
                     evidence_boost=list(data.get("evidence_boost", [])),
                 )
-        except Exception:
+        except Exception as exc:  # noqa: BLE001 - skip malformed skill files
+            logger.debug("Skipping skill file %s: %s", filepath, exc)
             continue
 
     return skills
