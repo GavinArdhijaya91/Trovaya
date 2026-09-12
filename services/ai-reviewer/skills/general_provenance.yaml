@@ -1,0 +1,8 @@
+id: general_provenance
+title: "General Provenance & Licensing Audit"
+description: "Pemeriksaan standar integritas hash, preview publik, dan catatan provenance kreator."
+system_prompt_extra: |
+  Konteks: Audit umum integritas karya on-chain Trovaya Protocol.
+  Fokus perhatian: Tinjau konsistensi metadata hash, izin AI training, dan keberadaan konten vault terenkripsi.
+evidence_boost: []
+flags_extra: []

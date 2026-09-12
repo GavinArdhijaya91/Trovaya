@@ -1,7 +1,8 @@
 from .models import AssetReviewRequest, ReviewFlag
+from .skills import SkillDefinition
 
 
-def build_evidence(request: AssetReviewRequest) -> list[str]:
+def build_evidence(request: AssetReviewRequest, skill: SkillDefinition | None = None) -> list[str]:
     evidence: list[str] = []
     if request.metadata_hash_verified:
         evidence.append("Hash metadata cocok dengan referensi yang diberikan.")
@@ -24,10 +25,12 @@ def build_evidence(request: AssetReviewRequest) -> list[str]:
     if request.license.allow_ai_training is not None:
         consent = "diizinkan" if request.license.allow_ai_training else "tidak diizinkan"
         evidence.append(f"Consent pelatihan AI tercatat: {consent}.")
+    if skill and skill.evidence_boost:
+        evidence.extend(skill.evidence_boost)
     return evidence
 
 
-def build_flags(request: AssetReviewRequest) -> list[ReviewFlag]:
+def build_flags(request: AssetReviewRequest, skill: SkillDefinition | None = None) -> list[ReviewFlag]:
     flags: list[ReviewFlag] = []
     if request.preview_protection == "experimental":
         flags.append(ReviewFlag(code="EXPERIMENTAL_PROTECTION", severity="info", message="Protected preview masih eksperimental dan tidak membuktikan pencegahan scraping."))
@@ -43,8 +46,15 @@ def build_flags(request: AssetReviewRequest) -> list[ReviewFlag]:
         flags.append(ReviewFlag(code="LICENSE_TERMS_UNVERIFIED", severity="warning", message="Hash terms lisensi belum diverifikasi."))
     if request.license.allow_ai_training is False:
         flags.append(ReviewFlag(code="AI_TRAINING_NOT_ALLOWED", severity="info", message="Terms mencatat bahwa pelatihan AI tidak diizinkan."))
+    if skill and skill.flags_extra:
+        for f in skill.flags_extra:
+            flags.append(ReviewFlag(
+                code=f.get("code", "SKILL_FLAG"),
+                severity=f.get("severity", "info"),
+                message=f.get("message", ""),
+            ))
     return flags
 
 
-def rules_review(request: AssetReviewRequest) -> tuple[list[str], list[ReviewFlag]]:
-    return build_evidence(request), build_flags(request)
+def rules_review(request: AssetReviewRequest, skill: SkillDefinition | None = None) -> tuple[list[str], list[ReviewFlag]]:
+    return build_evidence(request, skill), build_flags(request, skill)

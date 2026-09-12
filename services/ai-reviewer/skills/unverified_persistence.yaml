@@ -1,0 +1,11 @@
+id: unverified_persistence
+title: "Decentralized Persistence Diligence"
+description: "Audit penyimpanan saat asset belum menggunakan Pinata IPFS terverifikasi."
+system_prompt_extra: |
+  Konteks: Konten media belum disimpan di Pinata gateway terdedikasi atau masih berupa demo.
+  Fokus perhatian: Ingatkan bahwa integritas desentralisasi belum terbukti permanen di jaringan IPFS.
+evidence_boost: []
+flags_extra:
+  - code: "PERSISTENCE_UNVERIFIED_NOTICE"
+    severity: "warning"
+    message: "Konten belum dibuktikan permanen di gateway IPFS resmi."

@@ -1,0 +1,10 @@
+id: ai_protected_asset
+title: "Protected Anti-Scraping Audit"
+description: "Audit perlindungan karya dari scraping dan pelatihan model AI tanpa izin."
+system_prompt_extra: |
+  Konteks: Kreator memilih proteksi ketat larangan pelatihan AI.
+  Fokus perhatian: Preview publik dilindungi poisoned filter, izin AI bernilai false,
+  dan hak cipta moral kreator terlindungi secara on-chain.
+evidence_boost:
+  - "Klausul larangan pelatihan AI tercatat secara kriptografis."
+flags_extra: []

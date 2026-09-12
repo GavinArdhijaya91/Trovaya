@@ -1,0 +1,10 @@
+id: ai_dataset_buyer
+title: "AI Dataset Buyer Diligence"
+description: "Pemeriksaan kelayakan lisensi untuk pembeli dataset dan pengembang model AI."
+system_prompt_extra: |
+  Konteks: Ini adalah evaluasi untuk pembeli dataset pelatihan model AI atau data scientist.
+  Fokus perhatian: Izin pelatihan AI terkonfirmasi on-chain, persistensi Pinata IPFS utuh,
+  dan klausul non-eksklusifitas/hak komersial.
+evidence_boost:
+  - "Izin pelatihan AI terkonfirmasi dalam terms lisensi."
+flags_extra: []

@@ -1,0 +1,12 @@
+id: incomplete_license
+title: "Incomplete License Terms Audit"
+description: "Pemeriksaan khusus bila hash terms lisensi belum diverifikasi."
+system_prompt_extra: |
+  Konteks: Dokumen terms lisensi belum diverifikasi hash-nya.
+  Fokus perhatian: Berikan peringatan agar calon pembeli memeriksa detail perjanjian hukum
+  secara cermat sebelum mengeksekusi pembelian lisensi.
+evidence_boost: []
+flags_extra:
+  - code: "TERMS_DILIGENCE_REQUIRED"
+    severity: "warning"
+    message: "Dokumen lisensi memerlukan verifikasi manual sebelum hak komersial dapat dipastikan."

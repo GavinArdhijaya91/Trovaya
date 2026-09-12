@@ -34,31 +34,31 @@ export function SiteHeader() {
           className="hidden items-center gap-7 text-sm lg:flex"
         >
           <Link
+            href="/marketplace"
+            className="font-medium text-stone-600 transition hover:text-leaf"
+          >
+            Marketplace
+          </Link>
+
+          <Link
             href="/explore"
             className="font-medium text-stone-600 transition hover:text-leaf"
           >
-            Explore
+            Eksplorasi
           </Link>
 
           <Link
             href="/#how-it-works"
             className="font-medium text-stone-600 transition hover:text-leaf"
           >
-            How it works
-          </Link>
-
-          <Link
-            href="/#studio"
-            className="font-medium text-stone-600 transition hover:text-leaf"
-          >
-            For creators
+            Cara Kerja
           </Link>
 
           <Link
             href="/dashboard"
             className="font-medium text-stone-600 transition hover:text-leaf"
           >
-            Dashboard
+            Dashboard Kreator
           </Link>
         </nav>
 
