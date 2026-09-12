@@ -49,7 +49,8 @@ async function testUnauthorized() {
 }
 
 async function testAuthorized() {
-  const buyerPrivateKey = "0x532b61459b0d6e77b7d8be8f756a959b9b6898e82625c30276b7ebdf9c4deead";
+  const buyerPrivateKey = process.env.TEST_BUYER_PRIVATE_KEY;
+  if (!buyerPrivateKey) throw new Error("TEST_BUYER_PRIVATE_KEY env required for authorized vault test (use an unfunded test key)");
   const buyer = new ethers.Wallet(buyerPrivateKey, ethers.provider);
   console.log("\nTesting Authorized Buyer Wallet:", buyer.address);
 
