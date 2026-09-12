@@ -3,6 +3,22 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.13.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.12.0...v0.13.0) (2026-09-12)
+
+
+### Features
+
+* upgrading ai-reviewer v1 to v2 ([daa9cf6](https://github.com/GavinArdhijaya91/Trovaya/commit/daa9cf6df5b9c56c8088558c6a1f01a4c528f7ea))
+* upgrading ai-reviewer v1 to v2 ([6b2a98a](https://github.com/GavinArdhijaya91/Trovaya/commit/6b2a98a28edddd241a693fe7d8fcb8274d45e296))
+
+
+### Fixes
+
+* **ai-reviewer:** satisfy ruff checks after v2 upgrade ([eb47394](https://github.com/GavinArdhijaya91/Trovaya/commit/eb47394d805ac3e7668ad7f6f792be55a8d4ab4b))
+* **reviewer:** sync env schema with gemini v2 example ([937b629](https://github.com/GavinArdhijaya91/Trovaya/commit/937b62943cf5dcb5501506081d9518f0ee6a3196))
+* **security:** remove hardcoded buyer key, use TEST_BUYER_PRIVATE_KEY env ([db859cb](https://github.com/GavinArdhijaya91/Trovaya/commit/db859cbe44dc8e5509231ea7a939082eb98f05a4))
+* **web:** sync next specifier with lockfile to unblock frozen install ([35278d4](https://github.com/GavinArdhijaya91/Trovaya/commit/35278d47d9a2a77e0f807164d76e2bd26dfaecf4))
+
 ## [0.12.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.11.0...v0.12.0) (2026-09-09)
 
 
