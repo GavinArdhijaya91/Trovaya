@@ -55,7 +55,10 @@ export const configSchemas = {
   reviewer: {
     example: "services/ai-reviewer/.env.example",
     keys: {
-      AI_REVIEWER_PROVIDER: { type: "string", default: "ollama" },
+      AI_REVIEWER_PROVIDER: { type: "string", default: "gemini" },
+      GEMINI_API_KEY: { type: "string", optional: true, secret: true },
+      GEMINI_MODEL: { type: "string", optional: true },
+      AI_REVIEWER_GALLERY_RULES_PATH: { type: "string", optional: true },
       OLLAMA_URL: { type: "url", optional: true },
       OLLAMA_MODEL: { type: "string", optional: true },
       OLLAMA_TIMEOUT_SECONDS: { type: "positiveInteger", optional: true },
