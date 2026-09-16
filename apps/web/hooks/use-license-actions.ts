@@ -29,25 +29,26 @@ export function useLicenseActions() {
 
   async function purchaseLicense(tokenId: string, feeWei: string, termsHash: `0x${string}`, termsVersion: number) {
     if (!addresses) throw new Error("Alamat protokol belum dikonfigurasi.");
+    // Jangan set gas manual: biarkan viem/wallet mengestimasi aktual (~60-90k).
+    // Gas statis 500_000n sebelumnya membuat popup wallet menampilkan max fee
+    // (gasLimit x gasPrice) yang jauh lebih besar dari biaya sebenarnya.
     return purchase.writeContractAsync({
       address: addresses.ipNFT,
       abi: trovayaIPNFTAbi,
       functionName: "purchaseCommercialLicense",
       args: [BigInt(tokenId), termsHash, termsVersion],
       value: BigInt(feeWei),
-      // BSC testnet cap 16_777_216, viem kadang estimate 35M saat RPC lag — cap manual agar eth_sendRawTransaction tidak reject
-      gas: 500_000n,
     });
   }
 
   async function authorizeOriginal(tokenId: string) {
     if (!addresses) throw new Error("Alamat protokol belum dikonfigurasi.");
+    // Sama: estimasi otomatis agar tidak kena cap 16_777_216 BSC.
     return unlock.writeContractAsync({
       address: addresses.vault,
       abi: trovayaVaultAbi,
       functionName: "unlockWithLicense",
       args: [BigInt(tokenId)],
-      gas: 500_000n,
     });
   }
 
