@@ -10,6 +10,6 @@
     "start": "node dist/index.js",
     "lint": "tsc --noEmit"
   },
-  "dependencies": { "@trovaya/protocol-sdk": "workspace:*", "dotenv": "^17.4.2", "postgres": "^3.4.5", "viem": "^2.23.2" },
+  "dependencies": { "@trovaya/protocol-sdk": "workspace:*", "dotenv": "^17.4.2", "postgres": "^3.4.5", "viem": "^2.56.5" },
   "devDependencies": { "@types/node": "^22.13.1", "tsx": "^4.19.3", "typescript": "^5.7.3" }
 }
