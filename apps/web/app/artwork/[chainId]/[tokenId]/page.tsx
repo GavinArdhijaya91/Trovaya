@@ -3,11 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { formatEther } from "viem";
 import { useAccount, useSignMessage } from "wagmi";
 
 import { OperationStatus } from "@/components/operation-status";
+import { CoPurchaseCard } from "@/components/co-purchase-card";
+import { PurchaseCostBreakdown } from "@/components/purchase-cost-breakdown";
+import { usePurchaseQuote } from "@/hooks/use-purchase-quote";
 import { SiteHeader } from "@/components/site-header";
 import { AssetReviewer } from "@/components/asset-reviewer";
 import type { AssetReviewInput } from "@/lib/reviewer-types";
@@ -20,6 +23,10 @@ import {
   verifyLicenseTermsJson,
   type VersionedLicenseTerms,
 } from "@/lib/license-terms";
+import {
+  readCircleIdLocal,
+  recordCirclePurchase,
+} from "@/lib/co-purchase";
 import {
   decryptVaultFile,
   deliverContentKey,
@@ -252,6 +259,33 @@ export default function ArtworkDetailPage() {
     licenseTermsUri,
   ]);
 
+  const quote = usePurchaseQuote(
+    asset?.token_id,
+    asset?.commercial_license_fee_wei ?? undefined,
+    account.address,
+    (asset?.license_terms_hash as `0x${string}` | undefined) ?? undefined,
+    asset?.license_terms_version ?? undefined,
+  );
+
+  const [circleRecord, setCircleRecord] = useState<"idle" | "recorded" | "failed">("idle");
+  const recordAttemptedFor = useRef<string | null>(null);
+
+  // Alur patungan end-to-end: purchase ketua sukses -> catat tx ke grup -> PURCHASED.
+  useEffect(() => {
+    const txHash = license.purchaseState.transactionHash;
+    if (license.purchaseState.phase !== "completed" || !txHash || !account.address || !asset) return;
+    const circleId = readCircleIdLocal(asset.chain_id, asset.token_id);
+    if (!circleId || recordAttemptedFor.current === txHash) return;
+    recordAttemptedFor.current = txHash;
+    recordCirclePurchase(circleId, account.address, txHash).then(
+      () => setCircleRecord("recorded"),
+      () => {
+        recordAttemptedFor.current = null;
+        setCircleRecord("failed");
+      },
+    );
+  }, [license.purchaseState.phase, license.purchaseState.transactionHash, account.address, asset]);
+
   async function buyLicense() {
     if (
       !asset ||
@@ -263,9 +297,16 @@ export default function ArtworkDetailPage() {
       return;
     }
 
+    // Hardening: kontrak menuntut msg.value EXACT == fee on-chain.
+    // Bila indexer basi, pakai harga rantai agar tidak revert InvalidLicenseFee.
+    const feeWei =
+      quote.chainFeeWei && quote.matches === false
+        ? quote.chainFeeWei
+        : asset.commercial_license_fee_wei;
+
     await license.purchaseLicense(
       asset.token_id,
-      asset.commercial_license_fee_wei,
+      feeWei,
       asset.license_terms_hash as `0x${string}`,
       asset.license_terms_version,
     );
@@ -700,6 +741,8 @@ export default function ArtworkDetailPage() {
               </div>
             )}
 
+            <PurchaseCostBreakdown quote={quote} currency={getCurrency(asset.chain_id)} />
+
             <button
               type="button"
               onClick={buyLicense}
@@ -728,6 +771,25 @@ export default function ArtworkDetailPage() {
                 license.purchaseState
               }
             />
+
+            <CoPurchaseCard
+              chainId={asset.chain_id}
+              tokenId={asset.token_id}
+              feeWei={asset.commercial_license_fee_wei ?? undefined}
+              currency={getCurrency(asset.chain_id)}
+              quote={quote}
+              onLeaderPurchase={buyLicense}
+            />
+            {circleRecord === "recorded" && (
+              <p role="status" className="mt-2 rounded-xl bg-teal-50 p-3 text-xs font-medium text-teal-900">
+                Pembayaran ketua tercatat — grup patungan lunas on-chain. Tagih iuran teman off-chain.
+              </p>
+            )}
+            {circleRecord === "failed" && (
+              <p role="alert" className="mt-2 rounded-xl bg-amber-50 p-3 text-xs font-medium text-amber-800">
+                Lisensi terbayar, tapi bukti grup belum tercatat — muat ulang halaman untuk mencoba lagi.
+              </p>
+            )}
 
             {license.purchaseState.phase ===
               "completed" && (

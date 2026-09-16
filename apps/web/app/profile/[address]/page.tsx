@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 import { formatEther } from "viem";
 
 import { SiteHeader } from "@/components/site-header";
+import { MyCircles } from "@/components/my-circles";
 import { useAssets, type IndexedAsset } from "@/hooks/use-assets";
 
 function shortenAddress(address: string) {
@@ -150,6 +151,7 @@ export default function CreatorProfilePage() {
       </section>
 
       {/* Creator Works Gallery */}
+      <MyCircles wallet={creatorAddress} />
       <section className="mx-auto max-w-7xl px-5 py-10 md:px-8 md:py-14">
         <div className="mb-8 flex items-center justify-between">
           <div>
