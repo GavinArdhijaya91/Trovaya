@@ -3,6 +3,19 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.15.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.14.0...v0.15.0) (2026-09-16)
+
+
+### Features
+
+* **web:** group license co-purchase for 3-5 members with contract-aligned cost breakdown ([f1f9e12](https://github.com/GavinArdhijaya91/Trovaya/commit/f1f9e123c1f4b46a650fc84254040c9a19647ee5))
+* **web:** hardening 5 lapis patungan dan biaya ([04e58ac](https://github.com/GavinArdhijaya91/Trovaya/commit/04e58acaa37b5fb779b591506f30e53992267a36))
+
+
+### Security
+
+* trigger DB enforce_co_purchase_capacity menolak anggota melebihi max 3-5 walau ditulis di luar API; skrip supabase/tests/co_purchase_verification.sql untuk audit RLS. ([04e58ac](https://github.com/GavinArdhijaya91/Trovaya/commit/04e58acaa37b5fb779b591506f30e53992267a36))
+
 ## [0.14.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.13.0...v0.14.0) (2026-09-16)
 
 
