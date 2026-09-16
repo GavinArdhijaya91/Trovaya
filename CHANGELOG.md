@@ -3,6 +3,19 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.14.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.13.0...v0.14.0) (2026-09-16)
+
+
+### Features
+
+* **web:** group license co-purchase for 3-5 members with contract-aligned cost breakdown ([e74dba5](https://github.com/GavinArdhijaya91/Trovaya/commit/e74dba5f1a6ee6a43c47bca90384df834bcf8178))
+* **web:** patungan lisensi 3-5 orang dan rincian biaya selaras kontrak ([a7d7766](https://github.com/GavinArdhijaya91/Trovaya/commit/a7d77661a3582764434877cdeb2f8a64abefa89a))
+
+
+### Fixes
+
+* **web:** hapus variabel gas tak terpakai di use-purchase-quote ([e92e413](https://github.com/GavinArdhijaya91/Trovaya/commit/e92e413ae1721316e8bb067b66868e9ae8b55dd0))
+
 ## [0.13.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.12.0...v0.13.0) (2026-09-12)
 
 
