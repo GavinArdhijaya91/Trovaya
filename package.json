@@ -6,7 +6,10 @@
   "pnpm": {
     "overrides": {
       "axios": ">=1.18.0",
-      "ws": ">=8.21.0"
+      "ws": ">=8.21.0",
+      "hono": ">=4.13.5",
+      "decode-uri-component": ">=0.5.0",
+      "tmp": ">=0.2.6"
     }
   },
   "scripts": {
