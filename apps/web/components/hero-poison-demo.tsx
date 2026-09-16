@@ -98,10 +98,10 @@ export function HeroPoisonDemo() {
 
         {/* Labels */}
         <span className="pointer-events-none absolute top-3 left-3 rounded-full bg-black/55 backdrop-blur px-2.5 py-1 text-[10px] font-bold text-white border border-white/20">
-          POISON — blur
+          POISON (buram)
         </span>
         <span className="pointer-events-none absolute top-3 right-3 rounded-full bg-teal-900 px-2.5 py-1 text-[10px] font-bold text-white shadow-soft-md">
-          CLEAR — Vault
+          JERNIH (vault)
         </span>
         <span className="pointer-events-none absolute bottom-3 left-3 rounded bg-black/60 px-2 py-1 text-[10px] font-bold text-white">🔒 Vault terenkripsi</span>
       </div>
@@ -132,7 +132,7 @@ export function HeroPoisonDemo() {
           50:50
         </button>
       </div>
-      <p className="mt-2 text-center text-[11px] text-nusa-500">Geser handle bulat atau klik Full Blur/Clear — 0% = semua buram, 100% = semua jernih</p>
+      <p className="mt-2 text-center text-[11px] text-nusa-500">Geser handle bulat atau klik Full Blur atau Clear. 0% berarti semua buram, 100% berarti semua jernih</p>
       <p className="mt-3 text-[11px] leading-relaxed text-nusa-500 bg-nusa-50 border border-nusa-100 rounded-xl p-2.5">
         On-chain record = bukti provenance dan konsen, <strong>bukan pernyataan hak cipta atau penegakan hukum otomatis.</strong> File asli tidak otomatis terkirim setelah beli, butuh otorisasi vault terpisah.
       </p>

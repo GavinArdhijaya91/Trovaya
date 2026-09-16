@@ -790,12 +790,12 @@ export default function ArtworkDetailPage() {
             />
             {circleRecord === "recorded" && (
               <p role="status" className="mt-2 rounded-xl bg-teal-50 p-3 text-xs font-medium text-teal-900">
-                Pembayaran ketua tercatat — grup patungan lunas on-chain. Tagih iuran teman off-chain.
+                Pembayaran ketua tercatat dan grup patungan lunas. Tagih iuran teman di luar aplikasi.
               </p>
             )}
             {circleRecord === "failed" && (
               <p role="alert" className="mt-2 rounded-xl bg-amber-50 p-3 text-xs font-medium text-amber-800">
-                Lisensi terbayar, tapi bukti grup belum tercatat — muat ulang halaman untuk mencoba lagi.
+                Lisensi terbayar, tapi bukti grup belum tercatat. Muat ulang halaman untuk mencoba lagi.
               </p>
             )}
 
