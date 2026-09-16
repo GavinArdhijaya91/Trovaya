@@ -96,7 +96,7 @@ export function MyCircles({ wallet }: { wallet: string }) {
             </div>
             <p className="mt-2 text-xs">
               Iuran saya: <strong>{shareLabel(circle.my_share_wei)}</strong>
-              {circle.leader_wallet.toLowerCase() === wallet.toLowerCase() && " · saya ketua"}
+              {circle.leader_wallet.toLowerCase() === wallet.toLowerCase() && " (saya ketua)"}
             </p>
             {circle.onchain_tx_hash && (
               <a

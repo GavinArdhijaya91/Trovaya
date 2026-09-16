@@ -3,6 +3,8 @@ import test from "node:test";
 import {
   CO_PURCHASE_MAX,
   CO_PURCHASE_MIN,
+  isTokenId,
+  lockGroup,
   normalizeWallet,
   splitShares,
   validateGroup,
@@ -47,4 +49,31 @@ test("validasi menolak duplikat, alamat jelek, dan grup kurang orang", () => {
 test("normalisasi wallet menerima checksum dan menolak sampah", () => {
   assert.equal(normalizeWallet("0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B"), "0xab5801a7d398351b8be11c439e05c5b3259aec9b");
   assert.equal(normalizeWallet("  hello  "), null);
+});
+
+test("lock-in: kapasitas runtuh jadi jumlah aktual dan iuran genap", () => {
+  // Slider 5 tapi terkunci 3 orang -> iuran = fee/3, total tetap pas
+  const locked = lockGroup("10000000000000000", 5, [A, B, C]);
+  assert.equal(locked.size, 3);
+  assert.equal(locked.shares.length, 3);
+  const total = locked.shares.reduce((acc, s) => acc + BigInt(s), 0n);
+  assert.equal(total.toString(), "10000000000000000");
+});
+
+test("lock-in menolak grup di luar 3-5 aktual", () => {
+  assert.throws(() => lockGroup("100", 5, [A, B]));
+  assert.throws(() => lockGroup("100", 5, [A, A, B]));
+  assert.throws(() => lockGroup("100", 2, [A, B, C]));
+});
+
+test("token_id hanya menerima digit desimal", () => {
+  assert.equal(isTokenId("1"), true);
+  assert.equal(isTokenId("12345678901234567890"), true);
+  assert.equal(isTokenId(""), false);
+  assert.equal(isTokenId("-1"), false);
+  assert.equal(isTokenId("1.5"), false);
+  assert.equal(isTokenId("0x1"), false);
+  assert.equal(isTokenId("1; DROP TABLE users"), false);
+  assert.equal(isTokenId(1), false);
+  assert.equal(isTokenId(null), false);
 });

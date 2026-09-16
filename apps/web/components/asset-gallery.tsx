@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { formatEther } from "viem";
@@ -343,6 +344,12 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
               <span className="text-xs font-semibold text-slate-500">{asset.chain_id === 97 ? "tBNB" : "ETH"}</span>
             </span>
           </div>
+          <p className="mt-1 text-[11px] text-slate-500">
+            + Biaya Jaringan ikut estimasi dompet.{" "}
+            <Link href={`/artwork/${asset.chain_id}/${asset.token_id}`} className="font-semibold text-leaf hover:underline">
+              Lihat rincian
+            </Link>
+          </p>
 
           {terms ? (
             <div className="mt-2.5 border-t border-slate-200/60 pt-2 text-[11px] leading-relaxed text-slate-700">

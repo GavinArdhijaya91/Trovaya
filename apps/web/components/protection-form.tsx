@@ -187,7 +187,7 @@ export function ProtectionForm() {
       <button type="button" onClick={() => void completeKeyRegistration(pendingKey).catch(() => undefined)} className="mt-2 rounded-lg bg-amber-800 px-3 py-2 font-semibold text-white">Retry secure key registration</button>
     </div>}
     {persistenceMode && <div className={`mt-4 rounded-xl p-3 text-sm ${persistenceMode === "pinata" ? "bg-mint text-leaf" : "bg-amber-50 text-amber-800"}`}>
-      <strong>{persistenceMode === "pinata" ? "IPFS / Pinata tersimpan" : "MODE DEMO — belum tersimpan ke IPFS"}</strong>
+      <strong>{persistenceMode === "pinata" ? "IPFS / Pinata tersimpan" : "MODE DEMO, belum tersimpan ke IPFS"}</strong>
       <p className="mt-1 text-xs leading-5">
         {persistenceMode === "pinata"
           ? "Pratinjau, original terenkripsi, dan metadata menerima referensi IPFS nyata."
