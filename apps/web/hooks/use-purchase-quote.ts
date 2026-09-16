@@ -37,7 +37,7 @@ export function usePurchaseQuote(
   const { data: gasPrice } = useGasPrice();
   const ipNFT = getClientContractAddresses()?.ipNFT;
   const gasPriceLabel = gasPrice?.toString();
-  const gasPriceCategory = gasPrice?. toString();
+
   const metaQuery = useQuery({
     queryKey: ["purchase-quote-meta", ipNFT, tokenId],
     enabled: Boolean(publicClient && ipNFT && tokenId),
