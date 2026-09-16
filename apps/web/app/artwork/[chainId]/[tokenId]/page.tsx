@@ -9,6 +9,7 @@ import { useAccount, useSignMessage } from "wagmi";
 
 import { OperationStatus } from "@/components/operation-status";
 import { CoPurchaseCard } from "@/components/co-purchase-card";
+import { LicensePreview } from "@/components/license-preview";
 import { PurchaseCostBreakdown } from "@/components/purchase-cost-breakdown";
 import { usePurchaseQuote } from "@/hooks/use-purchase-quote";
 import { SiteHeader } from "@/components/site-header";
@@ -742,6 +743,13 @@ export default function ArtworkDetailPage() {
             )}
 
             <PurchaseCostBreakdown quote={quote} currency={getCurrency(asset.chain_id)} />
+
+            <div className="mt-3">
+              <LicensePreview
+                feeWei={quote.chainFeeWei ?? asset.commercial_license_fee_wei ?? undefined}
+                currency={getCurrency(asset.chain_id)}
+              />
+            </div>
 
             <button
               type="button"

@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   CO_PURCHASE_MAX,
   CO_PURCHASE_MIN,
+  isTokenId,
   lockGroup,
   normalizeWallet,
   splitShares,
@@ -63,4 +64,16 @@ test("lock-in menolak grup di luar 3-5 aktual", () => {
   assert.throws(() => lockGroup("100", 5, [A, B]));
   assert.throws(() => lockGroup("100", 5, [A, A, B]));
   assert.throws(() => lockGroup("100", 2, [A, B, C]));
+});
+
+test("token_id hanya menerima digit desimal", () => {
+  assert.equal(isTokenId("1"), true);
+  assert.equal(isTokenId("12345678901234567890"), true);
+  assert.equal(isTokenId(""), false);
+  assert.equal(isTokenId("-1"), false);
+  assert.equal(isTokenId("1.5"), false);
+  assert.equal(isTokenId("0x1"), false);
+  assert.equal(isTokenId("1; DROP TABLE users"), false);
+  assert.equal(isTokenId(1), false);
+  assert.equal(isTokenId(null), false);
 });

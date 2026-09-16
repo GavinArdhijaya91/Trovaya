@@ -3,6 +3,7 @@ import { isAddress } from "viem";
 import {
   CO_PURCHASE_MAX,
   CO_PURCHASE_MIN,
+  isTokenId,
   lockGroup,
 } from "@/lib/co-purchase";
 
@@ -30,7 +31,9 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const chainId = searchParams.get("chain_id");
   const tokenId = searchParams.get("token_id");
-  if (!chainId || !tokenId) return NextResponse.json({ detail: "Parameter chain_id dan token_id wajib." }, { status: 400 });
+  if (!chainId || !isTokenId(tokenId)) {
+    return NextResponse.json({ detail: "Parameter chain_id dan token_id tidak valid." }, { status: 400 });
+  }
 
   const query = new URLSearchParams({
     select: "id,chain_id,token_id,leader_wallet,target_fee_wei,max_members,status,created_at",
@@ -65,13 +68,13 @@ export async function POST(request: NextRequest) {
 
   const body = (await request.json().catch(() => null)) as CreateBody | null;
   const chainId = Number(body?.chain_id);
-  const tokenId = String(body?.token_id ?? "");
+  const tokenId = body?.token_id;
   const leader = typeof body?.leader_wallet === "string" ? body.leader_wallet : "";
   const feeWei = typeof body?.target_fee_wei === "string" ? body.target_fee_wei : "";
   const maxMembers = Number(body?.max_members ?? 0);
   const extras = Array.isArray(body?.member_wallets) ? (body.member_wallets as unknown[]) : [];
 
-  if (!Number.isInteger(chainId) || !tokenId || !isAddress(leader)) {
+  if (!Number.isInteger(chainId) || !isTokenId(tokenId) || !isAddress(leader)) {
     return NextResponse.json({ detail: "chain_id, token_id, leader_wallet tidak valid." }, { status: 400 });
   }
   let fee: bigint;

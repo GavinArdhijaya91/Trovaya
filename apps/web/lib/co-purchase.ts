@@ -3,6 +3,11 @@ import { formatEther, isAddress } from "viem";
 export const CO_PURCHASE_MIN = 3;
 export const CO_PURCHASE_MAX = 5;
 
+/** token_id on-chain selalu numerik; tolak injeksi/format aneh di API. */
+export function isTokenId(value: unknown): value is string {
+  return typeof value === "string" && /^\d{1,78}$/.test(value);
+}
+
 export function normalizeWallet(input: string): string | null {
   const trimmed = input.trim();
   if (!isAddress(trimmed)) return null;
