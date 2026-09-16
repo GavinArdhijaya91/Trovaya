@@ -55,17 +55,17 @@ export function PurchaseCostBreakdown({
         <p role="alert" className="mt-3 rounded-xl bg-amber-50 p-3 text-xs leading-6 text-amber-800">
           Harga galeri berbeda dari harga on-chain. Yang berlaku adalah harga on-chain
           ({feeLabel ? `${formatEther(BigInt(feeLabel))} ${currency}` : "…"}).{" "}
-          <HelpTip>Harga kreator tercatat di smart contract. Galeri hanya cermin — jika berbeda, kontrak yang menang.</HelpTip>
+          <HelpTip>Harga kreator tercatat di smart contract. Galeri hanya cermin. Jika berbeda, harga kontrak yang berlaku.</HelpTip>
         </p>
       )}
       {memberCount > 1 && feeLabel && (
         <p className="mt-2 text-xs text-stone-500">
-          Patungan {memberCount} orang → ± {formatEther(BigInt(feeLabel) / BigInt(memberCount))} {currency}/orang
+          Patungan {memberCount} orang, sekitar {formatEther(BigInt(feeLabel) / BigInt(memberCount))} {currency} per orang
           (belum termasuk gas, gas hanya dibayar ketua 1x).
         </p>
       )}
       <p className="mt-2 text-[11px] leading-5 text-stone-400">
-        Gas aktual yang dibayar biasanya lebih kecil dari batas atas — sisanya tidak jadi terpotong.
+        Gas aktual yang dibayar biasanya lebih kecil dari batas atas. Sisanya tidak jadi terpotong.
       </p>
     </div>
   );

@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { isAddress } from "viem";
 import { useAccount } from "wagmi";
+import { HelpTip } from "./help-tip";
 import {
   CO_PURCHASE_MAX,
   CO_PURCHASE_MIN,
@@ -17,6 +18,11 @@ import type { PurchaseQuote } from "@/hooks/use-purchase-quote";
 import { PurchaseCostBreakdown } from "./purchase-cost-breakdown";
 
 type SaveState = "idle" | "saving" | "saved" | "failed";
+
+function shortWallet(address: string): string {
+  if (address.length <= 14) return address;
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+}
 
 /**
  * MVP patungan ala Steam Family (bertahap):
@@ -79,7 +85,7 @@ export function CoPurchaseCard({
       return;
     }
     if (account.address && normalized === account.address.toLowerCase()) {
-      setInputError("Itu alamat kamu sendiri — kamu sudah jadi ketua.");
+      setInputError("Itu alamat kamu sendiri. Kamu sudah tercatat sebagai ketua.");
       return;
     }
     if (members.length >= size - 1) {
@@ -143,12 +149,14 @@ export function CoPurchaseCard({
 
   return (
     <section aria-label="Patungan keluarga" className="mt-4 rounded-[1.5rem] border border-teal-200 bg-teal-50/60 p-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.15em] text-teal-900">
-        Patungan keluarga · {CO_PURCHASE_MIN}-{CO_PURCHASE_MAX} orang
+      <p className="text-sm font-semibold text-teal-900">
+        Patungan keluarga, {CO_PURCHASE_MIN} sampai {CO_PURCHASE_MAX} orang
       </p>
       <p className="mt-2 text-sm leading-6 text-teal-950">
-        Ajak teman urunan beli lisensi karya ini — mis. batik atau Monalisa dinikmati bersama.
-        Harga kreator tetap, dibagi rata. Ketua membayar 1x on-chain, anggota mengganti urunan off-chain.
+        Ajak teman urunan beli lisensi karya ini, misalnya batik, untuk dinikmati bersama.
+        Harga kreator tetap dan dibagi rata. Ketua membayar sekali{" "}
+        <HelpTip>Pembayaran tunggal lewat blockchain oleh ketua. Nilai pastinya tampil di dompet sebelum kamu setujui.</HelpTip>{" "}
+        lewat blockchain, anggota mengganti urunan di luar aplikasi.
       </p>
 
       {quote && (
@@ -209,12 +217,20 @@ export function CoPurchaseCard({
 
       <ul className="mt-3 space-y-1 text-xs text-teal-950">
         <li className="font-semibold">
-          1. {account.address ?? "Kamu (hubungkan wallet dulu)"} — ketua
-          {leaderShare && account.address && ` · ${formatShare(leaderShare, currency)}`}
+          1.{" "}
+          <span title={account.address ?? undefined} className="font-mono">
+            {account.address ? shortWallet(account.address) : "Kamu (hubungkan wallet dulu)"}
+          </span>{" "}
+          (ketua)
+          {leaderShare && account.address && `, ${formatShare(leaderShare, currency)}`}
         </li>
         {members.map((m, i) => (
           <li key={m}>
-            {i + 2}. {m} · {shares[i + 1] ? formatShare(shares[i + 1]!, currency) : "…"}
+            {i + 2}.{" "}
+            <span title={m} className="font-mono">
+              {shortWallet(m)}
+            </span>
+            , {shares[i + 1] ? formatShare(shares[i + 1]!, currency) : "…"}
             <button
               type="button"
               className="ml-2 font-semibold text-red-700"
@@ -233,7 +249,7 @@ export function CoPurchaseCard({
         <p className="mt-3 text-xs text-amber-800">{validation.reason}</p>
       )}
       {!account.address && (
-        <p className="mt-2 text-xs text-amber-800">Hubungkan wallet — ketua harus terisi alamat valid.</p>
+        <p className="mt-2 text-xs text-amber-800">Hubungkan wallet. Ketua harus terisi alamat yang valid.</p>
       )}
 
       <div className="mt-4 grid gap-2">
@@ -243,7 +259,7 @@ export function CoPurchaseCard({
           disabled={!validation.ok || !account.address || saveState === "saving"}
           className="w-full rounded-xl border border-teal-700 px-5 py-3 text-sm font-semibold text-teal-900 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          {saveState === "saving" ? "Menyimpan grup…" : circleId ? "Grup tersimpan — simpan ulang bila berubah" : "Simpan grup patungan"}
+          {saveState === "saving" ? "Mengunci grup…" : circleId ? "Grup dikunci. Ubah susunan untuk mengunci ulang." : "Kunci grup patungan"}
         </button>
         {saveState === "failed" && saveError && (
           <p role="alert" className="text-xs font-medium text-red-700">
@@ -253,7 +269,7 @@ export function CoPurchaseCard({
         {saveState === "saved" && circleId && (
           <p role="status" className="text-xs font-medium text-teal-800">
             Grup dikunci {wallets.length} orang (ID {circleId.slice(0, 8)}…).
-            {lockedShareWei && <> Iuran final: {formatShare(lockedShareWei, currency)}/orang.</>} Lanjut ke pembayaran oleh ketua.
+            {lockedShareWei && <> Iuran final {formatShare(lockedShareWei, currency)} per orang.</>} Lanjut ke pembayaran oleh ketua.
           </p>
         )}
         <button
@@ -262,15 +278,15 @@ export function CoPurchaseCard({
           onClick={onLeaderPurchase}
           className="w-full rounded-xl bg-leaf px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Ketua bayar {perPersonWei ? formatShare(perPersonWei, currency).split(" ")[0] : ""} {currency} + gas — beli lisensi
+          Beli lisensi sebagai ketua ({perPersonWei ? formatShare(perPersonWei, currency).split(" ")[0] : ""} {currency} tambah gas)
         </button>
         {!locked && (
           <p className="text-[11px] leading-5 text-amber-800">
-            Kunci grup dulu (tombol di atas) — pembayaran aktif setelah iuran genap.
+            Kunci grup dulu pakai tombol di atas. Pembayaran aktif setelah iuran genap.
           </p>
         )}
         <p className="text-[11px] leading-5 text-teal-800">
-          Yang dibayar ketua on-chain = harga penuh karya. Iuran teman ditagih off-chain setelah bukti transaksi keluar.
+          Yang dibayar ketua lewat blockchain adalah harga penuh karya. Iuran teman ditagih di luar aplikasi setelah bukti transaksi keluar.
         </p>
       </div>
     </section>

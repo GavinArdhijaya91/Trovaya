@@ -11,7 +11,7 @@ function feeLabelFor(feeWei: string | undefined, currency: string): string {
   try {
     return `${formatEther(BigInt(feeWei))} ${currency}`;
   } catch {
-    return `— ${currency}`;
+    return "Belum tersedia";
   }
 }
 
@@ -40,7 +40,7 @@ export function LicensePreview({ feeWei, currency = "BNB" }: { feeWei?: string; 
         </div>
         {hasFee && <div className="mt-3 rounded-2xl border border-teal-200 bg-teal-50 p-4 text-xs leading-6 text-teal-900">
           <p className="font-semibold">Patungan ({CO_PURCHASE_MIN}-{CO_PURCHASE_MAX} orang, dibagi rata):</p>
-          <p>3 orang → {shareFor(3)}/orang · 4 orang → {shareFor(4)}/orang · 5 orang → {shareFor(5)}/orang</p>
+          <p>3 orang: {shareFor(3)} per orang. 4 orang: {shareFor(4)} per orang. 5 orang: {shareFor(5)} per orang.</p>
           <p className="mt-1 text-teal-800">On-chain tetap 1x bayar oleh ketua grup, sisanya urunan off-chain.</p>
         </div>}
         <button type="button" onClick={() => setLearning(false)} className="mt-5 w-full rounded-xl bg-ink px-4 py-3 font-semibold text-white">Saya mengerti</button>
