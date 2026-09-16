@@ -3,8 +3,7 @@ import { isAddress } from "viem";
 import {
   CO_PURCHASE_MAX,
   CO_PURCHASE_MIN,
-  splitShares,
-  validateGroup,
+  lockGroup,
 } from "@/lib/co-purchase";
 
 function restHeaders(key: string) {
@@ -90,10 +89,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ detail: "Ada alamat anggota yang tidak valid." }, { status: 400 });
   }
   const wallets = [leader, ...extraWallets];
-  const validation = validateGroup(wallets, maxMembers);
-  if (!validation.ok) return NextResponse.json({ detail: validation.reason }, { status: 400 });
-
-  const shares = splitShares(fee.toString(), maxMembers);
+  let locked;
+  try {
+    locked = lockGroup(fee.toString(), maxMembers, wallets);
+  } catch (caught) {
+    return NextResponse.json({ detail: caught instanceof Error ? caught.message : "Grup tidak valid." }, { status: 400 });
+  }
+  const { size: finalSize, shares } = locked;
   const circleRes = await fetch(`${url}/rest/v1/co_purchase_circles`, {
     method: "POST",
     headers: { ...restHeaders(key), Prefer: "return=representation" },
@@ -102,7 +104,7 @@ export async function POST(request: NextRequest) {
       token_id: tokenId,
       leader_wallet: leader.toLowerCase(),
       target_fee_wei: fee.toString(),
-      max_members: maxMembers,
+      max_members: finalSize,
       status: "OPEN",
     }),
   });
@@ -113,7 +115,7 @@ export async function POST(request: NextRequest) {
   const rows = wallets.map((w, i) => ({
     circle_id: circle.id,
     member_wallet: w.toLowerCase(),
-    share_wei: shares[i] ?? shares[shares.length - 1],
+    share_wei: shares[i]!,
     status: "JOINED",
   }));
   const membersRes = await fetch(`${url}/rest/v1/co_purchase_members`, {
@@ -173,6 +175,21 @@ export async function PATCH(request: NextRequest) {
   }
   if (circle.status !== "OPEN" && circle.status !== "LOCKED") {
     return NextResponse.json({ detail: `Grup berstatus ${circle.status}, tidak bisa dibayar.` }, { status: 409 });
+  }
+
+  // Cakram pengaman: grup yang dikunci harus tetap berisi 3-5 anggota,
+  // walau baris anggota ditulis di luar alur normal.
+  const countRes = await fetch(
+    `${url}/rest/v1/co_purchase_members?circle_id=eq.${circleId}&select=member_wallet`,
+    { headers: restHeaders(key), cache: "no-store" },
+  );
+  if (!countRes.ok) return NextResponse.json({ detail: "Anggota grup belum dapat dibaca." }, { status: 502 });
+  const memberRows = (await countRes.json()) as unknown[];
+  if (memberRows.length < CO_PURCHASE_MIN || memberRows.length > CO_PURCHASE_MAX) {
+    return NextResponse.json(
+      { detail: `Grup harus berisi ${CO_PURCHASE_MIN}-${CO_PURCHASE_MAX} orang (sekarang ${memberRows.length}).` },
+      { status: 409 },
+    );
   }
 
   const updateRes = await fetch(`${url}/rest/v1/co_purchase_circles?id=eq.${circleId}`, {

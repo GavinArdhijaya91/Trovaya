@@ -60,6 +60,25 @@ export function validateGroup(wallets: string[], size: number): GroupValidation 
   return { ok: true, reason: null };
 }
 
+export interface LockedGroup {
+  /** Jumlah anggota final yang dikunci (selalu 3-5). */
+  size: number;
+  /** Iuran per anggota seurutan wallets; jumlahnya == fee persis. */
+  shares: string[];
+}
+
+/**
+ * Kunci grup: kapasitas slider runtuh menjadi jumlah anggota aktual.
+ * Ini yang membuat 3-5 ketat dan lock-in — tidak ada grup "kapasitas 5
+ * isi 3" yang iurannya tidak genap menutup harga.
+ */
+export function lockGroup(feeWei: string, capacity: number, wallets: string[]): LockedGroup {
+  const validation = validateGroup(wallets, capacity);
+  if (!validation.ok) throw new Error(validation.reason ?? "Grup tidak valid.");
+  const size = wallets.length;
+  return { size, shares: splitShares(feeWei, size) };
+}
+
 // ---- Client helpers (browser) -------------------------------------------
 
 export function circleStorageKey(chainId: number, tokenId: string): string {
@@ -78,6 +97,15 @@ export function saveCircleIdLocal(chainId: number, tokenId: string, circleId: st
 export function readCircleIdLocal(chainId: number, tokenId: string): string | null {
   if (typeof window === "undefined") return null;
   return window.localStorage.getItem(circleStorageKey(chainId, tokenId));
+}
+
+export function clearCircleIdLocal(chainId: number, tokenId: string): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(circleStorageKey(chainId, tokenId));
+  } catch {
+    // abaikan — bukan fatal
+  }
 }
 
 /** Ketua mencatat bukti bayar setelah purchase on-chain sukses. */

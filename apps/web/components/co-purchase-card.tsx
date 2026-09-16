@@ -6,6 +6,7 @@ import { useAccount } from "wagmi";
 import {
   CO_PURCHASE_MAX,
   CO_PURCHASE_MIN,
+  clearCircleIdLocal,
   formatShare,
   normalizeWallet,
   saveCircleIdLocal,
@@ -46,6 +47,7 @@ export function CoPurchaseCard({
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [saveError, setSaveError] = useState<string | null>(null);
   const [circleId, setCircleId] = useState<string | null>(null);
+  const [lockedShareWei, setLockedShareWei] = useState<string | null>(null);
 
   const wallets = useMemo(() => {
     const leader = account.address ? [account.address] : [];
@@ -86,7 +88,15 @@ export function CoPurchaseCard({
     }
     setMembers((prev) => [...prev, normalized]);
     setInput("");
+    invalidateLock();
+  }
+
+  /** Setiap perubahan susunan membatalkan kunci lama agar ID grup basi tidak terpakai. */
+  function invalidateLock() {
     setSaveState("idle");
+    setCircleId(null);
+    setLockedShareWei(null);
+    clearCircleIdLocal(chainId, tokenId);
   }
 
   async function saveGroup() {
@@ -106,9 +116,14 @@ export function CoPurchaseCard({
           member_wallets: members,
         }),
       });
-      const data = (await res.json().catch(() => null)) as { circleId?: string; detail?: string } | null;
+      const data = (await res.json().catch(() => null)) as {
+        circleId?: string;
+        shareWei?: string[];
+        detail?: string;
+      } | null;
       if (!res.ok) throw new Error(data?.detail ?? "Grup belum dapat disimpan.");
       setCircleId(data?.circleId ?? null);
+      setLockedShareWei(data?.shareWei?.[0] ?? null);
       if (data?.circleId) saveCircleIdLocal(chainId, tokenId, data.circleId);
       setSaveState("saved");
     } catch (caught) {
@@ -119,8 +134,12 @@ export function CoPurchaseCard({
 
   if (!feeWei) return null;
 
+  // Lock-in: tombol bayar aktif hanya setelah grup dikunci (tersimpan),
+  // agar tidak ada pembelian yang iurannya belum genap menutup harga.
+  const locked = saveState === "saved" && circleId !== null;
   const canPurchase =
-    validation.ok && Boolean(account.address) && saveState !== "saving" && isAddress(account.address ?? "");
+    locked && validation.ok && Boolean(account.address) && isAddress(account.address ?? "");
+  const perPersonWei = locked && lockedShareWei ? lockedShareWei : leaderShare;
 
   return (
     <section aria-label="Patungan keluarga" className="mt-4 rounded-[1.5rem] border border-teal-200 bg-teal-50/60 p-5">
@@ -150,7 +169,7 @@ export function CoPurchaseCard({
             const next = Number(e.target.value);
             setSize(next);
             setMembers((prev) => prev.slice(0, Math.max(0, next - 1)));
-            setSaveState("idle");
+            invalidateLock();
           }}
         />
       </label>
@@ -201,7 +220,7 @@ export function CoPurchaseCard({
               className="ml-2 font-semibold text-red-700"
               onClick={() => {
                 setMembers((prev) => prev.filter((x) => x !== m));
-                setSaveState("idle");
+                invalidateLock();
               }}
             >
               hapus
@@ -233,7 +252,8 @@ export function CoPurchaseCard({
         )}
         {saveState === "saved" && circleId && (
           <p role="status" className="text-xs font-medium text-teal-800">
-            Grup tersimpan (ID {circleId.slice(0, 8)}…). Lanjut ke pembayaran oleh ketua.
+            Grup dikunci {wallets.length} orang (ID {circleId.slice(0, 8)}…).
+            {lockedShareWei && <> Iuran final: {formatShare(lockedShareWei, currency)}/orang.</>} Lanjut ke pembayaran oleh ketua.
           </p>
         )}
         <button
@@ -242,8 +262,13 @@ export function CoPurchaseCard({
           onClick={onLeaderPurchase}
           className="w-full rounded-xl bg-leaf px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-40"
         >
-          Ketua bayar {leaderShare ? formatShare(leaderShare, currency).split(" ")[0] : ""} {currency} + gas — beli lisensi
+          Ketua bayar {perPersonWei ? formatShare(perPersonWei, currency).split(" ")[0] : ""} {currency} + gas — beli lisensi
         </button>
+        {!locked && (
+          <p className="text-[11px] leading-5 text-amber-800">
+            Kunci grup dulu (tombol di atas) — pembayaran aktif setelah iuran genap.
+          </p>
+        )}
         <p className="text-[11px] leading-5 text-teal-800">
           Yang dibayar ketua on-chain = harga penuh karya. Iuran teman ditagih off-chain setelah bukti transaksi keluar.
         </p>
