@@ -38,7 +38,7 @@ const pillars = [
   {
     kicker: "Pilar 2: Own & Protect",
     title: "Miliki dan lindungi",
-    desc: "Upload menjadi preview terpoison eksperimental untuk publik, lalu file asli terenkripsi di Vault. Lisensi on-chain mencatat provenance dan konsen.",
+    desc: "Upload menjadi preview terproteksi eksperimental untuk publik, lalu file asli terenkripsi di Vault. Lisensi on-chain mencatat provenance dan konsen.",
     href: "#cara-kerja",
   },
 
@@ -51,7 +51,7 @@ const pillars = [
 ];
 
 const comparisonRows = [
-  { feature: "Perlindungan preview", trovaya: "Preview terpoison (violet badge), scraper lihat noise", biasa: "Tampil polos, mudah di-scrape", watermark: "Watermark bisa di-crop" },
+  { feature: "Perlindungan preview", trovaya: "Preview terproteksi eksperimental; file asli tidak dipublikasikan", biasa: "Tampil polos, mudah di-scrape", watermark: "Watermark bisa di-crop" },
   { feature: "Bukti konsen", trovaya: "Registrasi hash plus allowAITraining on-chain", biasa: "Hanya ToS platform", watermark: "Tidak ada bukti on-chain" },
   { feature: "Kontrol akses file asli", trovaya: "Vault terenkripsi, butuh otorisasi terpisah", biasa: "File asli ikut ter-publish", watermark: "File asli tetap terekspos" },
   { feature: "Royalti otomatis", trovaya: "ERC-2981, tarik manual ke wallet (BSC Testnet)", biasa: "Potongan platform 30-50%", watermark: "Tidak ada royalti" },
@@ -59,7 +59,7 @@ const comparisonRows = [
 
 const steps = [
   { n: "01", title: "Upload karya", desc: "Pilih file PNG/JPG/WebP maks 15 MB.", maturity: "Demo/Mock" },
-  { n: "02", title: "Protected Preview", desc: "Poison Engine buat versi terdistorsi untuk publik.", maturity: "Experimental" },
+  { n: "02", title: "Protected Preview", desc: "Trovaya membuat versi preview tertransformasi untuk publik.", maturity: "Experimental" },
   { n: "03", title: "Encrypt & Mint", desc: "File asli dienkripsi di perangkat → simpan ke IPFS → registrasi hash di BSC Testnet.", maturity: "BSC Testnet" },
   { n: "04", title: "Beli Lisensi", desc: "Pembeli bayar biaya lisensi komersial (BNB Testnet).", maturity: "BSC Testnet" },
   { n: "05", title: "Vault Authorization", desc: "Otorisasi on-chain ≠ kunci dikirim. Kunci dibungkus vault setelah otorisasi.", maturity: "Terpisah" },
@@ -216,7 +216,7 @@ export default function Home() {
       <section id="pilar" className="py-16 md:py-20 border-b border-nusa-200 bg-white">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="max-w-2xl">
-            <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">Solusi 3 pilar, MASTER_SPEC §2</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">Tiga Pilar Trovaya</span>
             <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-nusa-900">Access · Own & Protect · Understand</h2>
             <p className="mt-2 text-sm text-nusa-600">Tiga pilar saja, tidak ditambah. Setiap pilar = satu janji yang bisa diverifikasi.</p>
           </div>

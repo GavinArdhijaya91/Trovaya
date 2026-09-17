@@ -29,7 +29,7 @@ const filters: {
   },
   {
     id: "protected",
-    label: "Anti-Scraping AI",
+    label: "Preview Terproteksi",
     icon: "🛡️",
   },
   {
@@ -154,7 +154,7 @@ export default function MarketplacePage() {
               </h1>
 
               <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">
-                Jelajahi karya kreator Indonesia dengan preview terproteksi anti-scraping.
+                Jelajahi karya kreator Indonesia dengan preview terproteksi eksperimental.
                 Verifikasi provenance, beli lisensi komersial transparan, dan buka enkripsi vault karya asli.
               </p>
             </div>
@@ -167,7 +167,7 @@ export default function MarketplacePage() {
               />
               <MarketplaceMetric
                 value={assets.isLoading ? "—" : `${protectedCount}`}
-                label="Anti-Scraping AI"
+                label="Preview Terproteksi"
               />
               <MarketplaceMetric
                 value={assets.isLoading ? "—" : `${licensedCount}`}
@@ -281,7 +281,7 @@ export default function MarketplacePage() {
                   Punya karya asli yang ingin dilindungi?
                 </h3>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-emerald-100/90">
-                  Daftarkan karya Anda di Trovaya Creator Studio. Proteksi gambar dengan teknologi anti-scraping,
+                  Daftarkan karya Anda di Trovaya Creator Studio. Buat preview terproteksi eksperimental,
                   atur ketentuan lisensi komersial, dan pantau royalti langsung di dashboard kreator.
                 </p>
               </div>

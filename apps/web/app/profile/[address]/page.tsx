@@ -117,7 +117,7 @@ export default function CreatorProfilePage() {
               </div>
               <div className="flex items-center gap-1.5 rounded-xl border border-teal-200 bg-teal-50/80 px-3 py-1.5 text-xs font-semibold text-teal-800">
                 <span>🔒</span>
-                <span>Anti-Scraping Active</span>
+                <span>Preview Terproteksi Aktif</span>
               </div>
               <div className="flex items-center gap-1.5 rounded-xl border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-semibold text-stone-700">
                 <span>⚡</span>
