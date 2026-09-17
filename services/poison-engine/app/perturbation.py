@@ -46,14 +46,16 @@ def perturb_image(source: bytes, intensity: float) -> bytes:
     except (UnidentifiedImageError, OSError, Image.DecompressionBombError) as exc:
         raise InvalidImageError("file must be a valid image") from exc
 
-    # 1) Heavy Watercolor Wash & Gaussian blur — merusak pola visual / scraping bot AI
-    # Menghasilkan efek warna kabur/vignette seperti lukisan disiram air
+    # 1) Heavy Watercolor Wash & Gaussian blur — visual-only preview transform.
+    # Produces a blurred/vignette look. No scraping resistance is claimed.
     if intensity > 0:
         resolution_factor = min(image.width, image.height) / 22.0
         blur_radius = max(intensity * 14.0, resolution_factor * intensity)
         image = image.filter(ImageFilter.GaussianBlur(radius=blur_radius))
 
-    # 2) Bounded adversarial noise — ganggu CLIP/ViT embedding
+    # 2) Bounded pixel offset — visual texture only, NOT adversarial ML defense.
+    # Does not claim to disrupt CLIP/ViT embeddings; trivially removed by
+    # resize/recompress. Label output as Experimental in all UI and docs.
     amplitude = round(intensity * 14)
     if amplitude:
         pixels = np.asarray(image, dtype=np.int16).copy()

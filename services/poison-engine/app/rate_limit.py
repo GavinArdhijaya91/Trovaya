@@ -13,6 +13,9 @@ from starlette.responses import Response
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """Small in-process limiter for the MVP; use a shared Redis limiter when horizontally scaled."""
 
+    # Bound tracked IPs so spoofed X-Forwarded-For / NAT churn can't grow memory unbounded.
+    MAX_TRACKED_IPS = 10_000
+
     def __init__(self, app: object, requests_per_minute: int = 10) -> None:
         super().__init__(app)  # type: ignore[arg-type]
         self.limit = requests_per_minute
@@ -23,6 +26,10 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     async def allow(self, client_ip: str, now: float | None = None) -> bool:
         current = time.monotonic() if now is None else now
         async with self.lock:
+            if client_ip not in self.requests and len(self.requests) >= self.MAX_TRACKED_IPS:
+                # Evict the oldest entry instead of growing unbounded.
+                oldest = min(self.requests, key=lambda ip: self.requests[ip][0] if self.requests[ip] else current)
+                del self.requests[oldest]
             timestamps = self.requests[client_ip]
             while timestamps and current - timestamps[0] >= self.window_seconds:
                 timestamps.popleft()

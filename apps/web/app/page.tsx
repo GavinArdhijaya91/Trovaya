@@ -51,7 +51,7 @@ const pillars = [
 ];
 
 const comparisonRows = [
-  { feature: "Perlindungan preview", trovaya: "Preview terpoison (violet badge), scraper lihat noise", biasa: "Tampil polos, mudah di-scrape", watermark: "Watermark bisa di-crop" },
+  { feature: "Preview publik", trovaya: "Protected preview eksperimental (bukan anti-scrape terbukti)", biasa: "Tampil polos, mudah di-scrape", watermark: "Watermark bisa di-crop" },
   { feature: "Bukti konsen", trovaya: "Registrasi hash plus allowAITraining on-chain", biasa: "Hanya ToS platform", watermark: "Tidak ada bukti on-chain" },
   { feature: "Kontrol akses file asli", trovaya: "Vault terenkripsi, butuh otorisasi terpisah", biasa: "File asli ikut ter-publish", watermark: "File asli tetap terekspos" },
   { feature: "Royalti otomatis", trovaya: "ERC-2981, tarik manual ke wallet (BSC Testnet)", biasa: "Potongan platform 30-50%", watermark: "Tidak ada royalti" },
@@ -72,7 +72,7 @@ const personas = [
 ];
 
 const faqs = [
-  { q: "Apakah gambar saya benar-benar aman dari AI scraper?", a: "Tidak ada jaminan mutlak. Perlindungan preview kami adalah transformasi eksperimental terukur. Scraper melihat noise, manusia tetap melihat bentuk. Namun belum memiliki benchmark tereproduksi dan bukan setara Glaze atau Nightshade. Keamanan penuh tetap butuh kontrol akses vault plus lisensi." },
+  { q: "Apakah gambar saya benar-benar aman dari AI scraper?", a: "Tidak. Preview kami hanya transformasi visual eksperimental, bukan pertahanan adversarial dan bukan setara Glaze/Nightshade (belum ada benchmark). Yang benar-benar melindungi file asli adalah enkripsi + vault + lisensi on-chain, bukan efek blur/noise." },
   { q: "Apa bedanya lisensi dibeli vs akses vault diberikan?", a: "Dua status terpisah. Lisensi dibeli berarti transaksi on-chain tercatat. Akses vault berarti otorisasi plus pengiriman kunci terenkripsi oleh vault server. UI menampilkan keduanya sebagai langkah berbeda di stepper." },
   { q: "Apakah registrasi on-chain berarti hak cipta otomatis?", a: "Bukan. On-chain record adalah bukti provenance dan konsen yang bisa diverifikasi, bukan pernyataan hak cipta atau penegakan hukum otomatis." },
   { q: "Biaya transaksi mahal?", a: "Di BSC Testnet biaya transaksi sangat ringan (disebut juga gas fee di jaringan blockchain, dijelaskan via tooltip di dashboard). Penarikan royalti adalah aksi eksplisit, bukan auto-transfer." },

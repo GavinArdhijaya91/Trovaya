@@ -13,16 +13,19 @@ export class ServiceRequestError extends Error {
 export async function requestJson<T>(
   url: string,
   init: RequestInit,
-  options: { attempts?: number; baseDelayMs?: number; fetcher?: typeof fetch } = {},
+  options: { attempts?: number; baseDelayMs?: number; timeoutMs?: number; fetcher?: typeof fetch } = {},
 ): Promise<T> {
   const attempts = options.attempts ?? 2;
   const fetcher = options.fetcher ?? fetch;
   if (!Number.isSafeInteger(attempts) || attempts < 1 || attempts > 3) throw new Error("attempts must be between 1 and 3");
 
+  // Hard timeout per attempt so a hung service fails fast on stage instead of hanging the demo.
+  const timeoutMs = options.timeoutMs ?? 30_000;
   let finalError: unknown;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
-      const response = await fetcher(url, init);
+      const signal = init.signal ?? AbortSignal.timeout(timeoutMs);
+      const response = await fetcher(url, { ...init, signal });
       const result = await response.json().catch(() => null) as (T & { detail?: string }) | null;
       if (response.ok && result !== null) return result;
       const retryable = response.status === 502 || response.status === 503 || response.status === 504;
