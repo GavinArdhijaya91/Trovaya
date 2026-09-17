@@ -291,7 +291,7 @@ only to a Supabase project, then run the read-only checks in
 The indexer's `public.users` table remains a blockchain wallet directory and is
 not an email-account table.
 
-Browser auth will use:
+Browser auth will use: 
 
 ```dotenv
 NEXT_PUBLIC_SUPABASE_URL=https://PROJECT_ID.supabase.co

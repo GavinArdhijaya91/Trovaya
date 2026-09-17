@@ -6,6 +6,13 @@ export const runtime = "nodejs";
 const MAX_BYTES = 20 * 1024 * 1024;
 
 export async function POST(request: NextRequest) {
+  // Friends-preview guard: when DEMO_UPLOAD_TOKEN is set (public deploy),
+  // callers must send it as x-demo-token. Unset = local dev, no guard.
+  // Without this, anyone with the URL could burn our Pinata quota.
+  const expectedToken = process.env.DEMO_UPLOAD_TOKEN;
+  if (expectedToken && request.headers.get("x-demo-token") !== expectedToken) {
+    return NextResponse.json({ detail: "Token demo tidak valid." }, { status: 401 });
+  }
   const data = await request.formData();
   const file = data.get("file");
   if (!(file instanceof File)) return NextResponse.json({ detail: "File wajib tersedia." }, { status: 400 });
