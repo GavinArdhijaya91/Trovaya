@@ -32,7 +32,7 @@ async function testUnauthorized() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       walletAddress: rogue.address,
-      signature,
+      signature:
       challengeId: challenge.challengeId,
       message: challenge.message,
       publicKey,

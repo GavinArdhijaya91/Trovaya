@@ -3,6 +3,19 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.16.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.15.0...v0.16.0) (2026-09-17)
+
+
+### Features
+
+* **web:** prepare co-purchase preview for friends demo ([d2742b4](https://github.com/GavinArdhijaya91/Trovaya/commit/d2742b434f8382678381e50823167dadf3cb496e))
+* **web:** prepare co-purchase preview for friends demo ([23b91c7](https://github.com/GavinArdhijaya91/Trovaya/commit/23b91c7bae61d57990cdb725ab2b9e984d56b6a4))
+
+
+### Fixes
+
+* **scripts:** register demo upload tokens in web env schema ([ab279df](https://github.com/GavinArdhijaya91/Trovaya/commit/ab279dfd9a9a69442fd940a3fabedcf80df2c424))
+
 ## [0.15.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.14.0...v0.15.0) (2026-09-16)
 
 

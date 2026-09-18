@@ -18,11 +18,14 @@ export const configSchemas = {
       SUPABASE_SERVICE_ROLE_KEY: { type: "string", optional: true, secret: true },
       VAULT_RPC_URL: { type: "url", optional: true },
       VAULT_MASTER_KEY: { type: "base64Key32", optional: true, secret: true },
+      DEMO_UPLOAD_TOKEN: { type: "string", optional: true, secret: true },
+      NEXT_PUBLIC_DEMO_UPLOAD_TOKEN: { type: "string", optional: true },
     },
     groups: [
       ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY"],
       ["SUPABASE_URL", "SUPABASE_ANON_KEY"],
       ["SUPABASE_SERVICE_ROLE_KEY", "VAULT_RPC_URL", "VAULT_MASTER_KEY", "NEXT_PUBLIC_TROVAYA_IP_NFT_ADDRESS", "NEXT_PUBLIC_TROVAYA_VAULT_ADDRESS"],
+      ["DEMO_UPLOAD_TOKEN", "NEXT_PUBLIC_DEMO_UPLOAD_TOKEN"],
     ],
   },
   indexer: {

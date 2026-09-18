@@ -12,17 +12,17 @@ import { CustomConnectButton } from "@/components/custom-connect-button";
 
 const masalah = [
   {
-    icon: "🕸️",
+    icon: "ðŸ•¸ï¸",
     title: "Scraping tanpa izin",
     desc: "Karya di-upload ke medsos langsung diambil dataset AI tanpa persetujuan atau kompensasi. Kreator seperti Sarah kehilangan kendali.",
   },
   {
-    icon: "🪞",
+    icon: "ðŸªž",
     title: "Paradoks transparansi IPFS",
     desc: "IPFS publik = transparan tapi sekaligus mengekspos file asli resolusi tinggi. Tanpa vault terenkripsi, transparansi jadi bumerang.",
   },
   {
-    icon: "🧱",
+    icon: "ðŸ§±",
     title: "Friksi Web3 untuk UMKM",
     desc: "Pak Budi paham batik, bukan gas fee. Istilah mint, sign, smart contract bikin onboarding terasa seperti ujian, bukan seperti aplikasi investasi biasa.",
   },
@@ -51,8 +51,7 @@ const pillars = [
 ];
 
 const comparisonRows = [
-  { feature: "Perlindungan preview", trovaya: "Preview terproteksi eksperimental; file asli tidak dipublikasikan", biasa: "Tampil polos, mudah di-scrape", watermark: "Watermark bisa di-crop" },
-  { feature: "Bukti konsen", trovaya: "Registrasi hash plus allowAITraining on-chain", biasa: "Hanya ToS platform", watermark: "Tidak ada bukti on-chain" },
+  { feature: "Preview publik", trovaya: "Preview terproteksi eksperimental; bukan perlindungan anti-scraping yang terbukti", biasa: "Tampil polos, mudah di-scrape", watermark: "Watermark bisa di-crop" },  { feature: "Bukti konsen", trovaya: "Registrasi hash plus allowAITraining on-chain", biasa: "Hanya ToS platform", watermark: "Tidak ada bukti on-chain" },
   { feature: "Kontrol akses file asli", trovaya: "Vault terenkripsi, butuh otorisasi terpisah", biasa: "File asli ikut ter-publish", watermark: "File asli tetap terekspos" },
   { feature: "Royalti otomatis", trovaya: "ERC-2981, tarik manual ke wallet (BSC Testnet)", biasa: "Potongan platform 30-50%", watermark: "Tidak ada royalti" },
 ];
@@ -60,9 +59,9 @@ const comparisonRows = [
 const steps = [
   { n: "01", title: "Upload karya", desc: "Pilih file PNG/JPG/WebP maks 15 MB.", maturity: "Demo/Mock" },
   { n: "02", title: "Protected Preview", desc: "Trovaya membuat versi preview tertransformasi untuk publik.", maturity: "Experimental" },
-  { n: "03", title: "Encrypt & Mint", desc: "File asli dienkripsi di perangkat → simpan ke IPFS → registrasi hash di BSC Testnet.", maturity: "BSC Testnet" },
+  { n: "03", title: "Encrypt & Mint", desc: "File asli dienkripsi di perangkat â†’ simpan ke IPFS â†’ registrasi hash di BSC Testnet.", maturity: "BSC Testnet" },
   { n: "04", title: "Beli Lisensi", desc: "Pembeli bayar biaya lisensi komersial (BNB Testnet).", maturity: "BSC Testnet" },
-  { n: "05", title: "Vault Authorization", desc: "Otorisasi on-chain ≠ kunci dikirim. Kunci dibungkus vault setelah otorisasi.", maturity: "Terpisah" },
+  { n: "05", title: "Vault Authorization", desc: "Otorisasi on-chain â‰  kunci dikirim. Kunci dibungkus vault setelah otorisasi.", maturity: "Terpisah" },
 ];
 
 const personas = [
@@ -72,7 +71,7 @@ const personas = [
 ];
 
 const faqs = [
-  { q: "Apakah gambar saya benar-benar aman dari AI scraper?", a: "Tidak ada jaminan mutlak. Perlindungan preview kami adalah transformasi eksperimental terukur. Scraper melihat noise, manusia tetap melihat bentuk. Namun belum memiliki benchmark tereproduksi dan bukan setara Glaze atau Nightshade. Keamanan penuh tetap butuh kontrol akses vault plus lisensi." },
+  { q: "Apakah gambar saya benar-benar aman dari AI scraper?", a: "Tidak. Preview kami hanya transformasi visual eksperimental, bukan pertahanan adversarial dan bukan setara Glaze/Nightshade (belum ada benchmark). Yang benar-benar melindungi file asli adalah enkripsi + vault + lisensi on-chain, bukan efek blur/noise." },
   { q: "Apa bedanya lisensi dibeli vs akses vault diberikan?", a: "Dua status terpisah. Lisensi dibeli berarti transaksi on-chain tercatat. Akses vault berarti otorisasi plus pengiriman kunci terenkripsi oleh vault server. UI menampilkan keduanya sebagai langkah berbeda di stepper." },
   { q: "Apakah registrasi on-chain berarti hak cipta otomatis?", a: "Bukan. On-chain record adalah bukti provenance dan konsen yang bisa diverifikasi, bukan pernyataan hak cipta atau penegakan hukum otomatis." },
   { q: "Biaya transaksi mahal?", a: "Di BSC Testnet biaya transaksi sangat ringan (disebut juga gas fee di jaringan blockchain, dijelaskan via tooltip di dashboard). Penarikan royalti adalah aksi eksplisit, bukan auto-transfer." },
@@ -86,7 +85,7 @@ export default function Home() {
       <IntroExperience />
       <WalletConnectedBanner />
 
-      {/* NAV — sample2 compact, solid white, no translucency clash */}
+      {/* NAV â€” sample2 compact, solid white, no translucency clash */}
       <header className="sticky top-0 z-40 h-16 border-b border-nusa-200 bg-white">
         <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-5 md:px-8">
           <div className="flex items-center gap-8">
@@ -101,14 +100,14 @@ export default function Home() {
             </nav>
           </div>
           <div className="flex items-center gap-3 shrink-0">
-            <span className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-3 py-1.5 text-[11px] font-bold text-teal-900 leading-none">● BNB TESTNET</span>
+            <span className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-3 py-1.5 text-[11px] font-bold text-teal-900 leading-none">â— BNB TESTNET</span>
             <Link href="/dashboard" className="inline-flex items-center justify-center rounded-lg bg-teal-900 px-5 py-2 text-xs font-bold text-white hover:bg-teal-700 transition-colors">Masuk</Link>
             <CustomConnectButton label="" accountStatus="avatar" chainStatus="icon" showBalance={false} />
           </div>
         </div>
       </header>
 
-      {/* 1. HERO: sample2 — grid cream + dual preview card */}
+      {/* 1. HERO: sample2 â€” grid cream + dual preview card */}
       <section className="relative overflow-hidden border-b border-nusa-200 bg-[#FDFCF7] pt-12 md:pt-16 pb-14 md:pb-16">
         <div className="pointer-events-none absolute inset-0 opacity-[0.06]" aria-hidden="true" style={{ backgroundImage: "linear-gradient(to right, #D3D1C7 1px, transparent 1px), linear-gradient(to bottom, #D3D1C7 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
         <div className="mx-auto max-w-7xl px-5 md:px-8 relative">
@@ -120,34 +119,34 @@ export default function Home() {
               Karyamu Jadi Token.<br /> Aksesnya Kamu yang Atur.
             </h1>
             <div className="mt-7 flex flex-wrap justify-center gap-3">
-              <Link href="/dashboard" className="interactive-btn inline-flex items-center gap-2 rounded-lg bg-teal-900 px-7 py-3 text-sm font-bold text-white shadow-soft hover:bg-teal-700">Daftarkan Karya Saya <span aria-hidden>→</span></Link>
-              <a href="#cara-kerja" className="interactive-btn inline-flex items-center gap-2 rounded-lg border border-nusa-200 bg-white px-6 py-3 text-sm font-bold text-nusa-900 hover:bg-nusa-50">Lihat Alur Kerja <span aria-hidden>↗</span></a>
+              <Link href="/dashboard" className="interactive-btn inline-flex items-center gap-2 rounded-lg bg-teal-900 px-7 py-3 text-sm font-bold text-white shadow-soft hover:bg-teal-700">Daftarkan Karya Saya <span aria-hidden>â†’</span></Link>
+              <a href="#cara-kerja" className="interactive-btn inline-flex items-center gap-2 rounded-lg border border-nusa-200 bg-white px-6 py-3 text-sm font-bold text-nusa-900 hover:bg-nusa-50">Lihat Alur Kerja <span aria-hidden>â†—</span></a>
             </div>
-            <p className="mt-3 text-xs text-nusa-500">Bukti provenance & konsen di BSC Testnet · <span className="rounded bg-amber-50 border border-amber-200 px-1.5 py-0.5 font-bold text-amber-800">Edukatif, bukan saran finansial/hukum</span></p>
+            <p className="mt-3 text-xs text-nusa-500">Bukti provenance & konsen di BSC Testnet Â· <span className="rounded bg-amber-50 border border-amber-200 px-1.5 py-0.5 font-bold text-amber-800">Edukatif, bukan saran finansial/hukum</span></p>
           </div>
 
-          {/* Dual preview card — presis seperti sample2, tanpa bentrok negative margin */}
+          {/* Dual preview card â€” presis seperti sample2, tanpa bentrok negative margin */}
           <div className="mx-auto mt-10 max-w-5xl rounded-2xl border border-nusa-200 bg-white p-4 sm:p-6 shadow-soft-lg">
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-nusa-50 border border-nusa-100 px-4 py-3 text-[11px]">
               <div className="flex items-center gap-4 font-semibold text-nusa-600">
                 <span className="uppercase tracking-widest">Asset Protocol</span>
                 <span className="font-mono text-nusa-900">TRV-ID-2025-0894</span>
-                <span className="hidden sm:inline text-nusa-300">•</span>
-                <span className="hidden sm:inline font-medium">Standard ERC-721IP • BNB Chain Ledger</span>
+                <span className="hidden sm:inline text-nusa-300">â€¢</span>
+                <span className="hidden sm:inline font-medium">Standard ERC-721IP â€¢ BNB Chain Ledger</span>
               </div>
-              <span className="inline-flex items-center gap-1.5 font-semibold text-teal-900"><span className="grid h-5 w-5 place-items-center rounded-full bg-teal-50 border border-teal-200 text-[10px]">✓</span> On-Chain Registry · BSC Testnet · Tx Verifiable</span>
+              <span className="inline-flex items-center gap-1.5 font-semibold text-teal-900"><span className="grid h-5 w-5 place-items-center rounded-full bg-teal-50 border border-teal-200 text-[10px]">âœ“</span> On-Chain Registry Â· BSC Testnet Â· Tx Verifiable</span>
             </div>
             <div className="relative mt-4 grid gap-4 md:grid-cols-2">
               {/* Left: Pratinjau Publik */}
               <div className="rounded-xl border border-nusa-200 bg-[#FAF9F5] p-3">
                 <div className="flex items-center justify-between text-[11px] font-bold">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white border border-nusa-200 px-2.5 py-1 text-nusa-700">🔒 PRATINJAU PUBLIK</span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white border border-nusa-200 px-2.5 py-1 text-nusa-700">ðŸ”’ PRATINJAU PUBLIK</span>
                   <span className="text-nusa-500 font-medium">Layer 01: Perturbasi Bounded</span>
                 </div>
                 <div className="relative mt-3 aspect-[4/3] overflow-hidden rounded-lg bg-nusa-100 border border-nusa-200">
                   <Image src="/assets/flower-photo-poisoned.png" alt="Pratinjau terproteksi poison-engine" fill className="object-cover" sizes="50vw" />
                   <div className="absolute bottom-2 left-2 right-2 z-10 text-center">
-                    <span className="inline-block rounded bg-black/75 px-2.5 py-0.5 text-[9px] font-mono text-white/95">Output poison-engine · Watercolor Wash 80%</span>
+                    <span className="inline-block rounded bg-black/75 px-2.5 py-0.5 text-[9px] font-mono text-white/95">Output poison-engine Â· Watercolor Wash 80%</span>
                   </div>
                   <div className="absolute inset-0 opacity-20 parang-watermark" aria-hidden="true" />
                   <div className="absolute top-2 left-2">
@@ -157,41 +156,41 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="mt-3 flex justify-between text-[11px] font-medium">
-                  <span className="text-nusa-600">Status: Perturbasi Bounded • Warna Vignette</span>
-                  <span className="text-danger font-semibold">● Watermark Aktif</span>
+                  <span className="text-nusa-600">Status: Perturbasi Bounded â€¢ Warna Vignette</span>
+                  <span className="text-danger font-semibold">â— Watermark Aktif</span>
                 </div>
               </div>
-              {/* Center connector — absolute, tidak pakai negative margin */}
+              {/* Center connector â€” absolute, tidak pakai negative margin */}
               <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 md:flex">
-                <span className="rounded-full bg-teal-900 px-3.5 py-1.5 text-[11px] font-bold text-white shadow-soft-md border border-teal-700">TOKEN LISENSI →</span>
+                <span className="rounded-full bg-teal-900 px-3.5 py-1.5 text-[11px] font-bold text-white shadow-soft-md border border-teal-700">TOKEN LISENSI â†’</span>
               </div>
               {/* Right: Akses Token Aktif */}
               <div className="rounded-xl border border-nusa-200 bg-[#FAF9F5] p-3">
                 <div className="flex items-center justify-between text-[11px] font-bold">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-2.5 py-1 text-teal-900">🔓 AKSES TOKEN AKTIF</span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-2.5 py-1 text-teal-900">ðŸ”“ AKSES TOKEN AKTIF</span>
                   <span className="text-nusa-500 font-medium">Vault Terotorisasi #9102</span>
                 </div>
                 <div className="relative mt-3 aspect-[4/3] overflow-hidden rounded-lg bg-white border border-nusa-200">
                   <Image src="/assets/flower-photo.jpg" alt="Original master clear" fill className="object-cover" sizes="50vw" />
-                  <div className="absolute right-2 top-2 rounded-md bg-white border border-nusa-200 px-2.5 py-1 text-[11px] font-bold text-nusa-700 shadow-soft flex items-center gap-1.5"><span className="grid h-3.5 w-3.5 place-items-center rounded-full border border-teal-600 text-[8px]">✓</span> Original 4K Master</div>
+                  <div className="absolute right-2 top-2 rounded-md bg-white border border-nusa-200 px-2.5 py-1 text-[11px] font-bold text-nusa-700 shadow-soft flex items-center gap-1.5"><span className="grid h-3.5 w-3.5 place-items-center rounded-full border border-teal-600 text-[8px]">âœ“</span> Original 4K Master</div>
                 </div>
                 <div className="mt-3 flex justify-between text-[11px] font-medium">
-                  <span className="text-nusa-600">Status: Vault Terbuka • IPFS CID Decrypted</span>
-                  <span className="text-teal-700 font-semibold">● Lisensi Penuh</span>
+                  <span className="text-nusa-600">Status: Vault Terbuka â€¢ IPFS CID Decrypted</span>
+                  <span className="text-teal-700 font-semibold">â— Lisensi Penuh</span>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="mx-auto mt-10 grid max-w-5xl gap-6 md:grid-cols-3 text-xs leading-relaxed border-t border-nusa-200/60 pt-8">
-            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">🏛</span><div><p className="font-bold text-nusa-900">Bukti Kepemilikan On-Chain</p><p className="text-nusa-600 mt-1">Pencatatan kepemilikan definitif bersertifikasi di BNB Chain ledger yang sah secara yuridis.</p></div></div>
-            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">🛡️</span><div><p className="font-bold text-nusa-900">Preview Terpoison Eksperimental</p><p className="text-nusa-600 mt-1">Preview terpoison eksperimental ditampilkan publik; file asli terenkripsi di Vault dengan AES-256.</p></div></div>
-            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">📄</span><div><p className="font-bold text-nusa-900">Lisensi Transparan</p><p className="text-nusa-600 mt-1">Hak komersial, derivatif, dan royalti diatur otomatis via smart contract berstandar global.</p></div></div>
+            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">ðŸ›</span><div><p className="font-bold text-nusa-900">Bukti Kepemilikan On-Chain</p><p className="text-nusa-600 mt-1">Pencatatan kepemilikan definitif bersertifikasi di BNB Chain ledger yang sah secara yuridis.</p></div></div>
+            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">ðŸ›¡ï¸</span><div><p className="font-bold text-nusa-900">Preview Terpoison Eksperimental</p><p className="text-nusa-600 mt-1">Preview terpoison eksperimental ditampilkan publik; file asli terenkripsi di Vault dengan AES-256.</p></div></div>
+            <div className="flex gap-3"><span className="grid h-7 w-7 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0">ðŸ“„</span><div><p className="font-bold text-nusa-900">Lisensi Transparan</p><p className="text-nusa-600 mt-1">Hak komersial, derivatif, dan royalti diatur otomatis via smart contract berstandar global.</p></div></div>
           </div>
         </div>
       </section>
 
-      {/* 2. MASALAH: 3 kartu PRD 2.1 — dengan batik divider */}
+      {/* 2. MASALAH: 3 kartu PRD 2.1 â€” dengan batik divider */}
       <section id="masalah" className="py-16 md:py-20 border-b border-nusa-200 relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 batik-parang opacity-40" aria-hidden="true" />
         <div className="mx-auto max-w-7xl px-5 md:px-8">
@@ -217,7 +216,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-5 md:px-8">
           <div className="max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">Tiga Pilar Trovaya</span>
-            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-nusa-900">Access · Own & Protect · Understand</h2>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-nusa-900">Access Â· Own & Protect Â· Understand</h2>
             <p className="mt-2 text-sm text-nusa-600">Tiga pilar saja, tidak ditambah. Setiap pilar = satu janji yang bisa diverifikasi.</p>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
@@ -226,7 +225,7 @@ export default function Home() {
                 <p className="text-xs font-bold tracking-wider text-teal-700 uppercase">{p.kicker}</p>
                 <h3 className="mt-2 text-lg font-bold text-nusa-900">{p.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-nusa-600">{p.desc}</p>
-                <span className="mt-4 inline-flex text-xs font-bold text-teal-900">Pelajari →</span>
+                <span className="mt-4 inline-flex text-xs font-bold text-teal-900">Pelajari â†’</span>
               </Link>
             ))}
           </div>
@@ -239,7 +238,7 @@ export default function Home() {
           <div className="max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full">Perbandingan jujur</span>
             <h2 className="mt-3 text-3xl font-extrabold tracking-tight text-nusa-900">Trovaya vs cara lama</h2>
-            <p className="mt-2 text-sm text-nusa-600">Baris sesuai skill: Perlindungan preview · Bukti konsen · Kontrol akses · Royalti otomatis</p>
+            <p className="mt-2 text-sm text-nusa-600">Baris sesuai skill: Perlindungan preview Â· Bukti konsen Â· Kontrol akses Â· Royalti otomatis</p>
           </div>
           <div className="mt-10 overflow-hidden rounded-2xl border border-nusa-200 shadow-soft bg-white">
             <table className="w-full text-left text-sm border-collapse">
@@ -255,7 +254,7 @@ export default function Home() {
                 {comparisonRows.map((r) => (
                   <tr key={r.feature} className="hover:bg-nusa-50/50">
                     <td className="p-4 font-bold text-nusa-900">{r.feature}</td>
-                    <td className="p-4 font-semibold text-teal-900 bg-teal-50/40 border-x border-teal-100">✓ {r.trovaya}</td>
+                    <td className="p-4 font-semibold text-teal-900 bg-teal-50/40 border-x border-teal-100">âœ“ {r.trovaya}</td>
                     <td className="p-4 text-xs text-nusa-600">{r.biasa}</td>
                     <td className="p-4 text-xs text-nusa-600">{r.watermark}</td>
                   </tr>
@@ -289,7 +288,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <p className="mt-4 text-xs text-nusa-500">Simpan Karya ke Buku Besar Digital <HelpTip>mint NFT / registrasi on-chain</HelpTip> · Tanda Tangan Persetujuan <HelpTip>wallet signature / EIP-712</HelpTip> · Biaya Transaksi <HelpTip>disebut juga gas fee</HelpTip></p>
+          <p className="mt-4 text-xs text-nusa-500">Simpan Karya ke Buku Besar Digital <HelpTip>mint NFT / registrasi on-chain</HelpTip> Â· Tanda Tangan Persetujuan <HelpTip>wallet signature / EIP-712</HelpTip> Â· Biaya Transaksi <HelpTip>disebut juga gas fee</HelpTip></p>
         </div>
       </section>
 
@@ -303,11 +302,11 @@ export default function Home() {
             <ul className="mt-4 space-y-3 text-sm leading-relaxed text-nusa-700 list-disc pl-5">
               <li><strong>Preview terpoison = eksperimental</strong>, bukan Glaze/Nightshade. Transformasi terukur, belum ada benchmark tereproduksi.</li>
               <li><strong>Mock KYC ber-watermark SAMPLE/CONTOH</strong>, bukan verifikasi identitas asli, tidak bisa dihilangkan saat hover/zoom.</li>
-              <li><strong>On-chain record ≠ bukti hukum otomatis.</strong> Hanya bukti provenance & konsen yang bisa diverifikasi.</li>
-              <li><strong>Otorisasi vault ≠ kunci dikirim.</strong> Kunci dibungkus vault server setelah otorisasi tercatat.</li>
+              <li><strong>On-chain record â‰  bukti hukum otomatis.</strong> Hanya bukti provenance & konsen yang bisa diverifikasi.</li>
+              <li><strong>Otorisasi vault â‰  kunci dikirim.</strong> Kunci dibungkus vault server setelah otorisasi tercatat.</li>
               <li>Semua transaksi di <strong>BSC Testnet</strong>, bukan mainnet produksi.</li>
             </ul>
-            <p className="mt-4 text-xs text-nusa-600">Nada kami transparan, protektif, tidak berlebihan, sesuai PRD §9 risiko High jika over-promising.</p>
+            <p className="mt-4 text-xs text-nusa-600">Nada kami transparan, protektif, tidak berlebihan, sesuai PRD Â§9 risiko High jika over-promising.</p>
           </div>
         </div>
       </section>
@@ -315,7 +314,7 @@ export default function Home() {
       {/* 7. GALERI */}
       <section id="galeri" className="py-16 md:py-20 border-b border-nusa-200 bg-white">
         <div className="mx-auto max-w-7xl px-5 md:px-8">
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white border border-nusa-200 px-3 py-1 text-xs font-medium text-nusa-700">Galeri, asimetris per state <HelpTip>Setiap karya punya state berbeda: Public/Poisoned · Licensed/Clear · Vault-Locked</HelpTip></div>
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white border border-nusa-200 px-3 py-1 text-xs font-medium text-nusa-700">Galeri, asimetris per state <HelpTip>Setiap karya punya state berbeda: Public/Poisoned Â· Licensed/Clear Â· Vault-Locked</HelpTip></div>
           <AssetGallery />
           <p className="mt-4 text-xs text-nusa-500">Setiap kartu auditor wajib berlabel: <span className="rounded bg-amber-100 border border-amber-200 px-2 py-0.5 text-amber-800 font-bold">Edukatif, bukan saran finansial/hukum</span>, tidak ada sinyal beli/jual.</p>
         </div>
@@ -332,7 +331,7 @@ export default function Home() {
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {personas.map((p) => (
               <div key={p.name} className="rounded-2xl border border-nusa-200 bg-white p-6 shadow-soft">
-                <p className="text-sm leading-relaxed text-nusa-700 italic">“{p.quote}”</p>
+                <p className="text-sm leading-relaxed text-nusa-700 italic">â€œ{p.quote}â€</p>
                 <p className="mt-4 text-sm font-bold text-nusa-900">{p.name}</p>
                 <p className="text-xs text-nusa-500">{p.role}</p>
               </div>
@@ -352,7 +351,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 10. CTA PENUTUP — rapi, tidak overlap footer */}
+      {/* 10. CTA PENUTUP â€” rapi, tidak overlap footer */}
       <section className="bg-[#FDFCF7] border-t border-nusa-200 py-16 md:py-20">
         <div className="mx-auto max-w-4xl px-5 md:px-8">
           <div className="relative overflow-hidden rounded-2xl bg-teal-900 border border-teal-800 p-8 sm:p-10 md:p-12 text-white shadow-soft-lg">
@@ -361,7 +360,7 @@ export default function Home() {
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight leading-tight">Mulai lindungi karyamu hari ini</h2>
               <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-teal-100">Daftar di BSC Testnet, preview terpoison, vault terenkripsi, royalti ERC-2981.</p>
               <div className="mt-7 flex flex-wrap justify-center gap-3">
-                <Link href="/dashboard" className="interactive-btn inline-flex items-center justify-center rounded-xl bg-white px-7 py-3 text-sm font-bold text-teal-900 shadow-soft-md hover:bg-nusa-50">Buka Workspace Kreator →</Link>
+                <Link href="/dashboard" className="interactive-btn inline-flex items-center justify-center rounded-xl bg-white px-7 py-3 text-sm font-bold text-teal-900 shadow-soft-md hover:bg-nusa-50">Buka Workspace Kreator â†’</Link>
                 <a href="#cara-kerja" className="interactive-btn inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/10 px-6 py-3 text-sm font-semibold text-white hover:bg-white/15">Lihat cara kerja</a>
               </div>
               <div className="mx-auto mt-8 max-w-xl border-t border-white/10 pt-7">
@@ -409,12 +408,12 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-nusa-600 font-medium">
                 <li><Link href="/dashboard" className="hover:text-teal-900">Disclaimer Edukasi AI</Link></li>
                 <li><span className="text-nusa-500 text-xs block">ERC-721 IPNFT & Royalti ERC-2981 permanen di BNB Chain Testnet.</span></li>
-                <li className="pt-2"><span className="inline-flex rounded-lg bg-nusa-100 px-3 py-1.5 text-xs text-nusa-700 font-medium">🇮🇩 Dibuat untuk Hackathon Binance & BNB</span></li>
+                <li className="pt-2"><span className="inline-flex rounded-lg bg-nusa-100 px-3 py-1.5 text-xs text-nusa-700 font-medium">ðŸ‡®ðŸ‡© Dibuat untuk Hackathon Binance & BNB</span></li>
               </ul>
             </div>
           </div>
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-nusa-500">
-            <p>© 2026 Trovaya Protocol.</p>
+            <p>Â© 2026 Trovaya Protocol.</p>
             <p className="text-center sm:text-right">Mencatat bukti kepemilikan dan izin pakai, bukan pengganti putusan peradilan hukum. <span className="rounded bg-amber-50 border border-amber-200 px-2 py-0.5 text-amber-800 font-bold ml-1">Edukatif, bukan saran finansial/hukum</span></p>
           </div>
         </div>

@@ -154,7 +154,8 @@ export function ProtectionForm() {
         <span className="rounded-full bg-teal-200/80 px-2.5 py-0.5 text-[11px] font-bold text-teal-900">Otomatis Aktif</span>
       </div>
       <p className="mt-2 text-xs leading-5 text-nusa-700">
-        Efek <em>Heavy Watercolor Wash</em> diterapkan otomatis: mengaburkan detail tepi dan piksel menjadi unsur warna vignette lembut, sehingga model scraping bot AI tidak dapat membaca detail ataupun merekonstruksi karya asli Anda.
+        Efek <em>Protected Preview (eksperimental)</em> diterapkan otomatis: versi terdistorsi visual untuk publik.
+        Bukan pertahanan adversarial (bukan Glaze/Nightshade, belum ada benchmark). File asli tetap terproteksi oleh enkripsi + vault, bukan oleh efek visual ini.
       </p>
     </div>
     <div className="mt-6 grid gap-4 sm:grid-cols-2">

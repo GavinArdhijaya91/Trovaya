@@ -15,6 +15,8 @@ export function useLicenseProceeds() {
     args: account.address ? [account.address] : undefined,
     query: { enabled: Boolean(addresses && account.address) },
   });
+
+
   const writer = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash: writer.data });
   const refetchBalance = balance.refetch;
@@ -48,3 +50,4 @@ export function useLicenseProceeds() {
     state,
   };
 }
+

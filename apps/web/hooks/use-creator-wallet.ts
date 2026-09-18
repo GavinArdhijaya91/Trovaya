@@ -13,3 +13,4 @@ export function useCreatorWallet() {
     fundsSymbol: balance.data?.symbol,
   };
 }
+
