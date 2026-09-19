@@ -3,6 +3,14 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.17.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.16.0...v0.17.0) (2026-09-19)
+
+
+### Features
+
+* **web:** clarify buyer golden path status ([bc00bcf](https://github.com/GavinArdhijaya91/Trovaya/commit/bc00bcfb01da94c4135233425a8fd1be2b9a3503))
+* **web:** improve golden path status and protection messaging ([764321b](https://github.com/GavinArdhijaya91/Trovaya/commit/764321bacfb488794bb9eef7d869e1d1261ab1f3))
+
 ## [0.16.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.15.0...v0.16.0) (2026-09-17)
 
 
