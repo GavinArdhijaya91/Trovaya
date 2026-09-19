@@ -42,7 +42,7 @@ function shortenAddress(address: string) {
     return address;
   }
 
-  return `${address.slice(0, 7)}…${address.slice(-5)}`;
+  return `${address.slice(0, 7)}â€¦${address.slice(-5)}`;
 }
 
 function getChainLabel(chainId: number) {
@@ -148,7 +148,7 @@ export default function ArtworkDetailPage() {
 
   const [deliveryState, setDeliveryState] =
     useState<
-      "idle" | "pending" | "failed"
+      "idle" | "pending" | "completed" | "failed"
     >("idle");
 
   const [deliveryError, setDeliveryError] =
@@ -384,7 +384,7 @@ export default function ArtworkDetailPage() {
 
       URL.revokeObjectURL(url);
 
-      setDeliveryState("idle");
+      setDeliveryState("completed");
     } catch (caught) {
       setDeliveryState("failed");
 
@@ -514,7 +514,7 @@ export default function ArtworkDetailPage() {
             className="inline-flex items-center gap-2 text-sm font-semibold text-stone-500 transition hover:text-leaf"
           >
             <span aria-hidden="true">
-              ←
+              â†
             </span>
             Back to Explore
           </Link>
@@ -620,7 +620,7 @@ export default function ArtworkDetailPage() {
               className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-medium text-stone-600 transition hover:bg-mint/40 hover:text-leaf"
             >
               <span className="grid h-6 w-6 place-items-center rounded-full bg-mint text-[10px] font-bold text-leaf">
-                ✓
+                âœ“
               </span>
 
               {creator}
@@ -738,9 +738,36 @@ export default function ArtworkDetailPage() {
             ) : (
               <div className="mt-5 rounded-xl bg-amber-50 p-4 text-xs leading-6 text-amber-800">
                 {termsError ??
-                  "Verifying the license document before purchase…"}
+                  "Verifying the license document before purchaseâ€¦"}
               </div>
             )}
+
+            <div className="mb-4 grid grid-cols-3 gap-2 text-[11px] font-semibold">
+              <div className={`rounded-xl border p-3 text-center ${
+                license.purchaseState.phase === "completed"
+                  ? "border-leaf/30 bg-mint text-leaf"
+                  : "border-stone-200 bg-white text-stone-500"
+              }`}>
+                {license.purchaseState.phase === "completed" ? "âœ“" : "1"} Lisensi
+              </div>
+
+              <div className={`rounded-xl border p-3 text-center ${
+                license.unlockState.phase === "completed"
+                  ? "border-leaf/30 bg-mint text-leaf"
+                  : "border-stone-200 bg-white text-stone-500"
+              }`}>
+                {license.unlockState.phase === "completed" ? "âœ“" : "2"} Vault
+              </div>
+
+              <div className={`rounded-xl border p-3 text-center ${
+                deliveryState === "completed"
+                  ? "border-leaf/30 bg-mint text-leaf"
+                  : "border-stone-200 bg-white text-stone-500"
+              }`}>
+                {deliveryState === "completed" ? "âœ“" : "3"} Original
+              </div>
+            </div>
+
 
             <PurchaseCostBreakdown quote={quote} currency={getCurrency(asset.chain_id)} />
 
@@ -770,8 +797,8 @@ export default function ArtworkDetailPage() {
             >
               {license.purchaseState.phase ===
               "completed"
-                ? "License recorded"
-                : "Accept verified terms and purchase"}
+                ? "Lisensi tercatat"
+                : "Setujui terms dan beli lisensi"}
             </button>
 
             <OperationStatus
@@ -822,20 +849,12 @@ export default function ArtworkDetailPage() {
                   {license.unlockState
                     .phase ===
                   "completed"
-                    ? "Vault authorization recorded"
-                    : "Authorize original access"}
+                    ? "Otorisasi Vault tercatat"
+                    : "Otorisasi akses original"}
                 </button>
 
                 <p className="mt-3 text-[11px] leading-5 text-amber-700">
-                  On-chain authorization
-                  does not itself deliver
-                  the decryption key.
-                  Access can expire or be
-                  revoked before future
-                  delivery, but plaintext
-                  already downloaded
-                  cannot be remotely
-                  withdrawn.
+                  Otorisasi on-chain belum berarti kunci dekripsi telah dikirim. Akses dapat kedaluwarsa atau dicabut sebelum pengiriman berikutnya, tetapi file yang sudah diunduh tidak dapat ditarik kembali.
                 </p>
               </>
             )}
@@ -860,8 +879,8 @@ export default function ArtworkDetailPage() {
               >
                 {deliveryState ===
                 "pending"
-                  ? "Verifying wallet and wrapping key…"
-                  : "Verify wallet and download original"}
+                  ? "Memverifikasi wallet dan menyiapkan kunci..."
+                  : deliveryState === "completed" ? "Original berhasil diunduh" : "Verifikasi wallet dan unduh original"}
               </button>
             )}
 
@@ -924,7 +943,7 @@ export default function ArtworkDetailPage() {
       <footer className="mt-10 border-t border-stone-200">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-xs text-stone-500 md:flex-row md:items-center md:justify-between md:px-8">
           <span>
-            Trovaya — creator
+            Trovaya â€” creator
             provenance, consent, and
             licensing.
           </span>
@@ -933,7 +952,7 @@ export default function ArtworkDetailPage() {
             href="/explore"
             className="font-semibold text-leaf"
           >
-            Discover more works →
+            Discover more works â†’
           </Link>
         </div>
       </footer>

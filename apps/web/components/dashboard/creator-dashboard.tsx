@@ -207,7 +207,7 @@ export function CreatorDashboard(){
 
                 <div className="interactive-card rounded-2xl border border-nusa-200 bg-white p-5 shadow-soft hover:shadow-soft-md hover:border-teal-200">
                   <div className="flex justify-between items-center text-xs font-semibold text-nusa-500">
-                    <span>AI Scraper Diblokir</span>
+                    <span>Preview Terproteksi</span>
                     <span className="text-xl">🔒</span>
                   </div>
                   <p className="text-3xl font-extrabold text-teal-900 font-mono mt-2">
@@ -298,7 +298,7 @@ export function CreatorDashboard(){
                   Lindungi & Daftarkan Desain Anda
                 </h1>
                 <p className="text-sm text-nusa-600 mt-1">
-                  Upload file desain Anda. Sistem kami akan membuatkan preview anti-scraping dan mengunci file resolusi tinggi di dalam Vault terenkripsi.
+                  Upload file desain Anda. Sistem akan membuat preview terproteksi eksperimental dan menyimpan file resolusi tinggi di dalam Vault terenkripsi.
                 </p>
               </div>
 
@@ -334,7 +334,7 @@ export function CreatorDashboard(){
                     <div key={`${asset.chain_id}:${asset.token_id}`} className="rounded-xl border border-nusa-200 bg-white p-4 shadow-soft flex gap-4">
                       <div className="relative h-36 w-40 shrink-0 overflow-hidden rounded-lg bg-nusa-50 border border-nusa-200" style={{ backgroundImage: "radial-gradient(circle, #D3D1C7 1.5px, transparent 1.5px)", backgroundSize: "10px 10px" }}>
                         <div className="absolute inset-0 grid place-items-center text-[11px] font-bold text-nusa-500">🔒 Pratinjau Terlindungi</div>
-                        <span className="absolute bottom-1 right-1 rounded bg-nusa-900 text-white text-[10px] px-1.5 py-0.5">AI GLAZE</span>
+                        <span className="absolute bottom-1 right-1 rounded bg-nusa-900 text-white text-[10px] px-1.5 py-0.5">PREVIEW EKSPERIMENTAL</span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
@@ -519,7 +519,7 @@ export function CreatorDashboard(){
                   </div>
                   <h3 className="mt-4 font-bold text-sm text-nusa-900">Pelindung Anti-AI</h3>
                   <p className="mt-1 text-xs text-nusa-600 leading-relaxed">
-                    Menerapkan proteksi poisoned derivative dan larangan pelatihan AI tanpa izin.
+                    Menggunakan preview terproteksi eksperimental dan menampilkan preferensi pelatihan AI dari creator.
                   </p>
                 </div>
 
