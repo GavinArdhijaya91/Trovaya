@@ -41,9 +41,9 @@ contract TrovayaVault is AccessControl, Pausable, ReentrancyGuard, ITrovayaVault
         _grantRole(PAUSER_ROLE, initialOwner);
     }
 
-    function setTrovayaFamily(address _familyContract) external onlyRole(DEFAULT_ADMIN_ROLE) {
-        if (_familyContract == address(0)) revert InvalidAddress();
-        trovayaFamily = _familyContract;
+    function setTrovayaFamily(address familyContract) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (familyContract == address(0)) revert InvalidAddress();
+        trovayaFamily = familyContract;
     }
 
     /// @notice Grants demo access after the configured adapter confirms a human proof.

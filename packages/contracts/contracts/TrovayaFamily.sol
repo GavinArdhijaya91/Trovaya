@@ -53,20 +53,20 @@ contract TrovayaFamily is ReentrancyGuard, ITrovayaFamily {
      * @param _tokenId ID karya yang ingin dibeli.
      * @param _targetAmount Harga lisensi yang harus dikumpulkan.
      */
-    function createFamily(address[] calldata _members, uint256 _tokenId, uint256 _targetAmount) external returns (uint256 groupId) {
-        if (_members.length < 3 || _members.length > 5) revert("Members must be 3-5");
+    function createFamily(address[] calldata members, uint256 tokenId, uint256 targetAmount) external returns (uint256 groupId) {
+        if (members.length < 3 || members.length > 5) revert("Members must be 3-5");
         
         groupCount++;
         groups[groupCount] = FamilyGroup({
-            members: _members,
-            targetAmount: _targetAmount,
+            members: members,
+            targetAmount: targetAmount,
             currentAmount: 0,
-            tokenId: _tokenId,
+            tokenId: tokenId,
             isPurchased: false,
             creator: msg.sender
         });
 
-        emit GroupCreated(groupCount, msg.sender, _tokenId, _targetAmount);
+        emit GroupCreated(groupCount, msg.sender, tokenId, targetAmount);
         return groupCount;
     }
 
@@ -152,28 +152,28 @@ contract TrovayaFamily is ReentrancyGuard, ITrovayaFamily {
     /**
      * @notice Mengambil kembali dana jika grup gagal mencapai target dalam waktu tertentu.
      */
-    function claimRefund(uint256 _groupId) external nonReentrant {
-        FamilyGroup storage group = groups[_groupId];
+    function claimRefund(uint256 groupId) external nonReentrant {
+        FamilyGroup storage group = groups[groupId];
         if (group.isPurchased) revert LicenseAlreadyPurchased();
         
-        uint256 amount = contributions[_groupId][msg.sender];
+        uint256 amount = contributions[groupId][msg.sender];
         if (amount == 0) revert InsufficientFunds();
-
-        contributions[_groupId][msg.sender] = 0;
+        
+        contributions[groupId][msg.sender] = 0;
         group.currentAmount -= amount;
         
         payable(msg.sender).transfer(amount);
-        emit RefundClaimed(_groupId, msg.sender, amount);
+        emit RefundClaimed(groupId, msg.sender, amount);
     }
 
     /**
      * @notice Fungsi helper untuk TrovayaVault memverifikasi akses via Family.
      */
-    function isMemberOfPurchasedFamily(uint256 _tokenId, address _user) external view returns (bool) {
+    function isMemberOfPurchasedFamily(uint256 tokenId, address user) external view returns (bool) {
         for (uint i = 1; i <= groupCount; i++) {
-            if (groups[i].tokenId == _tokenId && groups[i].isPurchased) {
+            if (groups[i].tokenId == tokenId && groups[i].isPurchased) {
                 for (uint j = 0; j < groups[i].members.length; j++) {
-                    if (groups[i].members[j] == _user) return true;
+                    if (groups[i].members[j] == user) return true;
                 }
             }
         }
