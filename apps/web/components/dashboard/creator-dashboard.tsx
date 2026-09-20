@@ -573,8 +573,8 @@ const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
                )}
              </div>
            )}
-         </div>
-       </main>
-     </div>
-   );
+        </div>
+      </main>
+    </div>
+  );
 }
