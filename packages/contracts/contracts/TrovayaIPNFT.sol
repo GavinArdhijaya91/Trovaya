@@ -5,6 +5,8 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import {ERC2981} from "@openzeppelin/contracts/token/common/ERC2981.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
@@ -21,6 +23,8 @@ contract TrovayaIPNFT is
     ReentrancyGuard,
     ITrovayaIPNFT
 {
+    using SafeERC20 for IERC20;
+
     uint96 public constant MAX_ROYALTY_BPS = 10_000;
     uint64 public constant MAX_LICENSE_DURATION = 3650 days;
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -30,6 +34,7 @@ contract TrovayaIPNFT is
     mapping(uint256 tokenId => IPMetadata metadata) private _ipMetadata;
     mapping(uint256 tokenId => mapping(address buyer => bool purchased)) public hasCommercialLicense;
     mapping(uint256 tokenId => mapping(address buyer => LicenseReceipt receipt)) private _licenseReceipts;
+    mapping(address token => mapping(address creator => uint256 amount)) public pendingTokenWithdrawals;
     mapping(address creator => uint256 amount) public pendingWithdrawals;
     uint256 public totalPendingWithdrawals;
 
@@ -131,9 +136,31 @@ contract TrovayaIPNFT is
         bytes32 expectedTermsHash,
         uint32 expectedTermsVersion
     ) external payable whenNotPaused nonReentrant {
+        _processPurchase(tokenId, msg.value, address(0), expectedTermsHash, expectedTermsVersion);
+    }
+
+    function purchaseCommercialLicenseWithToken(
+        address token,
+        uint256 tokenId,
+        uint256 amount,
+        bytes32 expectedTermsHash,
+        uint32 expectedTermsVersion
+    ) external whenNotPaused nonReentrant {
+        if (token == address(0)) revert InvalidAddress();
+        IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
+        _processPurchase(tokenId, amount, token, expectedTermsHash, expectedTermsVersion);
+    }
+
+    function _processPurchase(
+        uint256 tokenId,
+        uint256 amount,
+        address token,
+        bytes32 expectedTermsHash,
+        uint32 expectedTermsVersion
+    ) internal {
         IPMetadata storage metadata = _ipMetadata[tokenId];
         if (metadata.creator == address(0)) revert TokenDoesNotExist();
-        if (msg.value != metadata.commercialLicenseFee || msg.value == 0) revert InvalidLicenseFee();
+        if (amount != metadata.commercialLicenseFee || amount == 0) revert InvalidLicenseFee();
         if (hasCommercialLicense[tokenId][msg.sender]) revert LicenseAlreadyPurchased();
         if (expectedTermsHash != metadata.licenseTermsHash
             || expectedTermsVersion != metadata.licenseTermsVersion) revert LicenseTermsMismatch();
@@ -142,13 +169,18 @@ contract TrovayaIPNFT is
         _licenseReceipts[tokenId][msg.sender] = LicenseReceipt({
             termsHash: metadata.licenseTermsHash,
             termsVersion: metadata.licenseTermsVersion,
-            pricePaid: msg.value,
+            pricePaid: amount,
             purchasedAt: uint64(block.timestamp)
         });
-        pendingWithdrawals[metadata.creator] += msg.value;
-        totalPendingWithdrawals += msg.value;
 
-        emit LicensePurchased(tokenId, msg.sender, msg.value);
+        if (token == address(0)) {
+            pendingWithdrawals[metadata.creator] += amount;
+            totalPendingWithdrawals += amount;
+        } else {
+            pendingTokenWithdrawals[token][metadata.creator] += amount;
+        }
+
+        emit LicensePurchased(tokenId, msg.sender, amount);
         emit LicenseTermsAccepted(tokenId, msg.sender, metadata.licenseTermsHash,
             metadata.licenseTermsVersion, metadata.licenseTermsURI);
     }
@@ -160,11 +192,17 @@ contract TrovayaIPNFT is
         if (amount == 0) revert NoProceeds();
         pendingWithdrawals[msg.sender] = 0;
         totalPendingWithdrawals -= amount;
-        // Pull payments require forwarding arbitrary gas to the creator-selected
-        // recipient; state is rolled back on failure and the entry is non-reentrant.
-        // slither-disable-next-line low-level-calls
         (bool sent,) = recipient.call{value: amount}("");
         if (!sent) revert WithdrawalFailed();
+        emit ProceedsWithdrawn(msg.sender, recipient, amount);
+    }
+
+    function withdrawTokenProceeds(address token, address payable recipient) external nonReentrant {
+        if (token == address(0) || recipient == address(0)) revert InvalidAddress();
+        uint256 amount = pendingTokenWithdrawals[token][msg.sender];
+        if (amount == 0) revert NoProceeds();
+        pendingTokenWithdrawals[token][msg.sender] = 0;
+        IERC20(token).safeTransfer(recipient, amount);
         emit ProceedsWithdrawn(msg.sender, recipient, amount);
     }
 

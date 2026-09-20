@@ -66,6 +66,14 @@ interface ITrovayaIPNFT {
         uint32 expectedTermsVersion
     ) external payable;
 
+    function purchaseCommercialLicenseWithToken(
+        address token,
+        uint256 tokenId,
+        uint256 amount,
+        bytes32 expectedTermsHash,
+        uint32 expectedTermsVersion
+    ) external;
+
     function getIPMetadata(uint256 tokenId) external view returns (IPMetadata memory);
 
     function hasCommercialLicense(uint256 tokenId, address buyer) external view returns (bool);

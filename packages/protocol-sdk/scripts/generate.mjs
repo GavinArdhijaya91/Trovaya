@@ -7,6 +7,7 @@ const contractsRoot = path.resolve(packageRoot, "../contracts/artifacts/contract
 const contracts = {
   TrovayaIPNFT: "TrovayaIPNFT.sol/TrovayaIPNFT.json",
   TrovayaVault: "TrovayaVault.sol/TrovayaVault.json",
+  TrovayaFamily: "TrovayaFamily.sol/TrovayaFamily.json",
   MockZKHumanVerifier: "mocks/MockZKHumanVerifier.sol/MockZKHumanVerifier.json",
 };
 
