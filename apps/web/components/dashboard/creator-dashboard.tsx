@@ -390,14 +390,12 @@ const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
                          Berikutnya
                        </button>
                      </div>
-                   )}
-                 </div>
-               )}
-             </div>
-           )}
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
-            </div>
-          )}
 
           {/* ════════════ 04. PENJUALAN & LISENSI (LICENSES) ════════════ */}
           {activeTab === "licenses" && (
