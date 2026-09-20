@@ -26,6 +26,20 @@ export interface IntegrationError {
   retryable: boolean;
 }
 
+export interface PaymentMethod {
+  symbol: string;
+  address: string; // address(0) for BNB
+  decimals: number;
+  displayName: string;
+}
+
+export const SUPPORTED_PAYMENT_METHODS: Record<string, PaymentMethod> = {
+  BNB: { symbol: "BNB", address: "0x0000000000000000000000000000000000000000", decimals: 18, displayName: "BNB" },
+  USDT: { symbol: "USDT", address: "0x55d39833adef184cacd482325d58e842a7c620bf", decimals: 18, displayName: "Tether USDT" },
+  PAXG: { symbol: "PAXG", address: "0x0b6a53580310e963221873149471576617538123", decimals: 18, displayName: "Pax Gold" },
+  XAUT: { symbol: "XAUT", address: "0x1388c764839479841564887c52c7445544d6536c", decimals: 18, displayName: "Tether Gold" },
+};
+
 export interface OperationState {
   phase: OperationPhase;
   message: string;
@@ -90,6 +104,9 @@ export function normalizeIntegrationError(error: unknown): IntegrationError {
   }
   if (rawMessage.includes("network") || rawMessage.includes("fetch") || rawMessage.includes("rpc")) {
     return { code: "network_error", message: "Jaringan belum dapat dihubungi. Coba kembali.", retryable: true };
+  }
+  if (rawMessage.includes("insufficient funds") || rawMessage.includes("insufficient balance")) {
+    return { code: "transaction_failed", message: "Saldo tidak mencukupi untuk transaksi ini.", retryable: true };
   }
   return {
     code: "transaction_failed",
