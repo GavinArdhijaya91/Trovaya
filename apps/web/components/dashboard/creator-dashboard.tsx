@@ -48,6 +48,9 @@ const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
 
 export function CreatorDashboard(){
   const [activeTab, setActiveTab] = useState<Tab>("overview");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
   const account = useAccount();
   const assets = useAssets();
   const records = assets.data ?? [];
@@ -308,76 +311,85 @@ export function CreatorDashboard(){
             </div>
           )}
 
-          {/* ════════════ 03. GALERI KARYA SAYA (ASSETS) — sample1 dotted card */}
-          {activeTab === "assets" && (
-            <div className="relative space-y-5">
-              <div className="flex flex-wrap items-end justify-between gap-3 border-b border-nusa-200 pb-4">
-                <div>
-                  <h1 className="text-2xl font-extrabold text-nusa-900 tracking-tight">Karya Kamu</h1>
-                  <p className="text-xs text-nusa-500">Terpasang di Ledger BNB · Menampilkan {records.length} dari 12 sertifikat</p>
-                </div>
-                <div className="flex gap-1 rounded-lg bg-nusa-100 p-1 text-[11px] font-bold">
-                  <span className="rounded bg-white border border-nusa-200 px-3 py-1 text-teal-900 shadow-sm">Semua ({records.length})</span>
-                  <span className="px-3 py-1 text-nusa-600">Aktif Berlisensi ({licensedForAI})</span>
-                  <span className="px-3 py-1 text-nusa-600">Belum Terjual ({protectedFromAI})</span>
-                </div>
-              </div>
-              {records.length === 0 ? (
-                <div className="rounded-xl border-2 border-dashed border-nusa-200 bg-white p-10 text-center">
-                  <p className="font-bold text-nusa-900">Belum ada karya yang terdaftar.</p>
-                  <button type="button" onClick={() => setActiveTab("studio")} className="mt-3 rounded-lg bg-teal-900 px-5 py-2 text-xs font-bold text-white">Buka Formulir Pendaftaran</button>
-                </div>
-              ) : (
-                <div className="grid gap-4 lg:grid-cols-[1.6fr_0.9fr]">
-                  <div className="space-y-4">
-                  {records.map((asset) => (
-                    <div key={`${asset.chain_id}:${asset.token_id}`} className="rounded-xl border border-nusa-200 bg-white p-4 shadow-soft flex gap-4">
-                      <div className="relative h-36 w-40 shrink-0 overflow-hidden rounded-lg bg-nusa-50 border border-nusa-200" style={{ backgroundImage: "radial-gradient(circle, #D3D1C7 1.5px, transparent 1.5px)", backgroundSize: "10px 10px" }}>
-                        <div className="absolute inset-0 grid place-items-center text-[11px] font-bold text-nusa-500">🔒 Pratinjau Terlindungi</div>
-                        <span className="absolute bottom-1 right-1 rounded bg-nusa-900 text-white text-[10px] px-1.5 py-0.5">PREVIEW EKSPERIMENTAL</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between gap-2">
-                          <h3 className="font-bold text-nusa-900 text-sm leading-tight">Karya #{asset.token_id} · Token #{asset.token_id}</h3>
-                          <span className="shrink-0 rounded-full bg-teal-50 border border-teal-200 px-2 py-0.5 text-[11px] font-bold text-teal-800">● 2 Lisensi Terjual</span>
-                        </div>
-                        <p className="mt-1 inline-flex rounded bg-nusa-50 border border-nusa-100 px-2 py-1 font-mono text-[11px] text-nusa-600">TRV-BNB-#{asset.token_id} • ERC-721IP • Hash: {String(asset.license_terms_hash ?? "").slice(0,10)}…</p>
-                        <div className="mt-3 grid grid-cols-3 gap-3 text-xs">
-                          <div><p className="text-nusa-500 text-[11px]">Royalti ERC-2981</p><p className="font-bold text-nusa-900">10% Sekunder</p></div>
-                          <div><p className="text-nusa-500 text-[11px]">Terdaftar Resmi</p><p className="font-bold text-nusa-900">14 Jan 2026</p></div>
-                          <div><p className="text-nusa-500 text-[11px]">Persetujuan AI</p><p className={`font-bold ${asset.allow_ai_training ? "text-emerald-700" : "text-danger"}`}>{asset.allow_ai_training ? "Diizinkan" : "⊘ Dilarang"}</p></div>
-                        </div>
-                        <div className="mt-3 flex gap-2">
-                          <button className="rounded-lg bg-nusa-50 border border-nusa-200 px-3 py-1.5 text-xs font-semibold text-nusa-700">🛡️ Detail Hak Cipta</button>
-                          <button className="rounded-lg bg-nusa-50 border border-nusa-200 px-3 py-1.5 text-xs font-semibold text-nusa-700">🔓 Lihat Vault</button>
-                        </div>
-                        <AssetReviewer input={buildReviewInput(asset)} />
-                      </div>
-                    </div>
-                  ))}
-                  </div>
-                  {/* Right rail — Catatan AI */}
-                  <div className="space-y-4">
-                    <div className="rounded-xl border border-nusa-200 bg-white p-4 shadow-soft">
-                      <div className="flex items-center justify-between"><h3 className="font-bold text-nusa-900 flex items-center gap-1.5">◉ Catatan AI</h3><span className="rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[11px] font-bold text-amber-800">Bukan Saran Finansial</span></div>
-                      <p className="mt-3 text-xs leading-relaxed text-nusa-600">Analisis konsistensi metadata on-chain menunjukkan reputasi lisensi stabil; seluruh derivatif komersial mematuhi batasan klausul non-eksklusif BNB Chain.</p>
-                      <div className="mt-3 space-y-2 text-xs">
-                        <div className="rounded bg-nusa-50 border border-nusa-100 p-2"><p className="font-bold text-teal-800 text-[11px]">BUKTI IZIN PELATIHAN AI</p><p className="font-bold">● Status Non-Aktif</p><p className="text-nusa-500">Proteksi penuh terhadap model genAI komersial</p></div>
-                        <div className="rounded bg-nusa-50 border border-nusa-100 p-2"><p className="font-bold text-teal-800 text-[11px]">INTEGRITAS ENKRIPSI</p><p className="font-bold">● 100% Client-Side Vault</p><p className="text-nusa-500">Validated IPFS tersimpan aman via MetaMask</p></div>
-                      </div>
-                      <div className="mt-3 text-xs"><div className="flex justify-between font-semibold"><span className="text-nusa-500">Pemindaian Lisensi</span><span>Aktif</span></div><div className="mt-1 h-1.5 rounded-full bg-nusa-100 overflow-hidden"><div className="h-full bg-teal-900" style={{ width: "88%" }} /></div><p className="text-[11px] text-nusa-500 mt-1">Terakhir diperiksa: 4 menit yang lalu via BNB Node 38M</p></div>
-                    </div>
-                    <div className="rounded-xl border border-nusa-200 bg-white p-4 shadow-soft">
-                      <h3 className="font-bold text-nusa-900 text-sm">STATUS JARINGAN & LEDGER</h3>
-                      <div className="mt-3 space-y-2 text-xs">
-                        <div className="flex justify-between"><span className="text-nusa-500">Jaringan Utama</span><span className="font-bold">BNB Testnet (Chain ID 97)</span></div>
-                        <div className="flex justify-between"><span className="text-nusa-500">Konfirmasi Blok</span><span className="text-nusa-700">Instan (~3.0s)</span></div>
-                        <div className="flex justify-between"><span className="text-nusa-500">Biaya Gas Kreator</span><span className="rounded bg-teal-50 border border-teal-200 px-2 py-0.5 font-bold text-teal-900">Zero Fee (Sponsored Relayer)</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+           {/* ════════════ 03. GALERI KARYA SAYA (ASSETS) — Responsive Grid Gallery ════════════ */}
+           {activeTab === "assets" && (
+             <div className="relative space-y-6">
+               <div className="flex flex-wrap items-end justify-between gap-3 border-b border-nusa-200 pb-4">
+                 <div className="max-w-2xl">
+                   <h1 className="text-2xl font-extrabold text-nusa-900 tracking-tight">Koleksi Karya Saya</h1>
+                   <p className="text-xs text-nusa-500 mt-1">Terpasang di Ledger BNB · Menampilkan {records.length} sertifikat IP terverifikasi</p>
+                 </div>
+                 <div className="flex gap-1 rounded-lg bg-nusa-100 p-1 text-[11px] font-bold">
+                   <span className="rounded bg-white border border-nusa-200 px-3 py-1 text-teal-900 shadow-sm">Semua ({records.length})</span>
+                   <span className="px-3 py-1 text-nusa-600">Aktif Berlisensi ({licensedForAI})</span>
+                   <span className="px-3 py-1 text-nusa-600">Belum Terjual ({protectedFromAI})</span>
+                 </div>
+               </div>
+               {records.length === 0 ? (
+                 <div className="rounded-xl border-2 border-dashed border-nusa-200 bg-white p-10 text-center">
+                   <p className="font-bold text-nusa-900">Belum ada karya yang terdaftar.</p>
+                   <button type="button" onClick={() => setActiveTab("studio")} className="mt-3 rounded-lg bg-teal-900 px-5 py-2 text-xs font-bold text-white">Buka Formulir Pendaftaran</button>
+                 </div>
+               ) : (
+                 <div className="space-y-8">
+                   <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                     {records.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((asset) => (
+                       <div key={`${asset.chain_id}:${asset.token_id}`} className="group relative rounded-2xl border border-nusa-200 bg-white overflow-hidden shadow-soft hover:shadow-md transition-all hover:border-teal-200">
+                         <div className="relative aspect-[4/3] overflow-hidden bg-nusa-100 border-b border-nusa-200">
+                           <div className="absolute inset-0 grid place-items-center text-[11px] font-bold text-nusa-500" style={{ backgroundImage: "radial-gradient(circle, #D3D1C7 1.5px, transparent 1.5px)", backgroundSize: "10px 10px" }}>🔒 Pratinjau Terlindungi</div>
+                           <span className="absolute bottom-2 right-2 rounded bg-nusa-900 text-white text-[10px] px-1.5 py-0.5 font-medium">PREVIEW EKSPERIMENTAL</span>
+                         </div>
+                         <div className="p-4">
+                           <div className="flex items-start justify-between gap-2">
+                             <h3 className="font-bold text-nusa-900 text-sm leading-tight">Karya #{asset.token_id}</h3>
+                             <span className="shrink-0 rounded-full bg-teal-50 border border-teal-200 px-2 py-0.5 text-[10px] font-bold text-teal-800">● 2 Lisensi Terjual</span>
+                           </div>
+                           <p className="mt-1.5 font-mono text-[10px] text-nusa-500 truncate">Hash: {String(asset.license_terms_hash ?? "").slice(0,16)}…</p>
+                           <div className="mt-4 grid grid-cols-2 gap-3 text-[11px]">
+                             <div className="flex flex-col">
+                               <span className="text-nusa-400 uppercase text-[9px] font-bold tracking-wider">Royalti</span>
+                               <span className="font-bold text-nusa-900">10% Sekunder</span>
+                             </div>
+                             <div className="flex flex-col">
+                               <span className="text-nusa-400 uppercase text-[9px] font-bold tracking-wider">AI Consent</span>
+                               <span className={`font-bold ${asset.allow_ai_training ? "text-emerald-700" : "text-danger"}`}>{asset.allow_ai_training ? "Diizinkan" : "Dilarang"}</span>
+                             </div>
+                           </div>
+                           <div className="mt-5 flex gap-2">
+                             <button className="flex-1 rounded-lg bg-nusa-50 border border-nusa-200 px-2 py-2 text-[11px] font-semibold text-nusa-700 hover:bg-white transition-colors">🛡️ Detail</button>
+                             <button className="flex-1 rounded-lg bg-nusa-50 border border-nusa-200 px-2 py-2 text-[11px] font-semibold text-nusa-700 hover:bg-white transition-colors">🔓 Vault</button>
+                           </div>
+                           <div className="mt-4 pt-4 border-t border-nusa-100">
+                             <AssetReviewer input={buildReviewInput(asset)} />
+                           </div>
+                         </div>
+                       </div>
+                     ))}
+                   </div>
+                   {records.length > itemsPerPage && (
+                     <div className="flex items-center justify-center gap-4 pt-4">
+                       <button 
+                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                         disabled={currentPage === 1}
+                         className="rounded-lg border border-nusa-200 px-4 py-2 text-xs font-bold text-nusa-700 hover:bg-white disabled:opacity-30 transition-colors"
+                       >
+                         Sebelumnya
+                       </button>
+                       <span className="text-xs font-medium text-nusa-500">Halaman {currentPage} dari {Math.ceil(records.length / itemsPerPage)}</span>
+                       <button 
+                         onClick={() => setCurrentPage(p => p + 1)}
+                         disabled={currentPage >= Math.ceil(records.length / itemsPerPage)}
+                         className="rounded-lg border border-nusa-200 px-4 py-2 text-xs font-bold text-nusa-700 hover:bg-white disabled:opacity-30 transition-colors"
+                       >
+                         Berikutnya
+                       </button>
+                     </div>
+                   )}
+                 </div>
+               )}
+             </div>
+           )}
+
             </div>
           )}
 
