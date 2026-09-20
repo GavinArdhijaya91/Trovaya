@@ -553,29 +553,28 @@ const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
                 </div>
               </div>
 
-              {/* Public Profile CTA Banner */}
-              {account.address && (
-                <div className="rounded-3xl border border-teal-200 bg-gradient-to-r from-teal-50 to-emerald-50 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div>
-                    <h3 className="font-bold text-base text-teal-900">Halaman Profil Publik Kreator Anda</h3>
-                    <p className="text-xs text-teal-700 mt-0.5">
-                      Bagikan tautan profil publik ini kepada calon pembeli lisensi dan kurator.
-                    </p>
-                    </div>
-                    <Link
-                      href={`/profile/${account.address}`}
-                      className="inline-flex items-center gap-2 rounded-xl bg-teal-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-teal-800 transition shrink-0"
-                    >
-                      <span>Buka Halaman Profil</span>
-                      <span>↗</span>
-                    </Link>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
-    </div>
-  );
+               {/* Public Profile CTA Banner */}
+               {account.address && (
+                 <div className="rounded-3xl border border-teal-200 bg-gradient-to-r from-teal-50 to-emerald-50 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                   <div>
+                     <h3 className="font-bold text-base text-teal-900">Halaman Profil Publik Kreator Anda</h3>
+                     <p className="text-xs text-teal-700 mt-0.5">
+                       Bagikan tautan profil publik ini kepada calon pembeli lisensi dan kurator.
+                     </p>
+                   </div>
+                   <Link
+                     href={`/profile/${account.address}`}
+                     className="inline-flex items-center gap-2 rounded-xl bg-teal-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-teal-800 transition shrink-0"
+                   >
+                     <span>Buka Halaman Profil</span>
+                     <span>↗</span>
+                   </Link>
+                 </div>
+               )}
+             </div>
+           )}
+         </div>
+       </main>
+     </div>
+   );
 }
