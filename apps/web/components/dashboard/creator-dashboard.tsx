@@ -576,5 +576,5 @@ const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
         </div>
       </main>
     </div>
-    );
+  );
 }
