@@ -49,9 +49,9 @@ contract TrovayaFamily is ReentrancyGuard, ITrovayaFamily {
 
     /**
      * @notice Membuat grup urunan untuk membeli lisensi karya tertentu.
-     * @param _members Daftar alamat anggota grup (maks 5 orang).
-     * @param _tokenId ID karya yang ingin dibeli.
-     * @param _targetAmount Harga lisensi yang harus dikumpulkan.
+     * @param members Daftar alamat anggota grup (maks 5 orang).
+     * @param tokenId ID karya yang ingin dibeli.
+     * @param targetAmount Harga lisensi yang harus dikumpulkan.
      */
     function createFamily(address[] calldata members, uint256 tokenId, uint256 targetAmount) external returns (uint256 groupId) {
         if (members.length < 3 || members.length > 5) revert("Members must be 3-5");
