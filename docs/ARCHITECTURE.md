@@ -18,5 +18,6 @@
            │                                 ▼
            └───────────────► [ L2 Smart Contracts (packages/contracts) ]
                                  │
-                                 ├─────────► TrovayaIPNFT (ERC-721 + ERC-2981)
-                                 └─────────► TrovayaVault (ZK-Access Gate)
+                                  ├─────────► TrovayaIPNFT (ERC-721 + ERC-2981)
+                                  ├─────────► TrovayaFamily (Shared Licensing)
+                                  └─────────► TrovayaVault (ZK-Access Gate)
