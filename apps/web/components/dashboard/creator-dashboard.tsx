@@ -60,7 +60,6 @@ const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
   }, [activeTab, records.length]);
   
   const licensedForAI = records.filter((a) => a.allow_ai_training).length;
-  const licensedForAI = records.filter((a) => a.allow_ai_training).length;
   const protectedFromAI = records.length - licensedForAI;
   const licenseReady = records.filter((a) => a.commercial_license_fee_wei).length;
   const contractsConfigured = Boolean(getClientContractAddresses());
@@ -562,22 +561,21 @@ const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
                     <p className="text-xs text-teal-700 mt-0.5">
                       Bagikan tautan profil publik ini kepada calon pembeli lisensi dan kurator.
                     </p>
+                    </div>
+                    <Link
+                      href={`/profile/${account.address}`}
+                      className="inline-flex items-center gap-2 rounded-xl bg-teal-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-teal-800 transition shrink-0"
+                    >
+                      <span>Buka Halaman Profil</span>
+                      <span>↗</span>
+                    </Link>
                   </div>
-                  <Link
-                    href={`/profile/${account.address}`}
-                    className="inline-flex items-center gap-2 rounded-xl bg-teal-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-teal-800 transition shrink-0"
-                  >
-                    <span>Buka Halaman Profil</span>
-                    <span>↗</span>
-                  </Link>
-                </div>
-              )}
-            </div>
-          )}
-
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </main>
-      </div>
     </div>
   );
 }
