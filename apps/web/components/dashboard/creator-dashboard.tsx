@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CustomConnectButton } from "@/components/custom-connect-button";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
@@ -46,14 +46,20 @@ const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
   { id: "trust",    label: "Profil & KYC",      icon: "👤", subtitle: "Keamanan akun" },
 ];
 
-export function CreatorDashboard(){
   const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
   const account = useAccount();
   const assets = useAssets();
+  
   const records = assets.data ?? [];
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, records.length]);
+  
+  const licensedForAI = records.filter((a) => a.allow_ai_training).length;
   const licensedForAI = records.filter((a) => a.allow_ai_training).length;
   const protectedFromAI = records.length - licensedForAI;
   const licenseReady = records.filter((a) => a.commercial_license_fee_wei).length;
