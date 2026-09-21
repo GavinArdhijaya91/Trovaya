@@ -24,7 +24,7 @@ const masalah = [
   {
     icon: "ðŸ§±",
     title: "Friksi Web3 untuk UMKM",
-    desc: "Pak Budi paham batik, bukan gas fee. Istilah mint, sign, smart contract bikin onboarding terasa seperti ujian, bukan seperti aplikasi investasi biasa.",
+    desc: "Kreator paham karya, bukan gas fee. Istilah mint, sign, smart contract bikin onboarding terasa seperti ujian, bukan seperti aplikasi investasi biasa.",
   },
 ];
 
@@ -65,7 +65,7 @@ const steps = [
 ];
 
 const personas = [
-  { name: "Pak Budi", role: "Pemilik UMKM batik, skenario ilustratif", quote: "Saya mau motif batik saya tetap terlihat cantik di katalog, tapi tidak diambil bot AI diam-diam. Trovaya kasih preview yang indah, file asli tetap di vault." },
+  { name: "Pak Budi", role: "Pemilik UMKM, skenario ilustratif", quote: "Saya mau karya saya tetap terlihat cantik di katalog, tapi tidak diambil bot AI diam-diam. Trovaya kasih preview yang indah, file asli tetap di vault." },
   { name: "Sarah", role: "Ilustrator digital, skenario ilustratif", quote: "Akhirnya saya bisa tentukan: karya ini boleh atau tidak untuk training AI. Lisensi jelas, hash-nya bisa dicek, royalti masuk wallet langsung." },
   { name: "Alex", role: "Developer AI etis, skenario ilustratif", quote: "Saya butuh dataset yang izinnya transparan. Di Trovaya saya cek allowAITraining dan hash terms sebelum pakai karya untuk training." },
 ];
@@ -119,20 +119,13 @@ export default function Home() {
               <div className="inline-flex items-center gap-2 rounded-full bg-white border border-nusa-200 px-3.5 py-1.5 text-[11px] font-bold tracking-widest text-nusa-600 shadow-sm">
                 <span className="h-2 w-2 rounded-full bg-teal-700" /> PROTOKOL REGISTRASI & LISENSI IP DIGITAL
               </div>
-              <h1 className="mt-8 text-4xl sm:text-6xl lg:text-[4rem] font-extrabold tracking-tight text-nusa-900 leading-[1.1]">
-                Karyamu Jadi Token.<br /> <span className="text-teal-900">Aksesnya Kamu yang Atur.</span>
-              </h1>
-              <div className="mt-10 flex flex-wrap justify-center gap-4">
-                <Link href="/dashboard" className="interactive-btn inline-flex items-center gap-2 rounded-xl bg-teal-900 px-8 py-4 text-sm font-bold text-white shadow-lg hover:bg-teal-700 transition-all active:scale-95">
-                  Daftarkan Karya Saya <span>→</span>
-                </Link>
-                <a href="#cara-kerja" className="interactive-btn inline-flex items-center gap-2 rounded-xl border border-nusa-200 bg-white px-8 py-4 text-sm font-bold text-nusa-900 hover:bg-nusa-50 transition-all active:scale-95">
-                  Lihat Alur Kerja <span>←</span>
-                </a>
-              </div>
-              <p className="mt-6 text-xs text-nusa-500">
-                Bukti provenance & konsen di BSC Testnet &bull; <span className="rounded bg-amber-50 border border-amber-200 px-2 py-0.5 font-bold text-amber-800">Edukatif, bukan saran finansial/hukum</span>
-              </p>
+               <h1 className="mt-8 text-4xl sm:text-6xl lg:text-[4rem] font-extrabold tracking-tight text-nusa-900 leading-[1.1]">
+                 Bagikan Karyamu ke Publik,<br /> <span className="text-teal-900">Tanpa Memberi File Aslinya.</span>
+               </h1>
+               <p className="mt-6 text-lg text-nusa-600 max-w-2xl mx-auto leading-relaxed">
+                 Trovaya lets creators share their work publicly without giving the clean original away. 
+                 Pisahkan visibilitas publik dengan akses master file melalui infrastruktur lisensi & vault on-chain.
+               </p>
             </div>
 
             {/* Dual preview card — Precision alignment */}
@@ -191,7 +184,7 @@ export default function Home() {
             </div>
 
             <div className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-3 text-xs leading-relaxed border-t border-nusa-200/60 pt-10">
-              <div className="flex gap-4"><span className="grid h-8 w-8 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0 text-lg">📜</span><div><p className="font-bold text-nusa-900">Bukti Kepemilikan On-Chain</p><p className="text-nusa-600 mt-1">Pencatatan kepemilikan definitif bersertifikasi di BNB Chain ledger yang sah secara yuridis.</p></div></div>
+              <div className="flex gap-4"><span className="grid h-8 w-8 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0 text-lg">📜</span><div><p className="font-bold text-nusa-900">Bukti Registrasi & Provenance On-Chain</p><p className="text-nusa-600 mt-1">Pencatatan registrasi dan asal-usul karya di BNB Chain ledger sebagai bukti verifiable record.</p></div></div>
               <div className="flex gap-4"><span className="grid h-8 w-8 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0 text-lg">🛡️</span><div><p className="font-bold text-nusa-900">Preview Terpoison Eksperimental</p><p className="text-nusa-600 mt-1">Preview terpoison eksperimental ditampilkan publik; file asli terenkripsi di Vault dengan AES-256.</p></div></div>
               <div className="flex gap-4"><span className="grid h-8 w-8 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0 text-lg">📑</span><div><p className="font-bold text-nusa-900">Lisensi Transparan</p><p className="text-nusa-600 mt-1">Hak komersial, derivatif, dan royalti diatur otomatis via smart contract berstandar global.</p></div></div>
             </div>
