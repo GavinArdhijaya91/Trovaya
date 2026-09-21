@@ -806,7 +806,7 @@ export default function ArtworkDetailPage() {
                   ? "border-leaf/30 bg-mint text-leaf"
                   : "border-stone-200 bg-white text-stone-500"
               }`}>
-                {entitlement.authorized ? "âœ“" : "2"} Vault
+                {entitlement.authorized ? "[v]" : "2"} Vault
               </div>
 
               <div className={`rounded-xl border p-3 text-center ${
@@ -814,7 +814,7 @@ export default function ArtworkDetailPage() {
                   ? "border-leaf/30 bg-mint text-leaf"
                   : "border-stone-200 bg-white text-stone-500"
               }`}>
-                {deliveryState === "completed" ? "âœ“" : "3"} Original
+                {deliveryState === "completed" ? "[v]" : "3"} Original
               </div>
             </div>
 
@@ -991,7 +991,7 @@ export default function ArtworkDetailPage() {
       <footer className="mt-10 border-t border-stone-200">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-xs text-stone-500 md:flex-row md:items-center md:justify-between md:px-8">
           <span>
-            Trovaya â€” creator
+            Trovaya &mdash; creator
             provenance, consent, and
             licensing.
           </span>
@@ -1000,7 +1000,7 @@ export default function ArtworkDetailPage() {
             href="/explore"
             className="font-semibold text-leaf"
           >
-            Discover more works â†’
+            Discover more works &rarr;
           </Link>
         </div>
       </footer>
