@@ -8,6 +8,7 @@ import { formatEther } from "viem";
 import { useAssets, type IndexedAsset } from "@/hooks/use-assets";
 import { useAssetAccess } from "@/hooks/use-asset-access";
 import { useLicenseActions } from "@/hooks/use-license-actions";
+import { usePurchaseQuote } from "@/hooks/use-purchase-quote";
 import { resolveEntitlement } from "@/lib/asset-access";
 import { OperationStatus } from "@/components/operation-status";
 import { verifyLicenseTermsJson, type VersionedLicenseTerms } from "@/lib/license-terms";
@@ -86,7 +87,6 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
   const [reviewInput, setReviewInput] = useState<AssetReviewInput>();
   const [deliveryState, setDeliveryState] = useState<"idle" | "pending" | "failed">("idle");
   const [deliveryError, setDeliveryError] = useState<string>();
-  const [forceUnblurPreview, setForceUnblurPreview] = useState(false);
 
   // Rantai adalah sumber kebenaran: pembeli yang memuat ulang halaman tetap
   // dikenali lewat pembacaan on-chain, bukan hanya lewat state sesi ini.
@@ -110,6 +110,18 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
     refreshedFor.current = key;
     void refreshAccess();
   }, [purchaseHash, unlockHash, refreshAccess]);
+
+  // Quote on-chain per-kartu: cegah fee basi indexer menyebabkan revert.
+  // termsHash/termsVersion diteruskan agar estimasi gas akurat 1:1 popup wallet.
+  const quote = usePurchaseQuote(
+    asset.token_id,
+    asset.commercial_license_fee_wei ?? undefined,
+    account.address,
+    (asset.license_terms_hash as `0x${string}` | undefined) ?? undefined,
+    asset.license_terms_version ?? undefined,
+  );
+  const effectiveFeeWei = quote.chainFeeWei ?? asset.commercial_license_fee_wei;
+  const feeMismatch = quote.matches === false;
 
   useEffect(() => {
     let active = true;
@@ -223,8 +235,13 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
   ]);
 
   async function buy() {
-    if (!asset.commercial_license_fee_wei || !asset.license_terms_hash || !asset.license_terms_version || !terms) return;
-    await license.purchaseLicense(asset.token_id, asset.commercial_license_fee_wei, asset.license_terms_hash as `0x${string}`, asset.license_terms_version);
+    if (!asset.license_terms_hash || !asset.license_terms_version || !terms) return;
+    // BUG FIX P0: gallery sebelumnya memakai fee indexer mentah -> revert
+    // InvalidLicenseFee jika indexer basi. Pakai fee on-chain bila tersedia,
+    // tolak beli bila fee belum bisa dibaca dari kedua sumber.
+    const fee = quote.chainFeeWei ?? asset.commercial_license_fee_wei;
+    if (!fee) return;
+    await license.purchaseLicense(asset.token_id, fee, asset.license_terms_hash as `0x${string}`, asset.license_terms_version);
   }
 
   async function authorizeVault() {
@@ -266,15 +283,15 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
       <div className="relative aspect-square w-full overflow-hidden bg-nusa-900">
         {cid && !isDemo ? (
           <>
+            {/* SECURITY: preview TIDAK PERNAH unblur untuk non-pemegang akses.
+                File asli tidak pernah keluar dari vault terenkripsi. */}
             <Image
               unoptimized
               width={600}
               height={600}
               src={`${gateway}/${cid}`}
               alt={`Pratinjau karya terproteksi #${asset.token_id}`}
-              className={`h-full w-full object-cover transition-all duration-500 ${
-                isUnlocked || forceUnblurPreview ? "filter-none" : "filter blur-md scale-105"
-              }`}
+              className="h-full w-full object-cover transition-all duration-500 filter blur-md scale-105"
             />
             {/* Anti-Scraping Overlay Watermark when locked */}
             {!isUnlocked && (
@@ -286,15 +303,8 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
                   Pratinjau Terproteksi
                 </p>
                 <p className="mt-1 text-xs text-white/90 leading-relaxed max-w-[240px]">
-                  Preview terproteksi aktif. Detail resolusi tinggi tetap terkunci di Vault.
+                  Public preview ≠ clean original. Detail resolusi tinggi tetap terkunci di Vault.
                 </p>
-                <button
-                  type="button"
-                  onClick={() => setForceUnblurPreview((prev) => !prev)}
-                  className="mt-3 rounded-full bg-white/20 border border-white/30 px-3 py-1 text-[11px] font-medium text-white hover:bg-white/30 transition-colors"
-                >
-                  {forceUnblurPreview ? "Tampilkan Preview Terproteksi" : "Lihat Transformasi Preview"}
-                </button>
               </div>
             )}
             {isUnlocked && (
@@ -362,10 +372,15 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
           <div className="flex items-baseline justify-between">
             <span className="text-xs font-medium text-nusa-600">Biaya lisensi komersial</span>
             <span className="text-base font-bold text-nusa-900">
-              {asset.commercial_license_fee_wei ? formatEther(BigInt(asset.commercial_license_fee_wei)) : "0.00"}{" "}
+              {effectiveFeeWei ? formatEther(BigInt(effectiveFeeWei)) : "0.00"}{" "}
               <span className="text-xs font-semibold text-slate-500">{asset.chain_id === 97 ? "tBNB" : "ETH"}</span>
             </span>
           </div>
+          {feeMismatch && (
+            <p role="alert" className="mt-2 rounded-lg bg-amber-50 border border-amber-200 p-2 text-[11px] leading-5 text-amber-800">
+              Harga galeri berbeda dari harga on-chain. Yang berlaku: harga on-chain saat tombol diklik.
+            </p>
+          )}
           <p className="mt-1 text-[11px] text-slate-500">
             + Biaya Jaringan ikut estimasi dompet.{" "}
             <Link href={`/artwork/${asset.chain_id}/${asset.token_id}`} className="font-semibold text-leaf hover:underline">
@@ -403,13 +418,16 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
                 !terms ||
                 !asset.license_terms_hash ||
                 !asset.license_terms_version ||
+                !effectiveFeeWei ||
                 !["idle", "failed"].includes(license.purchaseState.phase)
               }
               className="w-full rounded-xl bg-teal-900 px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-teal-700 disabled:opacity-50 transition-colors"
             >
               {license.purchaseState.phase === "confirming"
                 ? "Memproses di Blockchain…"
-                : "Beli Lisensi & Buka Proteksi"}
+                : license.purchaseState.phase === "indexing"
+                  ? "Mengonfirmasi di jaringan…"
+                  : "Beli Lisensi & Buka Proteksi"}
             </button>
           )}
 
@@ -424,7 +442,9 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
               >
                 {license.unlockState.phase === "confirming"
                   ? "Mencatat Otorisasi…"
-                  : "Catat Otorisasi Vault"}
+                  : license.unlockState.phase === "indexing"
+                    ? "Mengonfirmasi otorisasi…"
+                    : "Catat Otorisasi Vault"}
               </button>
               <p className="text-[11px] leading-relaxed text-amber-700 bg-amber-50/80 p-2.5 rounded-xl border border-amber-200/50">
                 Otorisasi on-chain memvalidasi hak akses. Kunci dekripsi akan dibungkus secara aman oleh vault server.
