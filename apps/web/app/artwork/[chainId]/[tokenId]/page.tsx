@@ -32,6 +32,8 @@ import {
   decryptVaultFile,
   deliverContentKey,
 } from "@/lib/vault-client";
+import { useAssetAccess } from "@/hooks/use-asset-access";
+import { resolveEntitlement } from "@/lib/asset-access";
 
 function shortenAddress(address: string) {
   if (!address) {
@@ -113,6 +115,27 @@ export default function ArtworkDetailPage() {
     params.chainId,
     params.tokenId,
   ]);
+
+  // Rantai adalah sumber kebenaran untuk lisensi dan otorisasi vault. Pembeli
+  // yang memuat ulang halaman tidak boleh kehilangan akses yang sudah dibayar.
+  const access = useAssetAccess(asset?.token_id);
+  const entitlement = resolveEntitlement({
+    sessionLicenseConfirmed: license.purchaseState.phase === "completed",
+    sessionUnlockConfirmed: license.unlockState.phase === "completed",
+    chainLicense: access.chainLicense,
+    chainVaultAccess: access.chainVaultAccess,
+  });
+
+  const refreshAccess = access.refetch;
+  const purchaseHash = license.purchaseState.transactionHash;
+  const unlockHash = license.unlockState.transactionHash;
+  const refreshedFor = useRef<string>("");
+  useEffect(() => {
+    const key = `${purchaseHash ?? ""}|${unlockHash ?? ""}`;
+    if (key === "|" || refreshedFor.current === key) return;
+    refreshedFor.current = key;
+    void refreshAccess();
+  }, [purchaseHash, unlockHash, refreshAccess]);
 
   const reviewInput = useMemo<AssetReviewInput | null>(() => {
     if (!asset) return null;
@@ -744,19 +767,19 @@ export default function ArtworkDetailPage() {
 
             <div className="mb-4 grid grid-cols-3 gap-2 text-[11px] font-semibold">
               <div className={`rounded-xl border p-3 text-center ${
-                license.purchaseState.phase === "completed"
+                entitlement.licensed
                   ? "border-leaf/30 bg-mint text-leaf"
                   : "border-stone-200 bg-white text-stone-500"
               }`}>
-                {license.purchaseState.phase === "completed" ? "âœ“" : "1"} Lisensi
+                {entitlement.licensed ? "âœ“" : "1"} Lisensi
               </div>
 
               <div className={`rounded-xl border p-3 text-center ${
-                license.unlockState.phase === "completed"
+                entitlement.authorized
                   ? "border-leaf/30 bg-mint text-leaf"
                   : "border-stone-200 bg-white text-stone-500"
               }`}>
-                {license.unlockState.phase === "completed" ? "âœ“" : "2"} Vault
+                {entitlement.authorized ? "âœ“" : "2"} Vault
               </div>
 
               <div className={`rounded-xl border p-3 text-center ${
@@ -782,6 +805,7 @@ export default function ArtworkDetailPage() {
               type="button"
               onClick={buyLicense}
               disabled={
+                entitlement.licensed ||
                 !license.isConfigured ||
                 !terms ||
                 !asset.license_terms_hash ||
@@ -795,9 +819,8 @@ export default function ArtworkDetailPage() {
               }
               className="mt-6 w-full rounded-xl bg-coral px-5 py-3 text-sm font-semibold text-white transition hover:bg-coral-dark disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {license.purchaseState.phase ===
-              "completed"
-                ? "Lisensi tercatat"
+              {entitlement.licensed
+                ? "Lisensi sudah tercatat untuk wallet ini"
                 : "Setujui terms dan beli lisensi"}
             </button>
 
@@ -826,8 +849,7 @@ export default function ArtworkDetailPage() {
               </p>
             )}
 
-            {license.purchaseState.phase ===
-              "completed" && (
+            {entitlement.licensed && (
               <>
                 <button
                   type="button"
@@ -863,8 +885,7 @@ export default function ArtworkDetailPage() {
               state={license.unlockState}
             />
 
-            {license.unlockState.phase ===
-              "completed" && (
+            {entitlement.authorized && (
               <button
                 type="button"
                 onClick={
