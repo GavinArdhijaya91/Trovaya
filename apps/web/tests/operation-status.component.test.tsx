@@ -22,4 +22,28 @@ describe("OperationStatus failure paths", () => {
     expect(screen.getByText("Jaringan akun tidak sesuai dengan jaringan Trovaya.")).toBeTruthy();
     expect(screen.queryByText(/RPC secret/i)).toBeNull();
   });
+
+  it("never claims success while the index is still catching up", () => {
+    const state = deriveTransactionState({
+      hash: `0x${"a".repeat(64)}`,
+      isWalletPending: false, isConfirming: false, isSuccess: true, isIndexing: true,
+    });
+
+    expect(state.phase).toBe("indexing");
+
+    render(<OperationStatus state={state} />);
+    expect(screen.getByText("Memperbarui data karya")).toBeTruthy();
+    expect(screen.queryByText("Proses berhasil")).toBeNull();
+  });
+
+  it("reports completion only once the indexed record is readable", () => {
+    const state = deriveTransactionState({
+      hash: `0x${"a".repeat(64)}`,
+      isWalletPending: false, isConfirming: false, isSuccess: true, isIndexing: false,
+    });
+
+    expect(state.phase).toBe("completed");
+    render(<OperationStatus state={state} />);
+    expect(screen.getByText("Proses berhasil")).toBeTruthy();
+  });
 });

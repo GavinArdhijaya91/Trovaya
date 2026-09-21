@@ -25,8 +25,12 @@ The PRD defines two P0 on-chain capabilities: IP registration and a mock ZK unlo
 - a replaceable `IZKHumanVerifier` adapter;
 - an on-chain access record and event for the off-chain key-delivery service.
 
-`MockZKHumanVerifier` provides demo-only identity approval. It is explicitly not a real ZK
-verifier and must not be deployed as a production trust mechanism.
+`TrovayaFamily` provides:
+
+- collective license funding (urunan) for 3-5 members;
+- proxy purchase mechanism to minimize changes to TrovayaIPNFT;
+- shared access verification for TrovayaVault;
+- refund management for failed funding groups.
 
 The NFT records provenance and protocol declarations. It does not, by itself, transfer or
 guarantee copyright under any jurisdiction. Legal license terms must be represented by the
@@ -50,8 +54,15 @@ TrovayaIPNFT (v1)
   ├─ IPMetadata and AI consent
   └─ commercial-license receipts
 
+TrovayaFamily (v1)
+  ├─ collective license funding (urunan) for 3-5 members
+  ├─ proxy purchase mechanism to minimize changes to TrovayaIPNFT
+  ├─ shared access verification for TrovayaVault
+  └─ refund management for failed funding groups
+
+
 TrovayaVault (v1 demo)
-  ├─ checks commercial-license ownership
+  ├─ checks commercial-license ownership (Individual & Family)
   ├─ delegates human verification to IZKHumanVerifier
   └─ records authorization for off-chain key delivery
 

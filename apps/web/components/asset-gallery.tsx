@@ -2,11 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { formatEther } from "viem";
 import { useAssets, type IndexedAsset } from "@/hooks/use-assets";
+import { useAssetAccess } from "@/hooks/use-asset-access";
 import { useLicenseActions } from "@/hooks/use-license-actions";
+import { resolveEntitlement } from "@/lib/asset-access";
 import { OperationStatus } from "@/components/operation-status";
 import { verifyLicenseTermsJson, type VersionedLicenseTerms } from "@/lib/license-terms";
 import { decryptVaultFile, deliverContentKey } from "@/lib/vault-client";
@@ -86,8 +88,28 @@ function AssetCard({ asset }: { asset: IndexedAsset }) {
   const [deliveryError, setDeliveryError] = useState<string>();
   const [forceUnblurPreview, setForceUnblurPreview] = useState(false);
 
-  const isUnlocked = license.unlockState.phase === "completed";
-  const isPurchased = license.purchaseState.phase === "completed";
+  // Rantai adalah sumber kebenaran: pembeli yang memuat ulang halaman tetap
+  // dikenali lewat pembacaan on-chain, bukan hanya lewat state sesi ini.
+  const access = useAssetAccess(asset.token_id);
+  const entitlement = resolveEntitlement({
+    sessionLicenseConfirmed: license.purchaseState.phase === "completed",
+    sessionUnlockConfirmed: license.unlockState.phase === "completed",
+    chainLicense: access.chainLicense,
+    chainVaultAccess: access.chainVaultAccess,
+  });
+  const isUnlocked = entitlement.authorized;
+  const isPurchased = entitlement.licensed;
+
+  const refreshAccess = access.refetch;
+  const purchaseHash = license.purchaseState.transactionHash;
+  const unlockHash = license.unlockState.transactionHash;
+  const refreshedFor = useRef<string>("");
+  useEffect(() => {
+    const key = `${purchaseHash ?? ""}|${unlockHash ?? ""}`;
+    if (key === "|" || refreshedFor.current === key) return;
+    refreshedFor.current = key;
+    void refreshAccess();
+  }, [purchaseHash, unlockHash, refreshAccess]);
 
   useEffect(() => {
     let active = true;

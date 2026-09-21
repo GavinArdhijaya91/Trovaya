@@ -18,6 +18,12 @@ async function main(): Promise<void> {
   const verifierReceipt = await verifierTransaction?.wait();
   if (!verifierTransaction || !verifierReceipt) throw new Error("Mock verifier deployment receipt is unavailable");
 
+  const family = await ethers.deployContract("TrovayaFamily", [await ipNFT.getAddress()]);
+  await family.waitForDeployment();
+  const familyTransaction = family.deploymentTransaction();
+  const familyReceipt = await familyTransaction?.wait();
+  if (!familyTransaction || !familyReceipt) throw new Error("TrovayaFamily deployment receipt is unavailable");
+
   const vault = await ethers.deployContract("TrovayaVault", [
     deployer.address,
     await ipNFT.getAddress(),
@@ -27,6 +33,10 @@ async function main(): Promise<void> {
   const vaultTransaction = vault.deploymentTransaction();
   const vaultReceipt = await vaultTransaction?.wait();
   if (!vaultTransaction || !vaultReceipt) throw new Error("Vault deployment receipt is unavailable");
+
+  // Integrate Family into Vault
+  const vaultContract = await ethers.getContractAt("TrovayaVault", await vault.getAddress());
+  await vaultContract.setTrovayaFamily(await family.getAddress());
 
   // Machine-readable output can be copied into frontend or indexer environment configuration.
   console.log(JSON.stringify({
@@ -44,6 +54,11 @@ async function main(): Promise<void> {
         transactionHash: verifierTransaction.hash,
         deploymentBlock: verifierReceipt.blockNumber,
         capability: "mock_not_zero_knowledge",
+      },
+      trovayaFamily: {
+        address: await family.getAddress(),
+        transactionHash: familyTransaction.hash,
+        deploymentBlock: familyReceipt.blockNumber,
       },
       trovayaVault: {
         address: await vault.getAddress(),

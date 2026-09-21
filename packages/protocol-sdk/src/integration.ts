@@ -26,6 +26,20 @@ export interface IntegrationError {
   retryable: boolean;
 }
 
+export interface PaymentMethod {
+  symbol: string;
+  address: string; // address(0) for BNB
+  decimals: number;
+  displayName: string;
+}
+
+export const SUPPORTED_PAYMENT_METHODS: Record<string, PaymentMethod> = {
+  BNB: { symbol: "BNB", address: "0x0000000000000000000000000000000000000000", decimals: 18, displayName: "BNB" },
+  USDT: { symbol: "USDT", address: "0x55d39833adef184cacd482325d58e842a7c620bf", decimals: 18, displayName: "Tether USDT" },
+  PAXG: { symbol: "PAXG", address: "0x0b6a53580310e963221873149471576617538123", decimals: 18, displayName: "Pax Gold" },
+  XAUT: { symbol: "XAUT", address: "0x1388c764839479841564887c52c7445544d6536c", decimals: 18, displayName: "Tether Gold" },
+};
+
 export interface OperationState {
   phase: OperationPhase;
   message: string;
@@ -38,6 +52,12 @@ export interface TransactionSignals {
   isWalletPending: boolean;
   isConfirming: boolean;
   isSuccess: boolean;
+  /**
+   * The chain already accepted the transaction, but the indexing layer has not
+   * published the new record yet. Additive and optional so existing consumers
+   * keep working. Callers that cannot observe indexing simply omit it.
+   */
+  isIndexing?: boolean;
   error?: unknown;
 }
 
@@ -61,6 +81,11 @@ export function deriveTransactionState(signals: TransactionSignals): OperationSt
       transactionHash: signals.hash,
       error: normalizeIntegrationError(signals.error),
     };
+  }
+  // Confirmation is not completion: a confirmed transaction whose record is not
+  // readable yet must not be presented as a finished, usable result.
+  if (signals.isIndexing) {
+    return { phase: "indexing", message: operationMessages.indexing, transactionHash: signals.hash };
   }
   if (signals.isSuccess) {
     return { phase: "completed", message: operationMessages.completed, transactionHash: signals.hash };
@@ -90,6 +115,9 @@ export function normalizeIntegrationError(error: unknown): IntegrationError {
   }
   if (rawMessage.includes("network") || rawMessage.includes("fetch") || rawMessage.includes("rpc")) {
     return { code: "network_error", message: "Jaringan belum dapat dihubungi. Coba kembali.", retryable: true };
+  }
+  if (rawMessage.includes("insufficient funds") || rawMessage.includes("insufficient balance")) {
+    return { code: "transaction_failed", message: "Saldo tidak mencukupi untuk transaksi ini.", retryable: true };
   }
   return {
     code: "transaction_failed",

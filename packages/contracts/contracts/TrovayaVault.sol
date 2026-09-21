@@ -7,6 +7,8 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {ITrovayaIPNFT} from "./interfaces/ITrovayaIPNFT.sol";
 import {ITrovayaVault} from "./interfaces/ITrovayaVault.sol";
 import {IZKHumanVerifier} from "./interfaces/IZKHumanVerifier.sol";
+import {ITrovayaFamily} from "./TrovayaFamily.sol";
+
 
 /// @title Trovaya encrypted-vault access coordinator
 /// @notice Records authorization only. Encryption keys and clean files remain off-chain.
@@ -16,6 +18,7 @@ contract TrovayaVault is AccessControl, Pausable, ReentrancyGuard, ITrovayaVault
     // slither-disable-next-line naming-convention
     ITrovayaIPNFT public immutable IP_NFT;
     IZKHumanVerifier public humanVerifier;
+    address public trovayaFamily;
 
     mapping(uint256 tokenId => mapping(address account => AccessGrant grant)) private _accessGrants;
 
@@ -38,6 +41,11 @@ contract TrovayaVault is AccessControl, Pausable, ReentrancyGuard, ITrovayaVault
         _grantRole(PAUSER_ROLE, initialOwner);
     }
 
+    function setTrovayaFamily(address familyContract) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        if (familyContract == address(0)) revert InvalidAddress();
+        trovayaFamily = familyContract;
+    }
+
     /// @notice Grants demo access after the configured adapter confirms a human proof.
     function unlockWithHumanProof(uint256 tokenId, bytes calldata proof)
         external whenNotPaused nonReentrant
@@ -53,7 +61,14 @@ contract TrovayaVault is AccessControl, Pausable, ReentrancyGuard, ITrovayaVault
 
     /// @notice Grants access to a buyer that purchased the on-chain commercial license.
     function unlockWithLicense(uint256 tokenId) external whenNotPaused nonReentrant {
-        if (!IP_NFT.hasCommercialLicense(tokenId, msg.sender)) revert CommercialLicenseRequired();
+        bool hasLicense = IP_NFT.hasCommercialLicense(tokenId, msg.sender);
+        
+        // Check if user has access via Trovaya Family
+        if (!hasLicense && trovayaFamily != address(0)) {
+            hasLicense = ITrovayaFamily(trovayaFamily).isMemberOfPurchasedFamily(tokenId, msg.sender);
+        }
+
+        if (!hasLicense) revert CommercialLicenseRequired();
         if (_accessGrants[tokenId][msg.sender].revokedAt > 0) revert AccessDenied();
         ITrovayaIPNFT.LicenseReceipt memory receipt = IP_NFT.getLicenseReceipt(tokenId, msg.sender);
         ITrovayaIPNFT.IPMetadata memory metadata = IP_NFT.getIPMetadata(tokenId);
