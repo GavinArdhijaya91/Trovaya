@@ -12,17 +12,17 @@ import { CustomConnectButton } from "@/components/custom-connect-button";
 
 const masalah = [
   {
-    icon: "ðŸ•¸ï¸",
+    icon: "web",
     title: "Scraping tanpa izin",
     desc: "Karya di-upload ke medsos langsung diambil dataset AI tanpa persetujuan atau kompensasi. Kreator seperti Sarah kehilangan kendali.",
   },
   {
-    icon: "ðŸªž",
+    icon: "mirror",
     title: "Paradoks transparansi IPFS",
     desc: "IPFS publik = transparan tapi sekaligus mengekspos file asli resolusi tinggi. Tanpa vault terenkripsi, transparansi jadi bumerang.",
   },
   {
-    icon: "ðŸ§±",
+    icon: "wall",
     title: "Friksi Web3 untuk UMKM",
     desc: "Kreator paham karya, bukan gas fee. Istilah mint, sign, smart contract bikin onboarding terasa seperti ujian, bukan seperti aplikasi investasi biasa.",
   },
@@ -204,7 +204,26 @@ export default function Home() {
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {masalah.map((m) => (
               <div key={m.title} className="rounded-2xl border border-nusa-200 bg-white p-6 shadow-soft">
-                <span className="text-3xl">{m.icon}</span>
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-teal-50 border border-teal-200 text-teal-900" aria-hidden="true">
+                  {m.icon === "web" && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="9" />
+                      <path d="M3 12h18M12 3c2.5 2.6 3.9 5.7 3.9 9S14.5 18.4 12 21c-2.5-2.6-3.9-5.7-3.9-9S9.5 5.6 12 3Z" />
+                    </svg>
+                  )}
+                  {m.icon === "mirror" && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect x="7" y="3" width="10" height="18" rx="2" />
+                      <path d="M10 7h4M10 11h4M10 15h2" />
+                    </svg>
+                  )}
+                  {m.icon === "wall" && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <rect x="3" y="5" width="18" height="14" rx="1.5" />
+                      <path d="M3 10h18M3 14.5h18M9 5v14M15 5v14" />
+                    </svg>
+                  )}
+                </span>
                 <h3 className="mt-3 text-lg font-bold text-nusa-900">{m.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-nusa-600">{m.desc}</p>
               </div>
