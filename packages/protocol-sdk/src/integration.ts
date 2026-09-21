@@ -52,6 +52,12 @@ export interface TransactionSignals {
   isWalletPending: boolean;
   isConfirming: boolean;
   isSuccess: boolean;
+  /**
+   * The chain already accepted the transaction, but the indexing layer has not
+   * published the new record yet. Additive and optional so existing consumers
+   * keep working. Callers that cannot observe indexing simply omit it.
+   */
+  isIndexing?: boolean;
   error?: unknown;
 }
 
@@ -75,6 +81,11 @@ export function deriveTransactionState(signals: TransactionSignals): OperationSt
       transactionHash: signals.hash,
       error: normalizeIntegrationError(signals.error),
     };
+  }
+  // Confirmation is not completion: a confirmed transaction whose record is not
+  // readable yet must not be presented as a finished, usable result.
+  if (signals.isIndexing) {
+    return { phase: "indexing", message: operationMessages.indexing, transactionHash: signals.hash };
   }
   if (signals.isSuccess) {
     return { phase: "completed", message: operationMessages.completed, transactionHash: signals.hash };
