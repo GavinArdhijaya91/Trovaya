@@ -11,10 +11,18 @@ export type IndexedAsset = PublicAsset;
 
 const mintEvent = parseAbiItem("event IPMinted(uint256 indexed tokenId,address indexed creator,bool allowAITraining)");
 
+/** Chains covered by the curated public RPC list used by the fallback scan. */
+const FALLBACK_CHAIN_IDS = [97];
+const CONFIGURED_CHAIN_ID = Number(process.env.NEXT_PUBLIC_CHAIN_ID ?? 97);
+
 // Fallback langsung ke chain jika API/indexer lag — workspace tetap guna tiap action
 async function fetchOnChainFallback(): Promise<IndexedAsset[]> {
   const addresses = getClientContractAddresses();
   if (!addresses) return [];
+  // Pemindaian di bawah ini khusus BSC Testnet (chain viem + daftar RPC publik).
+  // Jika rantai utama diarahkan ke jaringan lain, kembalikan kosong daripada
+  // membaca alamat kontrak yang benar di rantai yang salah.
+  if (!FALLBACK_CHAIN_IDS.includes(CONFIGURED_CHAIN_ID)) return [];
   const rpcUrls = [...new Set([
     process.env.NEXT_PUBLIC_BSC_RPC_URL,
     "https://bsc-testnet.bnbchain.org",
@@ -44,8 +52,8 @@ async function fetchOnChainFallback(): Promise<IndexedAsset[]> {
         client.readContract({ address: addresses.ipNFT, abi: trovayaIPNFTAbi, functionName: "tokenURI", args: [log.args.tokenId!] }),
       ]);
       assets.push({
-        id: `${97}:${tokenId}`,
-        chain_id: 97,
+        id: `${CONFIGURED_CHAIN_ID}:${tokenId}`,
+        chain_id: CONFIGURED_CHAIN_ID,
         token_id: tokenId,
         creator_wallet: (log.args.creator as string).toLowerCase(),
         allow_ai_training: Boolean(log.args.allowAITraining),
@@ -64,7 +72,7 @@ async function fetchOnChainFallback(): Promise<IndexedAsset[]> {
   return assets;
 }
 
-export function useAssets() {
+export function useAssets(options?: { refetchInterval?: number | false }) {
   return useQuery({
     queryKey: ["assets"],
     queryFn: async (): Promise<IndexedAsset[]> => {
@@ -79,5 +87,8 @@ export function useAssets() {
     },
     staleTime: 10_000,
     retry: 1,
+    // Pemanggil dapat meminta polling singkat saat menunggu index publik,
+    // misalnya halaman detail yang tokennya belum muncul di daftar.
+    refetchInterval: options?.refetchInterval,
   });
 }

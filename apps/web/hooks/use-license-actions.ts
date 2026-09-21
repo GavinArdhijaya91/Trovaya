@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { deriveTransactionState, trovayaIPNFTAbi, trovayaVaultAbi } from "@trovaya/protocol-sdk";
 import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { getClientContractAddresses } from "@/lib/contracts";
@@ -11,6 +13,7 @@ export function useLicenseActions() {
   const unlock = useWriteContract();
   const unlockReceipt = useWaitForTransactionReceipt({ hash: unlock.data });
   const addresses = getClientContractAddresses();
+  const queryClient = useQueryClient();
 
   const purchaseState = deriveTransactionState({
     hash: purchase.data,
@@ -26,6 +29,16 @@ export function useLicenseActions() {
     isSuccess: unlockReceipt.isSuccess,
     error: unlock.error ?? unlockReceipt.error,
   });
+
+  const purchaseConfirmed = purchaseReceipt.isSuccess;
+  const unlockConfirmed = unlockReceipt.isSuccess;
+  // Lisensi dan otorisasi membuka akses; daftar aset hanya boleh dianggap segar
+  // setelah rantai mengonfirmasi, bukan setelah tombol diklik.
+  useEffect(() => {
+    if (purchaseConfirmed || unlockConfirmed) {
+      void queryClient.invalidateQueries({ queryKey: ["assets"] });
+    }
+  }, [purchaseConfirmed, unlockConfirmed, queryClient]);
 
   async function purchaseLicense(tokenId: string, feeWei: string, termsHash: `0x${string}`, termsVersion: number) {
     if (!addresses) throw new Error("Alamat protokol belum dikonfigurasi.");

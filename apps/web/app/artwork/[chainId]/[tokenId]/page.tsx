@@ -92,7 +92,10 @@ export default function ArtworkDetailPage() {
     tokenId: string;
   }>();
 
-  const assets = useAssets();
+  // Polling index berbatas: berhenti begitu record muncul, dan berhenti juga
+  // setelah 30 detik agar tautan yang salah tidak berputar selamanya.
+  const [indexPollExpired, setIndexPollExpired] = useState(false);
+  const assets = useAssets({ refetchInterval: indexPollExpired ? false : 4_000 });
   const license = useLicenseActions();
   const account = useAccount();
   const signer = useSignMessage();
@@ -115,6 +118,18 @@ export default function ArtworkDetailPage() {
     params.chainId,
     params.tokenId,
   ]);
+
+  // Berhenti menunggu index begitu record ditemukan. Penyesuaian state saat
+  // render adalah pola resmi React dan tidak memicu render berantai.
+  if (asset && !indexPollExpired) setIndexPollExpired(true);
+
+  // Batas penantian: tautan yang memang tidak akan pernah muncul tidak berputar selamanya.
+  useEffect(() => {
+    const timer = setTimeout(() => setIndexPollExpired(true), 30_000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const waitingForIndex = !asset && !indexPollExpired;
 
   // Rantai adalah sumber kebenaran untuk lisensi dan otorisasi vault. Pembeli
   // yang memuat ulang halaman tidak boleh kehilangan akses yang sudah dibayar.
@@ -479,20 +494,32 @@ export default function ArtworkDetailPage() {
 
         <div className="mx-auto max-w-3xl px-5 py-24 text-center md:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-coral">
-            Artwork not found
+            {waitingForIndex ? "Memperbarui index" : "Artwork not found"}
           </p>
 
           <h1 className="mt-4 text-4xl font-semibold tracking-[-0.04em]">
-            This protected work is not
-            in the current public index.
+            {waitingForIndex
+              ? "Karya sudah dicatat on-chain; index publiknya sedang diperbarui."
+              : "This protected work is not in the current public index."}
           </h1>
 
-          <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-stone-500">
-            The work may not exist,
-            may not be public, or may
-            fall outside the current
-            indexed gallery window.
-          </p>
+          {waitingForIndex ? (
+            <p
+              role="status"
+              className="mx-auto mt-4 max-w-lg text-sm leading-7 text-stone-500"
+            >
+              Catatan provenance sudah final di jaringan. Halaman ini menyegarkan
+              sendiri sampai karya muncul di index publik; tidak ada tindakan lain
+              yang perlu Anda lakukan.
+            </p>
+          ) : (
+            <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-stone-500">
+              The work may not exist,
+              may not be public, or may
+              fall outside the current
+              indexed gallery window.
+            </p>
+          )}
 
           <Link
             href="/explore"
