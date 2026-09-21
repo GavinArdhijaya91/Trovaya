@@ -14,8 +14,11 @@ updates it from Conventional Commit messages merged into `main`.
 
 ### Fixes
 
+* **web:** bersihkan mojibake karakter rusak di homepage dan halaman artwork ([e713210](https://github.com/GavinArdhijaya91/Trovaya/commit/e71321030e5f305ca76ec9b1f15497e1e3f04ff8))
 * **web:** gallery pakai fee on-chain cegah revert InvalidLicenseFee ([249035e](https://github.com/GavinArdhijaya91/Trovaya/commit/249035eed403ab4fb1d5dd85a581b352ff41503c))
 * **web:** gallery pakai fee on-chain dan kunci preview ([0dd2577](https://github.com/GavinArdhijaya91/Trovaya/commit/0dd257737b555014c32370bda8bf42c882306266))
+* **web:** ganti emoji mojibake kartu masalah dengan ikon SVG ([73bbfbe](https://github.com/GavinArdhijaya91/Trovaya/commit/73bbfbefb32ef8701012385369653fc38f13f19e))
+* **web:** ganti emoji mojibake kartu masalah dengan ikon SVG ([8ed07cf](https://github.com/GavinArdhijaya91/Trovaya/commit/8ed07cf41437911cdec875c72a0aa9a58e1bbced))
 
 ## [0.18.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.17.0...v0.18.0) (2026-09-21)
 
