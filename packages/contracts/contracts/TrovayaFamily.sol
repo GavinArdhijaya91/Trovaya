@@ -42,6 +42,10 @@ contract TrovayaFamily is ReentrancyGuard, ITrovayaFamily {
     error LicenseAlreadyPurchased();
     error InsufficientFunds();
     error InvalidAmount();
+    error InvalidMemberCount();
+    error InvalidToken();
+    error GroupDoesNotExist();
+    error RefundFailed();
 
     constructor(address _ipNft) {
         ipNft = ITrovayaIPNFT(_ipNft);
@@ -54,7 +58,7 @@ contract TrovayaFamily is ReentrancyGuard, ITrovayaFamily {
      * @param targetAmount Harga lisensi yang harus dikumpulkan.
      */
     function createFamily(address[] calldata members, uint256 tokenId, uint256 targetAmount) external returns (uint256 groupId) {
-        if (members.length < 3 || members.length > 5) revert("Members must be 3-5");
+        if (members.length < 3 || members.length > 5) revert InvalidMemberCount();
         
         groupCount++;
         groups[groupCount] = FamilyGroup({
@@ -73,50 +77,51 @@ contract TrovayaFamily is ReentrancyGuard, ITrovayaFamily {
     /**
      * @notice Menyetorkan dana untuk urunan lisensi.
      */
-    function contribute(uint256 _groupId) external payable nonReentrant {
-        _processContribution(_groupId, msg.value, address(0));
+    function contribute(uint256 groupId) external payable nonReentrant {
+        _processContribution(groupId, msg.value, address(0));
     }
 
-    function contributeWithToken(address token, uint256 _groupId, uint256 amount) external nonReentrant {
-        if (token == address(0)) revert("Invalid token");
+    function contributeWithToken(address token, uint256 groupId, uint256 amount) external nonReentrant {
+        if (token == address(0)) revert InvalidToken();
         IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
-        _processContribution(_groupId, amount, token);
+        _processContribution(groupId, amount, token);
     }
 
-    function _processContribution(uint256 _groupId, uint256 amount, address token) internal {
-        FamilyGroup storage group = groups[_groupId];
-        if (group.creator == address(0)) revert("Group does not exist");
+    function _processContribution(uint256 groupId, uint256 amount, address token) internal {
+        FamilyGroup storage group = groups[groupId];
+        if (group.creator == address(0)) revert GroupDoesNotExist();
         if (group.isPurchased) revert LicenseAlreadyPurchased();
+        if (amount == 0) revert InvalidAmount();
+        if (!_isMember(group, msg.sender)) revert NotAMember();
         
         if (token == address(0)) {
-            if (contributions[_groupId][msg.sender] > 0) revert AlreadyContributed();
-            if (amount == 0) revert InvalidAmount();
-            contributions[_groupId][msg.sender] = amount;
+            if (contributions[groupId][msg.sender] > 0) revert AlreadyContributed();
+            contributions[groupId][msg.sender] = amount;
         } else {
-            if (tokenContributions[_groupId][msg.sender] > 0) revert AlreadyContributed();
-            if (amount == 0) revert InvalidAmount();
-            tokenContributions[_groupId][msg.sender] = amount;
+            if (tokenContributions[groupId][msg.sender] > 0) revert AlreadyContributed();
+            tokenContributions[groupId][msg.sender] = amount;
         }
-
-        bool isMember = false;
-        for (uint i = 0; i < group.members.length; i++) {
-            if (group.members[i] == msg.sender) {
-                isMember = true;
-                break;
-            }
-        }
-        if (!isMember) revert NotAMember();
 
         group.currentAmount += amount;
-        emit Contributed(_groupId, msg.sender, amount);
+        emit Contributed(groupId, msg.sender, amount);
 
         if (group.currentAmount >= group.targetAmount) {
-            _executePurchase(_groupId, token);
+            _executePurchase(groupId, token);
         }
     }
 
-    function _executePurchase(uint256 _groupId, address token) internal {
-        FamilyGroup storage group = groups[_groupId];
+    /// @dev Membatasi dana urunan hanya untuk anggota grup yang terdaftar.
+    function _isMember(FamilyGroup storage group, address account) private view returns (bool) {
+        address[] storage members = group.members;
+        uint256 length = members.length;
+        for (uint256 i = 0; i < length; i++) {
+            if (members[i] == account) return true;
+        }
+        return false;
+    }
+
+    function _executePurchase(uint256 groupId, address token) internal {
+        FamilyGroup storage group = groups[groupId];
         
         uint256 excess = group.currentAmount - group.targetAmount;
         group.currentAmount = group.targetAmount;
@@ -138,7 +143,7 @@ contract TrovayaFamily is ReentrancyGuard, ITrovayaFamily {
             );
         }
         
-        emit LicensePurchased(_groupId, group.tokenId);
+        emit LicensePurchased(groupId, group.tokenId);
         
         if (excess > 0) {
             if (token == address(0)) {
@@ -151,6 +156,7 @@ contract TrovayaFamily is ReentrancyGuard, ITrovayaFamily {
 
     /**
      * @notice Mengambil kembali dana jika grup gagal mencapai target dalam waktu tertentu.
+     * @dev Dana hanya dikembalikan setelah status grup dan saldo kontribusi diperbarui.
      */
     function claimRefund(uint256 groupId) external nonReentrant {
         FamilyGroup storage group = groups[groupId];
@@ -161,9 +167,14 @@ contract TrovayaFamily is ReentrancyGuard, ITrovayaFamily {
         
         contributions[groupId][msg.sender] = 0;
         group.currentAmount -= amount;
-        
-        payable(msg.sender).transfer(amount);
+
         emit RefundClaimed(groupId, msg.sender, amount);
+
+        // Efek dan event diselesaikan sebelum transfer dana (check-effects-interactions).
+        // `call` dipakai agar wallet kontrak tetap dapat menerima refund anggotanya.
+        // slither-disable-next-line low-level-calls
+        (bool sent,) = payable(msg.sender).call{value: amount}("");
+        if (!sent) revert RefundFailed();
     }
 
     /**

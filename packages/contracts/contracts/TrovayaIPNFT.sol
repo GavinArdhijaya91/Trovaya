@@ -192,6 +192,9 @@ contract TrovayaIPNFT is
         if (amount == 0) revert NoProceeds();
         pendingWithdrawals[msg.sender] = 0;
         totalPendingWithdrawals -= amount;
+        // Pull payment: liabilities are settled before the transfer and a low-level
+        // call keeps contract recipients working.
+        // slither-disable-next-line low-level-calls
         (bool sent,) = recipient.call{value: amount}("");
         if (!sent) revert WithdrawalFailed();
         emit ProceedsWithdrawn(msg.sender, recipient, amount);

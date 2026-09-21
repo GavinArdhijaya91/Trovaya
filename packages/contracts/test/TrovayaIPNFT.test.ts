@@ -125,6 +125,7 @@ describe("TrovayaIPNFT", () => {
       "mintIP(string,bool,uint256,string,string,uint96,string,bytes32,uint32,uint64)",
       "mintIPFor(address,string,bool,uint256,string,string,uint96,string,bytes32,uint32,uint64)",
       "purchaseCommercialLicense(uint256,bytes32,uint32)",
+      "purchaseCommercialLicenseWithToken(address,uint256,uint256,bytes32,uint32)",
       "getIPMetadata(uint256)",
       "hasCommercialLicense(uint256,address)",
       "pendingWithdrawals(address)",
