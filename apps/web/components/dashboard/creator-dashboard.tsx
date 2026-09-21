@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CustomConnectButton } from "@/components/custom-connect-button";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
@@ -46,10 +46,8 @@ const navItems: { id: Tab; label: string; icon: string; subtitle: string }[] = [
   { id: "trust",      label: "Profil & KYC",      icon: "👤", subtitle: "Keamanan akun" },
 ];
 
-// FIX 1: deklarasi komponen yang sebelumnya hilang
-export default function DashboardPage() {
+export function CreatorDashboard() {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
-  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
   const account = useAccount();
@@ -57,9 +55,18 @@ export default function DashboardPage() {
 
   const records = assets.data ?? [];
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [activeTab, records.length]);
+  // Paginasi kembali ke halaman 1 saat tab atau jumlah karya berubah.
+  // Penyesuaian dilakukan saat render (pola resmi React) supaya tidak ada
+  // setState di dalam effect yang memicu render berantai dan gagal lint.
+  const paginationKey = `${activeTab}:${records.length}`;
+  const [pagination, setPagination] = useState({ key: paginationKey, page: 1 });
+  if (pagination.key !== paginationKey) setPagination({ key: paginationKey, page: 1 });
+  const currentPage = pagination.page;
+  const setCurrentPage = (next: number | ((page: number) => number)) =>
+    setPagination((current) => ({
+      key: paginationKey,
+      page: typeof next === "function" ? next(current.page) : next,
+    }));
 
   const licensedForAI = records.filter((a) => a.allow_ai_training).length;
   const protectedFromAI = records.length - licensedForAI;
