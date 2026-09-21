@@ -44,7 +44,7 @@ function shortenAddress(address: string) {
     return address;
   }
 
-  return `${address.slice(0, 7)}â€¦${address.slice(-5)}`;
+  return `${address.slice(0, 7)}...${address.slice(-5)}`;
 }
 
 function getChainLabel(chainId: number) {
@@ -564,7 +564,7 @@ export default function ArtworkDetailPage() {
             className="inline-flex items-center gap-2 text-sm font-semibold text-stone-500 transition hover:text-leaf"
           >
             <span aria-hidden="true">
-              â†
+              &larr;
             </span>
             Back to Explore
           </Link>
@@ -670,7 +670,7 @@ export default function ArtworkDetailPage() {
               className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-xs font-medium text-stone-600 transition hover:bg-mint/40 hover:text-leaf"
             >
               <span className="grid h-6 w-6 place-items-center rounded-full bg-mint text-[10px] font-bold text-leaf">
-                âœ“
+                [v]
               </span>
 
               {creator}
@@ -788,7 +788,7 @@ export default function ArtworkDetailPage() {
             ) : (
               <div className="mt-5 rounded-xl bg-amber-50 p-4 text-xs leading-6 text-amber-800">
                 {termsError ??
-                  "Verifying the license document before purchaseâ€¦"}
+                  "Verifying the license document before purchase..."}
               </div>
             )}
 
@@ -798,7 +798,7 @@ export default function ArtworkDetailPage() {
                   ? "border-leaf/30 bg-mint text-leaf"
                   : "border-stone-200 bg-white text-stone-500"
               }`}>
-                {entitlement.licensed ? "âœ“" : "1"} Lisensi
+                {entitlement.licensed ? "[v]" : "1"} Lisensi
               </div>
 
               <div className={`rounded-xl border p-3 text-center ${
