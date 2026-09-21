@@ -86,11 +86,11 @@ export default function DashboardPage() {
               <p className="text-sm font-bold tracking-tight text-teal-900 leading-none">
                 Trovaya <span className="font-normal text-nusa-500 text-xs ml-1">IP PROTOCOL</span>
               </p>
-              <p className="text-[11px] text-nusa-500">Terdaftar & Patuh DJKI</p>
+               <p className="text-[11px] text-nusa-500">Trovaya Registry · Testnet</p>
             </div>
           </div>
           <div className="mx-3 mt-3 flex items-center justify-between rounded bg-nusa-100 px-3 py-1.5 text-[11px] font-bold text-nusa-600">
-            <span>DJKI REG. NODE</span>
+            <span className="text-teal-900">TROVAYA REGISTRY · TESTNET</span>
             <span className="text-teal-900">v2.4–BNB</span>
           </div>
           <nav aria-label="Menu Kreator" className="flex-1 p-3 space-y-1 overflow-y-auto mt-2">
@@ -149,10 +149,10 @@ export default function DashboardPage() {
           <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-nusa-200 bg-white/90 backdrop-blur px-4 md:px-6">
             <div className="flex-1 max-w-xl flex items-center gap-2 rounded-lg bg-nusa-50 border border-nusa-200 px-3 py-2 text-sm text-nusa-500">
               <span>⌕</span>
-              <input
-                placeholder="Cari aset IP, kontrak DJKI, sertifikat hak cipta..."
-                className="flex-1 bg-transparent outline-none text-xs placeholder:text-nusa-400"
-              />
+               <input
+                 placeholder="Cari aset IP, registrasi on-chain, sertifikat provenance..."
+                 className="flex-1 bg-transparent outline-none text-xs placeholder:text-nusa-400"
+               />
             </div>
             <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-3 py-1 text-[11px] font-bold text-teal-900">
               <span className="h-1.5 w-1.5 rounded-full bg-teal-700" /> BNB TESTNET
@@ -646,7 +646,7 @@ export default function DashboardPage() {
                     </div>
                     <h3 className="mt-4 font-bold text-sm text-nusa-900">Soulbound Token (SBT)</h3>
                     <p className="mt-1 text-xs text-nusa-600 leading-relaxed">
-                      Lencana reputasi non-transferable on-chain yang terikat dengan identitas DJKI.
+                       Lencana reputasi non-transferable on-chain yang terikat dengan identitas terverifikasi.
                     </p>
                   </div>
                 </div>
