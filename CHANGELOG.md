@@ -3,6 +3,45 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.18.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.17.0...v0.18.0) (2026-09-21)
+
+
+### Features
+
+* **contracts:** implement multi-token payment support (USDT, PAXG, XAUT) ([28493f9](https://github.com/GavinArdhijaya91/Trovaya/commit/28493f969771d2ae2185d5246c33a5764d0bc4e9))
+* **contracts:** integrate TrovayaFamily with TrovayaVault for shared access ([1e40d83](https://github.com/GavinArdhijaya91/Trovaya/commit/1e40d839596e43e6b4448d1d9903720f54c814b7))
+* **sdk:** add payment method tokens and error handling for multi-token ([19efb3d](https://github.com/GavinArdhijaya91/Trovaya/commit/19efb3d526c72fbc065f3d1e6d2588f7cd749be7))
+* web next iteration ([4f96161](https://github.com/GavinArdhijaya91/Trovaya/commit/4f96161738d98a46a57490b1e43c4f4f753c1130))
+* **web:** transform creator assets list to responsive grid gallery with pagination ([03e0d44](https://github.com/GavinArdhijaya91/Trovaya/commit/03e0d4487c0de5b2d2374ca9a227c4fbe883d1ee))
+
+
+### Fixes
+
+* clean up JSX closing tags and whitespace in creator-dashboard ([5bc44a4](https://github.com/GavinArdhijaya91/Trovaya/commit/5bc44a4518a7fd4f50a3c7e7b7db99c6616e3427))
+* finalize JSX structure and resolve build errors in creator-dashboard ([8e832ec](https://github.com/GavinArdhijaya91/Trovaya/commit/8e832ec530c2ae5f90d9482a59eb64224439fcfa))
+* refine closing tags and whitespace in creator-dashboard ([38ce1d4](https://github.com/GavinArdhijaya91/Trovaya/commit/38ce1d4d7ced08e46174b7a21b54e93ef4d70820))
+* remove duplicate Home function in page.tsx ([7b7b871](https://github.com/GavinArdhijaya91/Trovaya/commit/7b7b87163c51fe73d4b7caee7fcf32732465075c))
+* remove redundant closing divs in creator-dashboard ([af87a3c](https://github.com/GavinArdhijaya91/Trovaya/commit/af87a3c41d356fe83d2387dd4026a8f5fdb4083a))
+* remove stray jsx text and fix return statement in creator-dashboard ([cecee77](https://github.com/GavinArdhijaya91/Trovaya/commit/cecee77997d0c7486e6ec792a83a7a3646d491fe))
+* resolve docstring parameter mismatch in TrovayaFamily ([6d695ec](https://github.com/GavinArdhijaya91/Trovaya/commit/6d695eca284ad56589a529dc9dff39e90081962d))
+* resolve JSX nesting errors and duplicate variable in creator-dashboard ([0166820](https://github.com/GavinArdhijaya91/Trovaya/commit/0166820da4adc4e3a1a0fc2e2066b78f44f05605))
+* resolve slither security warnings and naming conventions in contracts ([a27da42](https://github.com/GavinArdhijaya91/Trovaya/commit/a27da42ee2dd517f17c506e91ebd7fc106878308))
+* resolve unexpected token and JSX nesting in creator-dashboard ([e289851](https://github.com/GavinArdhijaya91/Trovaya/commit/e289851370cab8dd3b00e8c4ef15614db36aac4e))
+* **sdk:** emit the indexing phase after a confirmed transaction ([6146a12](https://github.com/GavinArdhijaya91/Trovaya/commit/6146a12b4e9755ae7753fed7f9c319d3f6b89b80))
+* **web:** optimize asset gallery pagination and state sync ([7701b76](https://github.com/GavinArdhijaya91/Trovaya/commit/7701b765de3be1a75032b4d122065b834d11c6d2))
+* **web:** remove misleading legal claims and DJKI references to strengthen trust ([c09137b](https://github.com/GavinArdhijaya91/Trovaya/commit/c09137ba8f7cbbea78ea1fd3f1417eeca94931d2))
+* **web:** remove misleading legal claims and DJKI references to strengthen trust ([f8354a4](https://github.com/GavinArdhijaya91/Trovaya/commit/f8354a45fa1e7d8d5bba8332fc43dae8fe93a66f))
+* **web:** report index readiness and refresh data after confirmation ([27624c7](https://github.com/GavinArdhijaya91/Trovaya/commit/27624c7f6c7e43cc0aa7606a2b8f247da74b68ee))
+* **web:** restore the dashboard export and pagination gates ([3273e7c](https://github.com/GavinArdhijaya91/Trovaya/commit/3273e7c37882b2d44c70675dc1047b526e985ebf))
+* **web:** treat on-chain entitlement as the source of truth for access ([dee45ca](https://github.com/GavinArdhijaya91/Trovaya/commit/dee45cade69532c12964712d520a88400537daab))
+
+
+### Documentation
+
+* add the P0 golden path audit and E2E checklist ([04e84ae](https://github.com/GavinArdhijaya91/Trovaya/commit/04e84ae0829da9a3bb460c7f059d5756ca160047))
+* update architecture and contract docs for TrovayaFamily and multi-token support ([b731cf3](https://github.com/GavinArdhijaya91/Trovaya/commit/b731cf3993577657132990101297a5939fbf2d5a))
+* update README with multi-token payment support ([2a11624](https://github.com/GavinArdhijaya91/Trovaya/commit/2a11624a03c764e0d351738fecc4853b16a46a89))
+
 ## [0.17.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.16.0...v0.17.0) (2026-09-19)
 
 
