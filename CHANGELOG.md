@@ -3,6 +3,20 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.19.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.18.0...v0.19.0) (2026-09-21)
+
+
+### Features
+
+* web next iteration ([73cdb1a](https://github.com/GavinArdhijaya91/Trovaya/commit/73cdb1a5caf0bfd87d903b3e4d79ed23b97ae634))
+* **web:** explorer proof link dan copy provenance jujur ([0a41ed7](https://github.com/GavinArdhijaya91/Trovaya/commit/0a41ed765ad5e396cd375c76116891bd4d65398a))
+
+
+### Fixes
+
+* **web:** gallery pakai fee on-chain cegah revert InvalidLicenseFee ([249035e](https://github.com/GavinArdhijaya91/Trovaya/commit/249035eed403ab4fb1d5dd85a581b352ff41503c))
+* **web:** gallery pakai fee on-chain dan kunci preview ([0dd2577](https://github.com/GavinArdhijaya91/Trovaya/commit/0dd257737b555014c32370bda8bf42c882306266))
+
 ## [0.18.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.17.0...v0.18.0) (2026-09-21)
 
 
