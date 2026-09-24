@@ -3,6 +3,25 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.21.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.20.0...v0.21.0) (2026-09-24)
+
+
+### Features
+
+* **docs:** readme hackathon pitch ([8e0a70d](https://github.com/GavinArdhijaya91/Trovaya/commit/8e0a70d35e76796165e12e1b4fe79e3b75022520))
+
+
+### Fixes
+
+* **web:** hilangkan em/en dash dari teks UI, humanisasi kalimat ([8bbdd67](https://github.com/GavinArdhijaya91/Trovaya/commit/8bbdd67132c4839a03f991f5ef664df6aea7ee16))
+* **web:** hilangkan em/en dash dari teks UI, humanisasi kalimat ([7962ee4](https://github.com/GavinArdhijaya91/Trovaya/commit/7962ee47389c049e9201fb56a66a928e85409fdb))
+
+
+### Documentation
+
+* **readme:** hapus sisa garis dan tabel markdown ber-strip ([bbeb816](https://github.com/GavinArdhijaya91/Trovaya/commit/bbeb8168df76e0bda985c3d56e8b41fd43b9af0c))
+* **readme:** hilangkan em/en dash, humanisasi kalimat ([61180fb](https://github.com/GavinArdhijaya91/Trovaya/commit/61180fbc548719ffa0d91d32db029e26be2abe9a))
+
 ## [0.20.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.19.1...v0.20.0) (2026-09-24)
 
 
