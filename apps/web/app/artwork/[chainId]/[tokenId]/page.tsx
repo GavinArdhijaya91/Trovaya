@@ -992,7 +992,7 @@ export default function ArtworkDetailPage() {
       <footer className="mt-10 border-t border-stone-200">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-xs text-stone-500 md:flex-row md:items-center md:justify-between md:px-8">
           <span>
-            Trovaya &mdash; creator
+            Trovaya · creator
             provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip>, consent, and
             licensing.
           </span>

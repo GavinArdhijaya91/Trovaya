@@ -232,7 +232,7 @@ export default function ExplorePage() {
               <GalleryMetric
                 value={
                   assets.isLoading
-                    ? "—"
+                    ? "…"
                     : `${records.length}`
                 }
                 label="Works"
@@ -241,7 +241,7 @@ export default function ExplorePage() {
               <GalleryMetric
                 value={
                   assets.isLoading
-                    ? "—"
+                    ? "…"
                     : `${protectedCount}`
                 }
                 label="Protected"
@@ -250,7 +250,7 @@ export default function ExplorePage() {
               <GalleryMetric
                 value={
                   assets.isLoading
-                    ? "—"
+                    ? "…"
                     : `${licensedCount}`
                 }
                 label="Licensable"
@@ -457,7 +457,7 @@ export default function ExplorePage() {
       <footer className="border-t border-stone-200">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-xs text-stone-500 md:flex-row md:items-center md:justify-between md:px-8">
           <span>
-            Trovaya — creator
+            Trovaya · creator
             provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip>, consent, and
             licensing.
           </span>

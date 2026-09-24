@@ -111,7 +111,7 @@ export function CreatorDashboard() {
           </div>
           <div className="mx-3 mt-3 flex items-center justify-between rounded bg-nusa-100 px-3 py-1.5 text-[11px] font-bold text-nusa-600">
             <span className="text-teal-900">TROVAYA REGISTRY · TESTNET</span>
-            <span className="text-teal-900">v2.4–BNB</span>
+              <span className="text-teal-900">v2.4 BNB</span>
           </div>
           <nav aria-label="Menu Kreator" className="flex-1 p-3 space-y-1 overflow-y-auto mt-2">
             {navItems.map((item) => {
