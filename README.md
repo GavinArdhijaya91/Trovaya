@@ -6,7 +6,9 @@
 
 <p align="center">
   <strong>Bagikan karyamu ke publik, tanpa memberikan file aslinya.</strong><br />
-  Infrastruktur lisensi dan vault untuk kreator Indonesia di era AI.
+  Infrastruktur lisensi dan vault untuk kreator Indonesia di era AI.<br />
+  <em>Consent-first</em> — tidak ada pemakaian karya tanpa izin kreator.
+  <em>Fair-trade</em> — setiap pemakaian ada kompensasinya.
 </p>
 
 ---
