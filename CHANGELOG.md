@@ -3,6 +3,14 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.19.1](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.19.0...v0.19.1) (2026-09-21)
+
+
+### Fixes
+
+* **web:** bersihkan sisa mojibake simbol cek, em dash, dan panah di h… ([2035f8c](https://github.com/GavinArdhijaya91/Trovaya/commit/2035f8c4b443b4a044284b4b5845a78ef05aed04))
+* **web:** bersihkan sisa mojibake simbol cek, em dash, dan panah di halaman artwork ([17c1a9f](https://github.com/GavinArdhijaya91/Trovaya/commit/17c1a9f595cd2394ccff9f1ab9c8507f7e321d6c))
+
 ## [0.19.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.18.0...v0.19.0) (2026-09-21)
 
 
