@@ -13,6 +13,7 @@ import { LicensePreview } from "@/components/license-preview";
 import { PurchaseCostBreakdown } from "@/components/purchase-cost-breakdown";
 import { usePurchaseQuote } from "@/hooks/use-purchase-quote";
 import { SiteHeader } from "@/components/site-header";
+import { HelpTip } from "@/components/help-tip";
 import { AssetReviewer } from "@/components/asset-reviewer";
 import type { AssetReviewInput } from "@/lib/reviewer-types";
 import {
@@ -508,7 +509,7 @@ export default function ArtworkDetailPage() {
               role="status"
               className="mx-auto mt-4 max-w-lg text-sm leading-7 text-stone-500"
             >
-              Catatan provenance sudah final di jaringan. Halaman ini menyegarkan
+              Catatan provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip> sudah final di jaringan. Halaman ini menyegarkan
               sendiri sampai karya muncul di index publik; tidak ada tindakan lain
               yang perlu Anda lakukan.
             </p>
@@ -638,7 +639,7 @@ export default function ArtworkDetailPage() {
               </span>
 
               <span className="rounded-full bg-black/60 px-3 py-2 text-[10px] font-semibold text-white backdrop-blur-md">
-                Provenance recorded
+                Provenance recorded<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip>
               </span>
             </div>
           </div>
@@ -683,7 +684,7 @@ export default function ArtworkDetailPage() {
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             <InfoCard
-              label="Creator provenance"
+              label={<>Creator provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip></>}
               value="Recorded"
             />
 
@@ -992,7 +993,7 @@ export default function ArtworkDetailPage() {
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-xs text-stone-500 md:flex-row md:items-center md:justify-between md:px-8">
           <span>
             Trovaya &mdash; creator
-            provenance, consent, and
+            provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip>, consent, and
             licensing.
           </span>
 
@@ -1012,7 +1013,7 @@ function InfoCard({
   label,
   value,
 }: {
-  label: string;
+  label: React.ReactNode;
   value: string;
 }) {
   return (

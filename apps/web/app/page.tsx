@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { ReactNode } from "react";
 import { AssetGallery } from "@/components/asset-gallery";
 import { IntroExperience } from "@/components/intro-experience";
 import { WalletConnectedBanner } from "@/components/wallet-connected-banner";
@@ -8,7 +9,7 @@ import { NewsletterForm } from "@/components/newsletter-form";
 import { HelpTip } from "@/components/help-tip";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { SmoothScrollProvider } from "@/components/smooth-scroll";
-import { CustomConnectButton } from "@/components/custom-connect-button";
+import { SiteHeader } from "@/components/site-header";
 
 const masalah = [
   {
@@ -28,7 +29,7 @@ const masalah = [
   },
 ];
 
-const pillars = [
+const pillars: { kicker: string; title: string; desc: ReactNode; href: string }[] = [
   {
     kicker: "Pilar 1: Access",
     title: "Akses yang familiar",
@@ -38,7 +39,7 @@ const pillars = [
   {
     kicker: "Pilar 2: Own & Protect",
     title: "Miliki dan lindungi",
-    desc: "Upload menjadi preview terproteksi eksperimental untuk publik, lalu file asli terenkripsi di Vault. Lisensi on-chain mencatat provenance dan konsen.",
+    desc: <>Upload menjadi preview terproteksi eksperimental untuk publik, lalu file asli terenkripsi di Vault. Lisensi on-chain mencatat provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip> dan konsen.</>,
     href: "#cara-kerja",
   },
 
@@ -70,10 +71,10 @@ const personas = [
   { name: "Alex", role: "Developer AI etis, skenario ilustratif", quote: "Saya butuh dataset yang izinnya transparan. Di Trovaya saya cek allowAITraining dan hash terms sebelum pakai karya untuk training." },
 ];
 
-const faqs = [
+const faqs: { q: string; a: ReactNode }[] = [
   { q: "Apakah gambar saya benar-benar aman dari AI scraper?", a: "Tidak. Preview kami hanya transformasi visual eksperimental, bukan pertahanan adversarial dan bukan setara Glaze/Nightshade (belum ada benchmark). Yang benar-benar melindungi file asli adalah enkripsi + vault + lisensi on-chain, bukan efek blur/noise." },
   { q: "Apa bedanya lisensi dibeli vs akses vault diberikan?", a: "Dua status terpisah. Lisensi dibeli berarti transaksi on-chain tercatat. Akses vault berarti otorisasi plus pengiriman kunci terenkripsi oleh vault server. UI menampilkan keduanya sebagai langkah berbeda di stepper." },
-  { q: "Apakah registrasi on-chain berarti hak cipta otomatis?", a: "Bukan. On-chain record adalah bukti provenance dan konsen yang bisa diverifikasi, bukan pernyataan hak cipta atau penegakan hukum otomatis." },
+  { q: "Apakah registrasi on-chain berarti hak cipta otomatis?", a: <>Bukan. On-chain record adalah bukti provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip> dan konsen yang bisa diverifikasi, bukan pernyataan hak cipta atau penegakan hukum otomatis.</> },
   { q: "Biaya transaksi mahal?", a: "Di BSC Testnet biaya transaksi sangat ringan (disebut juga gas fee di jaringan blockchain, dijelaskan via tooltip di dashboard). Penarikan royalti adalah aksi eksplisit, bukan auto-transfer." },
   { q: "Data di landing page ini real?", a: "Angka di stats strip jika ada adalah data testnet atau demo dan diberi label eksplisit. Jangan menganggapnya sebagai metrik produksi." },
 ];
@@ -85,31 +86,9 @@ export default function Home() {
         <IntroExperience />
         <WalletConnectedBanner />
 
-        {/* NAV — Fixed height, clean white, absolute centering */}
-        <header className="sticky top-0 z-50 h-16 border-b border-nusa-200 bg-white/80 backdrop-blur-md">
-          <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-5 md:px-8">
-            <div className="flex items-center gap-8">
-              <Link href="/" className="flex items-center gap-2.5 shrink-0 transition-opacity hover:opacity-90">
-                <Image src="/trovaya-logo.svg" alt="Trovaya logo" width={28} height={28} priority />
-                <span className="text-lg font-bold tracking-tight text-teal-900 leading-none">
-                  Trovaya<span className="text-coral">.</span> <span className="ml-1 hidden sm:inline text-[10px] font-medium tracking-widest text-nusa-400 uppercase">IP Protocol</span>
-                </span>
-              </Link>
-              <nav className="hidden lg:flex items-center gap-6 text-xs font-semibold text-nusa-600">
-                <a href="#cara-kerja" className="hover:text-teal-900 transition-colors">Cara Kerja</a>
-                <a href="#galeri" className="hover:text-teal-900 transition-colors">Marketplace</a>
-                <a href="#batasan" className="hover:text-teal-900 transition-colors">Edukasi</a>
-              </nav>
-            </div>
-            <div className="flex items-center gap-3 shrink-0">
-              <span className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-teal-50 border border-teal-200 px-3 py-1 text-[11px] font-bold text-teal-900 leading-none">
-                <span className="h-1.5 w-1.5 rounded-full bg-teal-600 animate-pulse" /> BNB TESTNET
-              </span>
-              <Link href="/dashboard" className="inline-flex items-center justify-center rounded-lg bg-teal-900 px-5 py-2 text-xs font-bold text-white hover:bg-teal-700 transition-all active:scale-95">Masuk</Link>
-              <CustomConnectButton label="" accountStatus="avatar" chainStatus="icon" showBalance={false} />
-            </div>
-          </div>
-        </header>
+        {/* NAV — header shared, sama dengan marketplace/explore/profile/artwork.
+            Anchor lama (#cara-kerja, #galeri, #batasan) tetap hidup via footer. */}
+        <SiteHeader />
 
         {/* 1. HERO: Mathematically Centered & High Contrast */}
         <section className="relative overflow-hidden border-b border-nusa-200 bg-[#FDFCF7] py-16 md:py-24">
@@ -122,10 +101,10 @@ export default function Home() {
                <h1 className="mt-8 text-4xl sm:text-6xl lg:text-[4rem] font-extrabold tracking-tight text-nusa-900 leading-[1.1]">
                  Bagikan Karyamu ke Publik,<br /> <span className="text-teal-900">Tanpa Memberi File Aslinya.</span>
                </h1>
-               <p className="mt-6 text-lg text-nusa-600 max-w-2xl mx-auto leading-relaxed">
-                 Trovaya lets creators share their work publicly without giving the clean original away. 
-                 Pisahkan visibilitas publik dengan akses master file melalui infrastruktur lisensi & vault on-chain.
-               </p>
+                <p className="mt-6 text-lg text-nusa-600 max-w-2xl mx-auto leading-relaxed">
+                  Trovaya membiarkan kreator membagikan karyanya secara publik tanpa memberikan file bersih aslinya.
+                  Pisahkan visibilitas publik dengan akses master file melalui infrastruktur lisensi &amp; vault on-chain.
+                </p>
             </div>
 
             {/* Dual preview card — Precision alignment */}
@@ -184,7 +163,7 @@ export default function Home() {
             </div>
 
             <div className="mx-auto mt-12 grid max-w-5xl gap-8 md:grid-cols-3 text-xs leading-relaxed border-t border-nusa-200/60 pt-10">
-              <div className="flex gap-4"><span className="grid h-8 w-8 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0 text-lg">📜</span><div><p className="font-bold text-nusa-900">Bukti Registrasi & Provenance On-Chain</p><p className="text-nusa-600 mt-1">Pencatatan registrasi dan asal-usul karya di BNB Chain ledger sebagai bukti verifiable record.</p></div></div>
+              <div className="flex gap-4"><span className="grid h-8 w-8 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0 text-lg">📜</span><div><p className="font-bold text-nusa-900">Bukti Registrasi & Provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip> On-Chain</p><p className="text-nusa-600 mt-1">Pencatatan registrasi dan asal-usul karya di BNB Chain ledger sebagai bukti verifiable record.</p></div></div>
               <div className="flex gap-4"><span className="grid h-8 w-8 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0 text-lg">🛡️</span><div><p className="font-bold text-nusa-900">Preview Terpoison Eksperimental</p><p className="text-nusa-600 mt-1">Preview terpoison eksperimental ditampilkan publik; file asli terenkripsi di Vault dengan AES-256.</p></div></div>
               <div className="flex gap-4"><span className="grid h-8 w-8 place-items-center rounded bg-teal-50 border border-teal-200 text-teal-900 shrink-0 text-lg">📑</span><div><p className="font-bold text-nusa-900">Lisensi Transparan</p><p className="text-nusa-600 mt-1">Hak komersial, derivatif, dan royalti diatur otomatis via smart contract berstandar global.</p></div></div>
             </div>
@@ -323,7 +302,7 @@ export default function Home() {
             <ul className="mt-4 space-y-3 text-sm leading-relaxed text-nusa-700 list-disc pl-5">
               <li><strong>Preview terpoison = eksperimental</strong>, bukan Glaze/Nightshade. Transformasi terukur, belum ada benchmark tereproduksi.</li>
               <li><strong>Mock KYC ber-watermark SAMPLE/CONTOH</strong>, bukan verifikasi identitas asli, tidak bisa dihilangkan saat hover/zoom.</li>
-              <li><strong>On-chain record bukan bukti hukum otomatis.</strong> Hanya bukti provenance &amp; konsen yang bisa diverifikasi.</li>
+              <li><strong>On-chain record bukan bukti hukum otomatis.</strong> Hanya bukti provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip> &amp; konsen yang bisa diverifikasi.</li>
               <li><strong>Otorisasi vault bukan berarti kunci dikirim.</strong> Kunci dibungkus vault server setelah otorisasi tercatat.</li>
               <li>Semua transaksi di <strong>BSC Testnet</strong>, bukan mainnet produksi.</li>
             </ul>
@@ -403,7 +382,7 @@ export default function Home() {
                 <Image src="/trovaya-logo.svg" alt="Trovaya logo" width={32} height={32} />
                 <span className="text-2xl font-bold tracking-tight text-teal-900">Trovaya<span className="text-coral">.</span></span>
               </Link>
-              <p className="text-sm leading-relaxed text-nusa-600 max-w-sm">Infrastruktur bukti provenance & konsen di BSC Testnet, bukan pengganti putusan peradilan hukum.</p>
+              <p className="text-sm leading-relaxed text-nusa-600 max-w-sm">Infrastruktur bukti provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip> & konsen di BSC Testnet, bukan pengganti putusan peradilan hukum.</p>
               <div className="flex items-center gap-3 pt-2"><BnbNetworkBadge size="sm" variant="outline" showPulse /></div>
             </div>
             <div className="md:col-span-3 space-y-3">

@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { formatEther } from "viem";
 
 import { SiteHeader } from "@/components/site-header";
+import { HelpTip } from "@/components/help-tip";
 import {
   useAssets,
   type IndexedAsset,
@@ -220,7 +221,7 @@ export default function ExplorePage() {
               <p className="mt-6 max-w-2xl text-base leading-8 text-stone-600">
                 Discover public protected
                 previews with visible
-                creator provenance,
+                creator provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip>,
                 AI-training consent, and
                 commercial licensing
                 signals.
@@ -341,7 +342,7 @@ export default function ExplorePage() {
 
             <p className="mt-3 text-xs text-stone-500">
               Select a work to inspect
-              its provenance, consent,
+              its provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip>, consent,
               and licensing details.
             </p>
           </div>
@@ -432,7 +433,7 @@ export default function ExplorePage() {
                 </h2>
 
                 <p className="mt-4 max-w-xl text-sm leading-7 text-emerald-100">
-                  Establish provenance,
+                  Establish provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip>,
                   choose your AI consent,
                   define licensing terms,
                   and publish a protected
@@ -457,7 +458,7 @@ export default function ExplorePage() {
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-xs text-stone-500 md:flex-row md:items-center md:justify-between md:px-8">
           <span>
             Trovaya — creator
-            provenance, consent, and
+            provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip>, consent, and
             licensing.
           </span>
 

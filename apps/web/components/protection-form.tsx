@@ -11,6 +11,7 @@ import { createLicenseTerms } from "@/lib/license-terms";
 import { registerContentKey } from "@/lib/vault-client";
 import { protectImage, type PoisonResult } from "@/lib/poison-api";
 import { OperationStatus } from "@/components/operation-status";
+import { HelpTip } from "@/components/help-tip";
 import { inspectAssetFile, type AssetQualityMetadata } from "@/lib/asset-quality";
 
 export function ProtectionForm() {
@@ -179,7 +180,7 @@ export function ProtectionForm() {
     </button>
     {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
     <OperationStatus state={registration.state} />
-    {registration.isConfirmed && <p className="mt-3 font-semibold text-leaf">Catatan provenance dan consent berhasil didaftarkan. Ini bukan penetapan hak cipta oleh Trovaya.</p>}
+    {registration.isConfirmed && <p className="mt-3 font-semibold text-leaf">Catatan provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip> dan consent berhasil didaftarkan. Ini bukan penetapan hak cipta oleh Trovaya.</p>}
     {keyDeliveryStatus === "registering" && <p className="mt-3 rounded-xl bg-mint p-3 text-xs text-leaf">Menunggu signature creator untuk menyimpan content key secara terenkripsi…</p>}
     {keyDeliveryStatus === "registered" && <p className="mt-3 rounded-xl bg-mint p-3 text-xs text-leaf">Content key sudah dibungkus oleh secure vault dan dihapus dari state halaman.</p>}
     {keyDeliveryStatus === "unavailable" && pendingKey && <div className="mt-3 rounded-xl bg-amber-50 p-3 text-xs text-amber-800">
