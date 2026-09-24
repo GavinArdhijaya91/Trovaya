@@ -3,6 +3,27 @@
 All notable changes to Trovaya are recorded in this file. Release Please
 updates it from Conventional Commit messages merged into `main`.
 
+## [0.20.0](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.19.1...v0.20.0) (2026-09-24)
+
+
+### Features
+
+* **d0cs:** readme hackathon pitch ([7e1a009](https://github.com/GavinArdhijaya91/Trovaya/commit/7e1a0094dc1e91f54d905e23e119a63823465567))
+
+
+### Fixes
+
+* **supabase:** scope co_purchase_members RLS to open circles, hide sh… ([e4128a2](https://github.com/GavinArdhijaya91/Trovaya/commit/e4128a2b94ee48ba693aca2d02fe739d8563f839))
+* **ui:** copy consistency ([79a9658](https://github.com/GavinArdhijaya91/Trovaya/commit/79a96586d02056cac49c606f0477f9781c287805))
+* **web:** generate gambar preview poison-engine hero yang hilang ([cf201e7](https://github.com/GavinArdhijaya91/Trovaya/commit/cf201e70ae06a68d7495868886ce322021f9ddd3))
+* **web:** satukan header landing ke SiteHeader, rapikan copy ID, HelpTip provenance, kartu dashboard, BNB primer ([cd917e1](https://github.com/GavinArdhijaya91/Trovaya/commit/cd917e1cb31541bd6bd79265c4c29c73c22a075d))
+
+
+### Documentation
+
+* **readme:** selipkan tagline consent-first dan fair-trade bahasa manusia ([8c04e3c](https://github.com/GavinArdhijaya91/Trovaya/commit/8c04e3cd0fea5350a140bfd0d1b1a7e9d426da33))
+* **readme:** tulis ulang sebagai pitch hackathon yang manusiawi tanpa emoji ([8813a8c](https://github.com/GavinArdhijaya91/Trovaya/commit/8813a8c39d360eb55f88386fb0301890094ac55e))
+
 ## [0.19.1](https://github.com/GavinArdhijaya91/Trovaya/compare/v0.19.0...v0.19.1) (2026-09-21)
 
 
