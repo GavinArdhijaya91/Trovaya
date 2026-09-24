@@ -54,13 +54,11 @@ Presentasi yang baik tidak melebih-lebihkan. Beberapa hal penting:
 
 ## Teknologi di balik layar
 
-| Bagian | Teknologi | Peran |
-| --- | --- | --- |
-| Aplikasi web (`apps/web`) | Next.js, Tailwind | Workspace kreator, marketplace, integrasi wallet |
-| Poison engine (`services/poison-engine`) | FastAPI, Python | Pembuatan preview terproteksi |
-| Event indexer (`services/event-indexer`) | Node.js, PostgreSQL | Membaca event blockchain ke database |
-| Smart contract (`packages/contracts`) | Solidity (ERC-721, ERC-2981) | Registrasi karya, lisensi, royalti, vault, patungan |
-| Protocol SDK (`packages/protocol-sdk`) | TypeScript | Penghubung kontrak dan frontend |
+- **Aplikasi web** (`apps/web`, Next.js + Tailwind): workspace kreator, marketplace, integrasi wallet.
+- **Poison engine** (`services/poison-engine`, FastAPI + Python): pembuatan preview terproteksi.
+- **Event indexer** (`services/event-indexer`, Node.js + PostgreSQL): membaca event blockchain ke database.
+- **Smart contract** (`packages/contracts`, Solidity ERC-721 dan ERC-2981): registrasi karya, lisensi, royalti, vault, patungan.
+- **Protocol SDK** (`packages/protocol-sdk`, TypeScript): penghubung kontrak dan frontend.
 
 ## Menjalankan demo secara lokal
 
@@ -96,7 +94,5 @@ Lalu jalankan:
 - [CONTRACT_ARCHITECTURE.md](docs/CONTRACT_ARCHITECTURE.md): desain smart contract
 - [DESIGN.md](docs/DESIGN.md): identitas brand dan sistem visual
 - [LOCAL_DEVELOPMENT.md](docs/guides/LOCAL_DEVELOPMENT.md): panduan setup lokal
-
----
 
 *Dibuat dengan teliti untuk kreator Indonesia. Hackathon x Web3, 2026.*
