@@ -35,7 +35,7 @@ export function formatShare(shareWei: string, currency = "BNB"): string {
   try {
     return `${formatEther(BigInt(shareWei))} ${currency}`;
   } catch {
-    return `— ${currency}`;
+    return "Iuran belum tersedia";
   }
 }
 

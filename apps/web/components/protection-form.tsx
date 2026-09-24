@@ -143,7 +143,7 @@ export function ProtectionForm() {
     </div>
     <label className="block rounded-2xl border-2 border-dashed border-teal-200 bg-teal-50/40 p-8 text-center cursor-pointer hover:bg-teal-50 transition-colors">
       <span className="block font-bold text-nusa-900">Pilih karya atau gambar produk</span>
-      <span className="mt-1 block text-sm text-nusa-600">PNG, JPG, atau WebP · maksimal 15 MiB · 512–8192 px · rasio 0,5–2:1</span>
+      <span className="mt-1 block text-sm text-nusa-600">PNG, JPG, atau WebP · maksimal 15 MiB · 512 sampai 8192 px · rasio 0,5 sampai 2:1</span>
       <input className="mt-4 block w-full text-sm" type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => setFile(event.target.files?.[0])} />
     </label>
     <div className="mt-6 rounded-2xl border border-teal-200 bg-teal-50/70 p-4">

@@ -163,15 +163,15 @@ export default function MarketplacePage() {
             {/* Quick Stats Bar */}
             <div className="grid grid-cols-3 gap-5 rounded-2xl border border-stone-200/80 bg-white/80 p-5 shadow-soft backdrop-blur-md lg:min-w-[380px]">
               <MarketplaceMetric
-                value={assets.isLoading ? "—" : `${records.length}`}
+                value={assets.isLoading ? "…" : `${records.length}`}
                 label="Karya Terdaftar"
               />
               <MarketplaceMetric
-                value={assets.isLoading ? "—" : `${protectedCount}`}
+                value={assets.isLoading ? "…" : `${protectedCount}`}
                 label="Preview Terproteksi"
               />
               <MarketplaceMetric
-                value={assets.isLoading ? "—" : `${licensedCount}`}
+                value={assets.isLoading ? "…" : `${licensedCount}`}
                 label="Siap Lisensi"
               />
             </div>
@@ -300,7 +300,7 @@ export default function MarketplacePage() {
 
       <footer className="border-t border-stone-200">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-xs text-stone-500 md:flex-row md:items-center md:justify-between md:px-8">
-          <span>Trovaya Protocol — Decentralized IP Registry & Marketplace.</span>
+          <span>Trovaya Protocol, registri IP dan marketplace desentral.</span>
           <div className="flex gap-4">
             <Link href="/dashboard" className="hover:text-leaf">Dashboard Kreator</Link>
             <Link href="/explore" className="hover:text-leaf">Eksplorasi</Link>
