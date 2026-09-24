@@ -15,7 +15,7 @@
 
 ## Masalah yang kami selesaikan
 
-Bayangkan Anda seorang ilustrator atau pemilik UMKM. Anda memajang karya terbaik di internet agar dikenal orang. Tapi di saat yang sama, karya itu bisa diambil diam-diam untuk melatih model AI, tanpa izin dan tanpa kompensasi sepeser pun.
+Bayangkan Anda seorang ilustrator. Anda memajang karya terbaik di internet agar dikenal orang. Tapi di saat yang sama, karya itu bisa diambil diam-diam untuk melatih model AI, tanpa izin dan tanpa kompensasi sepeser pun.
 
 Inilah dilema kreator hari ini: **ingin terlihat, tapi takut diambil.** Pilihan yang ada selama ini tidak memuaskan. Mengunci karya berarti tidak ada yang melihat, memajang karya berarti merelakan semuanya.
 
