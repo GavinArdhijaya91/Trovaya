@@ -35,7 +35,7 @@ finding remains, and the named security and privacy reviewers approve the record
 | Chain reorg leaves a false projection | High integrity impact | Confirmation depth, canonical cursor hash, transactional rewind/replay, and full replay near deployment start | Run a controlled testnet/RPC-failure drill and compare projection with chain state. Delivery reads chain directly. |
 | Rejecting receiver blocks purchases or loses proceeds | Medium fund-access impact | Pull-payment liability, alternate recipient, non-reentrancy, rollback on failed transfer | External contract review and target-chain withdrawal test remain required. |
 | Compromised deployer retains control | Critical governance impact | Fail-closed role checker and multisig transfer/revocation runbook | Attach target role-check output. |
-| Experimental transform is called proven AI protection | High user-deception risk | Explicit labels and a benchmark validator that rejects incomplete studies | Keep the claim disabled until lawful reproducible evidence passes. |
+| Public member list leaks cancelled-circle wallets and shares | High confidentiality breach | Migration `202609180001_fix_co_purchase_members_rls.sql`: member reads restricted to circles with status OPEN/LOCKED/PURCHASED and member status != REMOVED; `share_wei` hidden from anon/authenticated via column grants; allowlisted `public_circle_members` view (no nominal) | Run `supabase/tests/co_purchase_members_rls_negative.sql` anon probes: CANCELLED -> 0 rows, OPEN/LOCKED/PURCHASED -> wallet+status only. || Experimental transform is called proven AI protection | High user-deception risk | Explicit labels and a benchmark validator that rejects incomplete studies | Keep the claim disabled until lawful reproducible evidence passes. |
 | Mock identity is presented as KYC/ZK | High compliance risk | SAMPLE/CONTOH and mock/not_verified labels; no document persistence | Select lawful issuer, processor, jurisdiction owner, appeal route, retention policy, and DPIA owner. |
 | Secrets or vulnerable dependencies enter a release | High compromise risk | Gitleaks, dependency review/audits, Slither, pinned actions, and production-audit policy | Hosted workflow must pass; reassess accepted transitive advisories each release. |
 
@@ -56,6 +56,12 @@ sanitized evidence location, and follow-up for each drill:
 
 Evidence must contain no secret, key material, signature, nonce, OTP, session
 token, identity document, or clean-source plaintext.
+
+## Findings log
+
+| Date | Finding | Status |
+| --- | --- | --- |
+| 2026-09-24 | `circle_members_read` on `co_purchase_members` used `using (true)`, exposing `member_wallet`/`share_wei` for CANCELLED circles and REMOVED members — looser than parent `circles_open_read`. | Resolved in code via `supabase/migrations/202609180001_fix_co_purchase_members_rls.sql` (status-scoped policy, column-level `share_wei` denial, `public_circle_members` view); target-environment anon probes pending (`supabase/tests/co_purchase_members_rls_negative.sql`). |
 
 ## Approval record
 
