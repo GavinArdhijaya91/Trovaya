@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
+import { HelpTip } from "@/components/help-tip";
 
 export function HeroPoisonDemo() {
   const [pos, setPos] = useState(50); // 0 = full blur, 100 = full clear
@@ -134,7 +135,7 @@ export function HeroPoisonDemo() {
       </div>
       <p className="mt-2 text-center text-[11px] text-nusa-500">Geser handle bulat atau klik Full Blur atau Clear. 0% berarti semua buram, 100% berarti semua jernih</p>
       <p className="mt-3 text-[11px] leading-relaxed text-nusa-500 bg-nusa-50 border border-nusa-100 rounded-xl p-2.5">
-        On-chain record = bukti provenance dan konsen, <strong>bukan pernyataan hak cipta atau penegakan hukum otomatis.</strong> File asli tidak otomatis terkirim setelah beli, butuh otorisasi vault terpisah.
+        On-chain record = bukti provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip> dan konsen, <strong>bukan pernyataan hak cipta atau penegakan hukum otomatis.</strong> File asli tidak otomatis terkirim setelah beli, butuh otorisasi vault terpisah.
       </p>
     </div>
   );

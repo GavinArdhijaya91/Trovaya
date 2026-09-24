@@ -14,6 +14,7 @@ import { OperationStatus } from "@/components/operation-status";
 import { verifyLicenseTermsJson, type VersionedLicenseTerms } from "@/lib/license-terms";
 import { decryptVaultFile, deliverContentKey } from "@/lib/vault-client";
 import { AssetReviewer } from "@/components/asset-reviewer";
+import { HelpTip } from "@/components/help-tip";
 import type { AssetReviewInput } from "@/lib/reviewer-types";
 
 export function AssetGallery() {
@@ -30,7 +31,7 @@ export function AssetGallery() {
         </div>
         <div className="flex items-center gap-2 rounded-full bg-teal-50 border border-teal-200 px-4 py-2 text-xs font-bold text-teal-900">
           <span className="inline-block h-2 w-2 rounded-full bg-teal-500 animate-pulse" />
-          On-chain provenance · BSC Testnet
+          On-chain provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip> · BSC Testnet
         </div>
       </div>
       <div className="batik-divider mt-4" />

@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { formatEther } from "viem";
 
 import { SiteHeader } from "@/components/site-header";
+import { HelpTip } from "@/components/help-tip";
 import {
   useAssets,
   type IndexedAsset,
@@ -155,7 +156,7 @@ export default function MarketplacePage() {
 
               <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">
                 Jelajahi karya kreator Indonesia dengan preview terproteksi eksperimental.
-                Verifikasi provenance, beli lisensi komersial transparan, dan buka enkripsi vault karya asli.
+                Verifikasi provenance<HelpTip>riwayat kepemilikan dan konsen yang tercatat on-chain</HelpTip>, beli lisensi komersial transparan, dan buka enkripsi vault karya asli.
               </p>
             </div>
 

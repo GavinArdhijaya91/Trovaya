@@ -78,9 +78,22 @@ export function CreatorDashboard() {
     : "Wallet Belum Terhubung";
   const chainLabel = process.env.NEXT_PUBLIC_CHAIN_ID === "97" ? "BNB" : "ETH";
 
-  // Approximate IDR calculation for friendly visual representation
+  // Approximate IDR calculation for friendly visual representation.
+  // Kurs hardcoded hanya untuk estimasi tampilan; angka utama selalu BNB.
+  const IDR_PER_BNB = 10000000;
   const bnbAmount = parseFloat(formatEther(proceeds.amount || 0n));
-  const estimatedIdr = (bnbAmount * 10000000).toLocaleString("id-ID");
+  const estimatedIdr = (bnbAmount * IDR_PER_BNB).toLocaleString("id-ID");
+  const bnbDisplay = proceeds.isLoading ? "Memuat…" : `${formatEther(proceeds.amount || 0n)} ${chainLabel}`;
+  function idrEstimateForFeeWei(feeWei: string | null | undefined): string | null {
+    if (!feeWei) return null;
+    try {
+      const bnb = parseFloat(formatEther(BigInt(feeWei)));
+      if (!Number.isFinite(bnb)) return null;
+      return (bnb * IDR_PER_BNB).toLocaleString("id-ID");
+    } catch {
+      return null;
+    }
+  }
 
   return (
     <div className="min-h-screen text-nusa-900" style={{ background: "#FDFCF7" }}>
@@ -157,7 +170,7 @@ export function CreatorDashboard() {
             <div className="flex-1 max-w-xl flex items-center gap-2 rounded-lg bg-nusa-50 border border-nusa-200 px-3 py-2 text-sm text-nusa-500">
               <span>⌕</span>
                <input
-                 placeholder="Cari aset IP, registrasi on-chain, sertifikat provenance..."
+                  placeholder="Cari aset IP, registrasi on-chain, sertifikat asal-usul..."
                  className="flex-1 bg-transparent outline-none text-xs placeholder:text-nusa-400"
                />
             </div>
@@ -201,13 +214,15 @@ export function CreatorDashboard() {
                   <div>
                     <p className="text-[11px] font-bold tracking-widest text-nusa-500 uppercase">Saldo Lisensi (Dapat Ditarik)</p>
                     <div className="flex items-baseline gap-2 mt-1">
-                      <span className="text-3xl font-extrabold text-nusa-900">Rp</span>
                       <span className="text-3xl font-extrabold text-nusa-900 font-mono">
-                        {proceeds.isLoading ? "Memuat…" : estimatedIdr}
+                        {bnbDisplay}
                       </span>
                     </div>
                     <p className="text-[11px] text-nusa-500 mt-1">
-                      Smart Vault: ERC-2981 Settlement Pooling · ~{proceeds.isLoading ? "…" : formatEther(proceeds.amount)} {chainLabel}
+                      ≈ Rp {proceeds.isLoading ? "…" : estimatedIdr} (kurs perkiraan, bukan nilai final)
+                    </p>
+                    <p className="text-[11px] text-nusa-500 mt-1">
+                      Smart Vault: ERC-2981 Settlement Pooling
                     </p>
                   </div>
                   <div className="flex flex-col gap-2 shrink-0">
@@ -236,19 +251,10 @@ export function CreatorDashboard() {
                   </div>
                 </div>
 
-                {/* 4 Economic & Protection Cards */}
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                  <div className="interactive-card rounded-2xl border border-nusa-200 bg-white p-5 shadow-soft hover:shadow-soft-md hover:border-teal-200">
-                    <div className="flex justify-between items-center text-xs font-semibold text-nusa-500">
-                      <span>Total Karya Terlindungi</span>
-                      <span className="text-xl">🖼️</span>
-                    </div>
-                    <p className="text-3xl font-extrabold text-teal-900 font-mono mt-2">
-                      {assets.isLoading ? "..." : records.length}
-                    </p>
-                    <p className="text-xs text-nusa-500 mt-1">Aset terdaftar di blockchain</p>
-                  </div>
-
+                {/* 3 Economic & Protection Cards (dulu 4: "Total Karya Terlindungi"
+                    dihapus karena formulanya identik dengan "Total Karya Terdaftar"
+                    di kartu ringkasan atas, yaitu records.length) */}
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   <div className="interactive-card rounded-2xl border border-nusa-200 bg-white p-5 shadow-soft hover:shadow-soft-md hover:border-teal-200">
                     <div className="flex justify-between items-center text-xs font-semibold text-nusa-500">
                       <span>Lisensi Siap Jual</span>
@@ -257,7 +263,7 @@ export function CreatorDashboard() {
                     <p className="text-3xl font-extrabold text-teal-900 font-mono mt-2">
                       {assets.isLoading ? "..." : licenseReady}
                     </p>
-                    <p className="text-xs text-nusa-500 mt-1">Dengan biaya komersial aktif</p>
+                    <p className="text-xs text-nusa-500 mt-1">Dari total karya; sama dengan total bila semua siap jual</p>
                   </div>
 
                   <div className="interactive-card rounded-2xl border border-nusa-200 bg-white p-5 shadow-soft hover:shadow-soft-md hover:border-coral-200">
@@ -268,7 +274,7 @@ export function CreatorDashboard() {
                     <p className="text-3xl font-extrabold text-coral font-mono mt-2">
                       {assets.isLoading ? "..." : licensedForAI}
                     </p>
-                    <p className="text-xs text-nusa-500 mt-1">Karya berlisensi model AI</p>
+                    <p className="text-xs text-nusa-500 mt-1">Karya berlisensi model AI; nol bila semua menolak AI</p>
                   </div>
 
                   <div className="interactive-card rounded-2xl border border-nusa-200 bg-white p-5 shadow-soft hover:shadow-soft-md hover:border-teal-200">
@@ -279,7 +285,7 @@ export function CreatorDashboard() {
                     <p className="text-3xl font-extrabold text-teal-900 font-mono mt-2">
                       {assets.isLoading ? "..." : protectedFromAI}
                     </p>
-                    <p className="text-xs text-nusa-500 mt-1">Hanya pratinjau noise</p>
+                    <p className="text-xs text-nusa-500 mt-1">Hanya pratinjau noise; sama dengan total bila semua menolak AI</p>
                   </div>
                 </div>
 
@@ -341,10 +347,17 @@ export function CreatorDashboard() {
                             <span className={a.allow_ai_training ? "text-coral font-semibold" : "text-teal-900 font-semibold"}>
                               {a.allow_ai_training ? "✓ Izin AI" : "✕ Tanpa AI"}
                             </span>
-                            <span className="font-bold text-nusa-800">
-                              {a.commercial_license_fee_wei
-                                ? `${formatEther(BigInt(a.commercial_license_fee_wei))} BNB`
-                                : "Gratis"}
+                            <span className="flex flex-col items-end font-bold text-nusa-800">
+                              <span>
+                                {a.commercial_license_fee_wei
+                                  ? `${formatEther(BigInt(a.commercial_license_fee_wei))} BNB`
+                                  : "Gratis"}
+                              </span>
+                              {a.commercial_license_fee_wei && idrEstimateForFeeWei(a.commercial_license_fee_wei) && (
+                                <span className="text-[10px] font-normal text-nusa-400">
+                                  ≈ Rp {idrEstimateForFeeWei(a.commercial_license_fee_wei)} (kurs perkiraan)
+                                </span>
+                              )}
                             </span>
                           </div>
                         ))}

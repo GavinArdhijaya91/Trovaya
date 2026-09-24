@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
-type Faq = { q: string; a: string };
+type Faq = { q: string; a: ReactNode };
 
 export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
   const [open, setOpen] = useState<number | null>(null);
